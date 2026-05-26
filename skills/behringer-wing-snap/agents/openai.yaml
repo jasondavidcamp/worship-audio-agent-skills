@@ -1,0 +1,4 @@
+interface:
+  display_name: "Behringer Wing Snap"
+  short_description: "Analyze Behringer Wing .snap mixer snapshots."
+  default_prompt: "Analyze this Behringer Wing .snap file for routing, naming, inserts, buses, and issues."
