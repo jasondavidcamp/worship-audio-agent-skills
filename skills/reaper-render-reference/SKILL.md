@@ -49,7 +49,7 @@ Use REAPER as a disposable staging area for fast plugin-setting iteration before
    - Before a compare batch, render known-good baseline snippets and candidate snippets for at least three sections: loud/dense, mid-song, and late-song. Do not print full-length candidates until the multi-section snippet batch passes the artifact gate.
    - For short clip analysis, prefer a temporary 30-second media item plus "apply track/take FX to item" over full project render. Copy the resulting WAV to the analysis folder and delete the temporary track/item.
    - Compare source, candidate, and reference with the metrics in `references/analysis-metrics.md`.
-   - For drum or drum-bus compares aimed at a specific artist/reference, read the relevant private aimpoint profile before ranking candidates.
+   - For drum or drum-bus compares aimed at a specific artist/reference, read the relevant deployment-local aimpoint profile before ranking candidates. Keep those private profiles outside public skill repositories.
    - Before translating offline DSP prototypes into Waves chains, use `waves-live-plugin-chains` and any locally generated Waves plugin catalog.
    - Use `scripts/analyze_wav.py` for quick dependency-free WAV peak/RMS/crest checks.
    - Use `scripts/artifact_gate.py` to compare candidate snippets against known-good baseline snippets before scoring. Treat user-reported static/crackle/hash as a hard failure for that render file, but isolate whether the issue is the candidate chain, a specific section, the full-length render, or playback before learning mix taste.

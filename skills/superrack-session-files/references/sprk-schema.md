@@ -12,7 +12,7 @@ SELECT type, name, sql FROM sqlite_master WHERE name NOT LIKE 'sqlite_%';
 
 Important tables:
 
-- `snapshot`: snapshots such as `Active`, `starter`, `good`.
+- `snapshot`: Active state plus user-named snapshots.
 - `snapshot_chainer`: names and presets for rack/bus chainers in each snapshot.
 - `object`: `id`, `obj_type`, `obj_index`, `name`; join to `cluster_type`.
 - `chainer`: chainer details, keyed by `obj_id`.
@@ -94,9 +94,9 @@ The visible band enable flags were confirmed by disabling Band 1 in SuperRack UI
 - Band 5 enable: token `172`
 - Band 6 enable: token `173`
 
-## Vocal Pocketing Pattern
+## Example F6 Dynamic-EQ Pattern
 
-To use bands 5 and 6 for vocal pocketing while disabling bands 1-4:
+This example uses bands 5 and 6 for gentle sidechain-style pocketing while disabling bands 1-4. Treat the values as a conservative starting example, not as universal settings:
 
 - `4 = 2200`
 - `5 = 4000`
@@ -121,9 +121,9 @@ To use bands 5 and 6 for vocal pocketing while disabling bands 1-4:
 
 This leaves the static EQ line flat and applies only dynamic ducking on the sidechain.
 
-## Sidechain Pattern
+## Sidechain Row Pattern
 
-Observed sidechain row for Band Bus F6 keyed by Vocal Bus:
+Example sidechain row for one F6 instance keyed by another rack/source:
 
 - `plug_sidechain.plug_id = 225`
 - `AsgnType = 1`
@@ -135,7 +135,7 @@ Observed sidechain row for Band Bus F6 keyed by Vocal Bus:
 - `ChannelIndex = -1`
 - `controlID = 0`
 
-In the observed session, `TrackHandle=48` matched `Vocal Bus` object index. Do not assume this value in other sessions.
+In that example, `TrackHandle=48` matched the detector rack's object index. Do not assume this value, plug ID, or rack name in other sessions.
 
 ## Learned Caution
 
@@ -143,13 +143,13 @@ Earlier attempts changed tokens `136-141`, which did not disable visible bands i
 
 ## F6 External Detector Mapping
 
-A controlled UI save changed Band 6 `SC SOURCE` from `INT` to `EXT` on the Band Bus pocketing F6-RTA.
+A controlled UI save changed Band 6 `SC SOURCE` from `INT` to `EXT` on a sidechained F6-RTA.
 
 Observed database effects:
 
 - Active preset changed from `plugin_preset.id=756` to `763`.
 - `plug_sidechain` row did not change.
-- Stored snapshots `starter` and `good` did not change.
+- Stored snapshots did not change.
 - Active preset token `149` changed from `0` to `1`.
 - A reverse save changed Band 6 `SC SOURCE` from `EXT` back to `INT`.
 - That reverse save changed only Active preset token `149`, from `1` back to `0`.
@@ -250,7 +250,7 @@ Because `141` sits in a likely six-band group `136-141`, the likely shape/type f
 
 ## Plugin Bypass Mapping
 
-Bypassing the Band Bus pocketing F6-RTA did not change the `plug` row or F6 parameter tokens.
+Bypassing the sidechained F6-RTA did not change the `plug` row or F6 parameter tokens.
 
 Observed bypass row change:
 
@@ -258,7 +258,7 @@ Observed bypass row change:
 - row: `plug_id=225`, `snapshot_id=-1` (`Active`)
 - `bypass`: `0` to `1`
 - `preset_id` changed from `788` to `792`, but the RealWorld token stream did not change.
-- Stored snapshots `starter` and `good` kept `bypass=0`.
+- Stored snapshots kept their prior bypass state.
 
 Therefore:
 
@@ -398,7 +398,7 @@ Toggling Solo on Band 6 changed the Active F6 RealWorld token stream:
 
 - token `21`: `0` to `1`
 
-The same save also changed `snapshot_plugin.bypass` for the Active pocketing F6-RTA from `1` back to `0`, so the plugin was re-enabled during this experiment. The stored snapshots kept `bypass=0`.
+The same save also changed `snapshot_plugin.bypass` for the Active F6-RTA from `1` back to `0`, so the plugin was re-enabled during this experiment. The stored snapshots kept their prior bypass state.
 
 Because token `21` sits in a likely six-band group `16-21`, the likely band solo flags are:
 

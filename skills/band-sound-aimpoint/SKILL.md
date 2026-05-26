@@ -7,7 +7,7 @@ description: Define, analyze, calibrate, and apply a target sound for church ban
 
 ## Purpose
 
-Use this skill to keep mix decisions anchored to a named musical target instead of isolated plugin tweaks. Combine subjective language, reference-track evidence, objective metrics, and the user's taste history so Codex can make better engineering recommendations before asking for more taste calls.
+Use this skill to keep mix decisions anchored to a named musical target instead of isolated plugin tweaks. Combine subjective language, reference-track evidence, objective metrics, and deployment-local taste history so Codex can make better engineering recommendations before asking for more taste calls.
 
 ## Operating Rules
 
@@ -43,9 +43,9 @@ Use this skill to keep mix decisions anchored to a named musical target instead 
    - Add `--essentia` when Essentia Python bindings are available and tonal/rhythm/spectral descriptors would help compare the aimpoint.
    - Save or update a reference profile in `references/`.
 
-4. Compare our render:
+4. Compare the candidate render:
    - Render the same kind of section from REAPER or another source.
-   - Loudness-match our render to the reference before judging tone.
+   - Loudness-match the candidate render to the reference before judging tone.
    - Compare broad bands and dynamics, then write an engineering interpretation.
 
 5. Turn analysis into moves:

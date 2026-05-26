@@ -53,10 +53,10 @@ Use `scripts/inspect_sprk.py` for a compact report:
 & "<python>" scripts/inspect_sprk.py "<path-to-session.sprk>"
 ```
 
-Use `scripts/patch_f6_pocketing.py` only when the session already contains a SuperRack-created sidechained F6-RTA instance to patch:
+Use `scripts/patch_f6_pocketing.py` only when the session already contains a SuperRack-created sidechained F6-RTA instance to patch. Run `inspect_sprk.py` first to locate the plug ID; never reuse an example plug ID from another session:
 
 ```powershell
-& "<python>" scripts/patch_f6_pocketing.py "<path-to-session.sprk>" --plug-id 225
+& "<python>" scripts/patch_f6_pocketing.py "<path-to-session.sprk>" --plug-id <f6-plug-id>
 ```
 
 The patch script makes a timestamped backup, edits only `plugin_preset` rows for the selected plug, and validates SQLite integrity.

@@ -1,45 +1,35 @@
 # SuperRack UI Reference
 
-Visual notes learned from SuperRack Performer v15.14.136.660 screenshots.
+Portable visual notes learned from SuperRack Performer screenshots. Treat rack names, bus numbers, plugin order, and parameter values as examples only; re-detect them from the user's screenshot or `.sprk` file every time.
 
 ## Rack View
 
-- The large title at top left shows the selected rack/bus. In the observed session it reads `Band Bus`.
+- The large title at top left shows the selected rack/bus, such as a vocal, band, drum, livestream, or speech rack.
 - The selected plugin tile in the left chain is outlined yellow.
 - SuperRack logs may identify UI-originated plugin selections and `IN on/off` actions by rack name, plugin name, and UI slot number.
 - Windows UI Automation can expose top-bar controls such as rack navigation and view tabs, but rack/plugin tiles may require screenshot or coordinate-driven interaction.
 - The sidechain source dropdown appears above the plugin editor, labeled `SIDE CHAIN`.
-- For the observed vocal-pocketing setup, that dropdown displays `Vocal Bus`.
+- The sidechain dropdown displays the selected detector/source rack, for example a vocal rack feeding a band-bus dynamic EQ.
 - The plugin tile for the sidechained F6-RTA shows an orange/red `SC` badge.
 - The same plugin tile shows `IN`, meaning the plugin instance is inserted and enabled.
 
 ## Overview View
 
-- The `49-64` layer shows bus-style strips.
-- In the observed session:
-  - `Vocal Bus` input is numbered `49`.
-  - `Band Bus` input is numbered `51`.
-  - `Drum Bus` input is numbered `53`.
-  - `Livestream` input is numbered `60`.
-- Band Bus visible chain order:
-  1. `NLS Buss`
-  2. `F6-RTA` sidechained pocketing instance
-  3. `SSL Cmp`
-  4. `TGMstrL`
-  5. Existing late-chain `F6-RTA`
-- This matches the database pattern where Band Bus is `chainer_id=51`, the pocketing F6-RTA is slot `2`, and the old late-chain F6-RTA remains slot `5`.
+- The overview layers show rack/bus strips and their visible numbering. Treat those numbers as session-specific evidence, not universal bus IDs.
+- Visible plugin order in the rack should match `plug.slot` order in the database after accounting for zero-based database slots versus one-based UI/log wording.
+- When a screenshot and database disagree, verify whether the screenshot is showing Active state, a stored snapshot, a different rack layer, or an unsaved current-state change.
 
 ## F6-RTA Visual Cues
 
 - A flat EQ line is expected when static gain is `0`; dynamic ducking is not visible as a static EQ curve.
 - The graph may still show numbered markers `1-6` even when the intent is to use only selected dynamic bands.
-- In the observed pocketing setup, bands 5 and 6 are the active vocal-pocketing bands:
+- In a conservative two-band sidechain/pocketing example, bands 5 and 6 may be the only active dynamic bands:
   - Band 5: `2200 Hz`, range `-2 dB`, attack `20 ms`, release `180 ms`.
-- Band 6: `4000 Hz`, range `-1.5 dB`, attack `10 ms`, release `120 ms`.
+  - Band 6: `4000 Hz`, range `-1.5 dB`, attack `10 ms`, release `120 ms`.
 - The selected band's lower controls show its frequency, Q, gain, range, threshold, attack, release, and sidechain mode.
 - The rack-level sidechain dropdown and the plugin-level F6 `SC SOURCE` controls are separate visual checks.
-- In the screenshot, the rack-level sidechain dropdown displays `Vocal Bus`, and the plugin tile shows `SC`.
-- In the same screenshot, the selected F6 band's `SC SOURCE` area appears to show `INT` selected, not `EXT`.
+- In a screenshot, the rack-level sidechain dropdown and the plugin tile `SC` badge can prove that a sidechain source is assigned at rack/plugin level.
+- The selected F6 band's `SC SOURCE` area can still show `INT`; that means the rack-level assignment alone is not enough to prove the band is using external detection.
 - For true vocal-triggered ducking, verify each active F6 band is set to the intended detector source. Do not assume the rack-level `Vocal Bus` assignment alone proves the selected band is using external detection.
 - A Band 6 `INT` to `EXT` save changed Active preset token `149` from `0` to `1`.
 - A reverse `EXT` to `INT` save changed only token `149` back from `1` to `0`.
@@ -73,21 +63,16 @@ Visual notes learned from SuperRack Performer v15.14.136.660 screenshots.
 ## Practical Teaching Notes
 
 - Explain that the sidechain supplies the detector signal; it does not draw a permanent EQ curve.
-- To see action, audio must be passing through Band Bus and Vocal Bus at the same time.
+- To see sidechain action, audio must pass through both the processed rack and the detector/source rack at the same time.
 - Watch the F6 band's dynamic movement or gain-reduction behavior while vocals are active.
 - If the user is confused by all six markers, disable unused visible bands in the preset state rather than relying on explanation alone.
 
 ## Silk Vocal Visual Cues
 
-Observed vocal-rack screenshot after adding Silk Vocal Live:
+A vocal-rack screenshot after adding Silk Vocal Live can expose useful UI/database mappings:
 
 - Rack title showed the selected vocal rack name; top subtitle showed `PRESET*`, indicating unsaved or modified preset/session state.
-- Left chain order:
-  1. `SilkVocl`
-  2. `F6-RTA`
-  3. `DeEsser`
-  4. `RVox`
-  5. `API-550B`
+- Left chain order is session-specific; use it to cross-check visible slot order against `plug.slot`, not as a recommended vocal chain.
 - The selected Silk tile is outlined yellow and shows `IN`.
 - Silk tile latency displayed `LT 1.3ms`; rack output latency area displayed `Latency 2.7ms` for the whole rack.
 - The plugin window title/logo reads `Silk Vocal Live` even though the database header observed `<PluginName>Silk Vocal</PluginName>` and the plug row name is `SilkVocl`.

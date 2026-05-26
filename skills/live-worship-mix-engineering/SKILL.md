@@ -62,7 +62,7 @@ Use this skill as the judgment and calibration layer between measured audio data
 
 6. Apply only the winner:
    - Keep runner-up renders for taste calls.
-   - Record taste calls in the deployment's local aimpoint/taste log when the user's reaction should guide future work.
+   - Record taste calls in a deployment-local aimpoint/taste log, kept outside public skill repositories, when the user's reaction should guide future work.
 
 ## Common Diagnoses
 
@@ -110,7 +110,7 @@ Public training material can teach techniques, plugin roles, and vocabulary. Use
 
 Keep this skill brand-neutral. For plugin-specific choices, switch skills:
 
-- Use `waves-live-plugin-chains` for Waves, SuperRack, LV1, MultiRack, or REAPER-hosted Waves chains.
+- Use `waves-live-plugin-chains` for Waves, SuperRack, LV1/SuperRack-compatible, or REAPER-staged Waves chains that must transfer to a live host.
 - Use `superrack-session-files` only for SuperRack `.sprk`/`.xps` file inspection, validation, or patching.
 
 ## Related Skills

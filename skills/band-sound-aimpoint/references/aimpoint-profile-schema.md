@@ -67,7 +67,7 @@ Do not say "the reference is better because the curve is flatter." Say what the 
 
 ## Comparison Notes
 
-When comparing our render to a profile:
+When comparing a candidate render to a profile:
 
 ```yaml
 comparison:

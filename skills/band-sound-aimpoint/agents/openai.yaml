@@ -1,4 +1,4 @@
 interface:
   display_name: "Band Sound Aimpoint"
   short_description: "Define reference targets and taste calibration."
-  default_prompt: "Use the band sound aimpoint to compare our band or bus renders against reference tracks, describe the desired style and feel, preserve user taste-call memory, and guide mix decisions toward that target."
+  default_prompt: "Use the band sound aimpoint to compare band or bus renders against reference tracks, describe the desired style and feel, preserve deployment-local taste memory, and guide mix decisions toward that target."
