@@ -50,11 +50,25 @@ To back up a single rack chain from SuperRack:
 
 This `.xps` backup is not a full `.sprk` session backup. It preserves the rack chain and plugin states, but not the whole session's routing, buses, snapshots, or external insert assignments.
 
-## Native Export Shape
+## Import Round-Trip Caveat
+
+In a controlled import/save round trip, a generated rack-chain `.xps` imported successfully and preserved plugin order, plugin settings, bypass state, SQLite integrity, and foreign-key validity.
+
+However, a prior rack output trim stored as:
+
+```text
+snapshot_chainer_params: snapshot_id=-1, param_id=50
+```
+
+was not present after the `.xps` import/save. Treat rack output gain as a session-level/rack parameter that may need to be verified or restored separately after importing a rack-chain `.xps`.
+
+## Native Export Size / Setup Layout
 
 Native SuperRack rack-chain `.xps` exports observed so far contain one top-level rack `PresetData` block with the slot chain inside its `PluginSpecificXMLData`.
 
 Embedded plugin presets inside slot CDATA may each contain their own `SETUP_A` and `SETUP_B` blocks. Do not confuse those embedded plugin setup blocks with top-level rack setup blocks.
+
+Early generated `.xps` files that duplicated the entire top-level rack slot list under both top-level `SETUP_A` and top-level `SETUP_B` imported successfully, but they did not match the native/minimal export shape. Future generated `.xps` exports should include the rack slot chain once, matching native exports, while preserving the embedded plugin preset XML as-is.
 
 Native exports may include:
 
@@ -64,6 +78,8 @@ Native exports may include:
 - multiple `ArtistInput` entries on some populated slots
 
 Prefer preserving these native details when using an actual SuperRack export as the source. If a native export exists for the rack, the safest generated backup is often to copy that file and change only the top-level preset name.
+
+Native UI exports can differ from saved `.sprk` preset payloads by a small number of opaque tokens or UI labels even when the audible chain appears equivalent. Treat native exported plugin preset blobs as more authoritative than regenerated blobs from the `.sprk` when making `.xps` backups.
 
 ## XPS Generation Rules
 
@@ -79,10 +95,26 @@ When creating a rack-chain `.xps`, prefer compatibility over prettiness:
    - one top-level rack `<PresetData Setup="SETUP_A">` containing the slot chain
    - preserve a native top-level empty `<PresetData Setup="SETUP_B">` if present in the template
 3. Include exactly nine rack slot entries, `0` through `8`, unless later SuperRack versions prove a different native slot count.
-4. Preserve populated slot metadata: plugin name, ID, vendor, bypass, disabled, sidechain, ignore-latency, recall-safe, and floating-window metadata when known.
+4. Preserve populated slot metadata:
+   - `plugin_name`
+   - `plugin_id`
+   - `plugin_vendor`
+   - `plugin_bypass`
+   - `plugin_disabled`
+   - `plugin_side_chain`
+   - `plugin_ignore_latency`
+   - `slot_recall_safe`
+   - floating-window metadata when known
 5. Preserve embedded `plugin_preset` XML as-is whenever possible. Do not normalize numeric precision or rewrite formatting unless the token value itself intentionally changes.
 6. If changing plugin parameters, modify only known-safe token positions, then leave all unrelated tokens and XML structure untouched.
-7. Do not duplicate the full rack slot chain into top-level `SETUP_B`.
-8. After generating, inspect the `.xps` and compare it against a known native export for top-level identity, slot count, plugin order, bypass/disabled states, embedded token counts, and known parameter values.
+7. Do not duplicate the full rack slot chain into top-level `SETUP_B`. Embedded plugin presets may still contain their own `SETUP_A`/`SETUP_B` blocks inside CDATA. A native empty top-level `SETUP_B` is acceptable and should be preserved from a template.
+8. After generating, inspect the `.xps` and compare it against a known native export for:
+   - top-level identity (`Super-Rack Chainer` / `MCMR`)
+   - top-level rack `PresetData` count
+   - slot count
+   - plugin order
+   - bypass/disabled/sidechain/ignore-latency states
+   - embedded plugin token counts
+   - known parameter values
 
 If the generated file imports in SuperRack, inspect the saved `.sprk` afterward because SuperRack may rewrite plugin IDs, preset IDs, preset display names, or omit rack-level parameters such as rack output trim.

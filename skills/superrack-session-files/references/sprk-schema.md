@@ -22,6 +22,13 @@ Important tables:
 - `plug_sidechain`: sidechain source for a plugin.
 - `routes`: routing rows. Do not edit unless the encoding is understood.
 
+## Slot Numbering
+
+- `plug.slot` is zero-based chain order within `plug.chainer_id`.
+- `snapshot_chainer.selected_slot` has been observed following SuperRack's UI/log slot numbering rather than `plug.slot`; selected plugin tile slot 7 corresponded to `plug.slot=6`.
+- `selected_slot=-1` has been observed when no plugin slot is selected.
+- Reconfirm these mappings per session before using selected slot state as evidence for an edit.
+
 ## Validation Queries
 
 Use these orphan checks after edits:
@@ -262,7 +269,7 @@ Therefore:
 
 RVox / Renaissance Vox preset payloads use a compact `RealWorld` token stream with 9 tokens observed.
 
-Example Blue Vocal RVox tokens after controlled UI changes:
+Example RVox tokens after controlled UI changes:
 
 ```text
 -20 -80 130 * * * * -11.5 *
@@ -281,13 +288,13 @@ Likely from observed defaults, but not yet isolated:
 
 - token `2` may be a fixed/ceiling-style output or internal value; commonly observed `130`.
 
-When editing RVox for one singer, clone shared `plugin_preset` rows first or verify SuperRack has already created a private preset for that plugin. In the Laura/Blue Vocal test, manual RVox changes created private preset rows for Blue Vocal, avoiding changes to Red Vocal.
+When editing RVox for one source, clone shared `plugin_preset` rows first or verify SuperRack has already created a private preset for that plugin. In a controlled vocal-rack test, manual RVox changes created private preset rows for the edited rack, avoiding changes to another rack that had previously shared the preset.
 
 ## Silk Vocal Identity
 
 SuperRack UI may show Silk Vocal or Silk Vocal Live depending on host/platform wording.
 
-Database rows observed after adding Silk Vocal to Blue Vocal:
+Database rows observed after adding Silk Vocal to a vocal rack:
 
 - `plug.plugin_name`: `SilkVocl`
 - `plug.plugin_4cc`: `KPMM`
@@ -300,7 +307,7 @@ Do not edit Silk Vocal parameter tokens until controlled UI changes establish th
 
 ## Silk Vocal Gender Mapping
 
-A controlled UI save changed Silk Vocal Live voice type from `Male` to `Female` on the Blue Vocal rack.
+A controlled UI save changed Silk Vocal Live voice type from `Male` to `Female` on a vocal rack.
 
 Compared with the prior Male preset, the Active Silk Vocal `RealWorld` token stream remained 436 tokens. The likely primary gender selector changed:
 
@@ -364,7 +371,7 @@ Known visible values from screenshot / saves:
 
 ## Silk Vocal Factory Preset: Raw to Pro - Female (Gain Match)
 
-Loading the Silk Vocal Live factory preset `Raw to Pro - Female (Gain Match)` on Blue Vocal created an Active Silk preset named:
+Loading the Silk Vocal Live factory preset `Raw to Pro - Female (Gain Match)` on a vocal rack created an Active Silk preset named:
 
 - `<Preset Name="Raw to Pro - Female (Gain Match)">`
 - `SetupName="Raw to Pro - Female (Gain Match)"`
@@ -383,7 +390,7 @@ Compared with the default Male Silk preset, this factory preset changed the know
 - token `424`: `100` to `34.700000000000002842`
 - token `434`: `0.4000000000000000222` to `0.5999999999999999778`
 
-Treat tokens `405`, `424`, and `434` as preset-specific/vendor controls until isolated UI tests identify their visible controls. This preset is a good vendor-authored baseline for Laura-style female lead vocal tests because it is gain-matched and conservative on Low/Mid/High amounts.
+Treat tokens `405`, `424`, and `434` as preset-specific/vendor controls until isolated UI tests identify their visible controls. This preset is a useful vendor-authored baseline for female lead vocal tests because it is gain-matched and conservative on Low/Mid/High amounts.
 
 ## F6 Band Solo Mapping
 

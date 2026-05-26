@@ -6,6 +6,8 @@ Visual notes learned from SuperRack Performer v15.14.136.660 screenshots.
 
 - The large title at top left shows the selected rack/bus. In the observed session it reads `Band Bus`.
 - The selected plugin tile in the left chain is outlined yellow.
+- SuperRack logs may identify UI-originated plugin selections and `IN on/off` actions by rack name, plugin name, and UI slot number.
+- Windows UI Automation can expose top-bar controls such as rack navigation and view tabs, but rack/plugin tiles may require screenshot or coordinate-driven interaction.
 - The sidechain source dropdown appears above the plugin editor, labeled `SIDE CHAIN`.
 - For the observed vocal-pocketing setup, that dropdown displays `Vocal Bus`.
 - The plugin tile for the sidechained F6-RTA shows an orange/red `SC` badge.
@@ -77,9 +79,9 @@ Visual notes learned from SuperRack Performer v15.14.136.660 screenshots.
 
 ## Silk Vocal Visual Cues
 
-Observed Blue Vocal screenshot after adding Silk Vocal Live:
+Observed vocal-rack screenshot after adding Silk Vocal Live:
 
-- Rack title: `Blue Vocal`; top subtitle showed `PRESET*`, indicating unsaved or modified preset/session state.
+- Rack title showed the selected vocal rack name; top subtitle showed `PRESET*`, indicating unsaved or modified preset/session state.
 - Left chain order:
   1. `SilkVocl`
   2. `F6-RTA`
@@ -87,7 +89,7 @@ Observed Blue Vocal screenshot after adding Silk Vocal Live:
   4. `RVox`
   5. `API-550B`
 - The selected Silk tile is outlined yellow and shows `IN`.
-- Silk tile latency displayed `LT 1.3ms`; rack output latency area displayed `Latency 2.7ms` for the whole Blue Vocal rack.
+- Silk tile latency displayed `LT 1.3ms`; rack output latency area displayed `Latency 2.7ms` for the whole rack.
 - The plugin window title/logo reads `Silk Vocal Live` even though the database header observed `<PluginName>Silk Vocal</PluginName>` and the plug row name is `SilkVocl`.
 - Visible current Silk settings from the screenshot:
   - Voice type dropdown: `Male`

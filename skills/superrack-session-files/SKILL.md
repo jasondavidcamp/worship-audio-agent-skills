@@ -42,6 +42,7 @@ Keep this skill focused on SuperRack files and session structure.
 Use [sprk-schema.md](references/sprk-schema.md) for learned mappings and F6 notes.
 Use [superrack-ui.md](references/superrack-ui.md) for visual/UI cues from SuperRack screenshots.
 Use [superrack-docs.md](references/superrack-docs.md) for official Waves documentation anchors and interpretation rules.
+Use [current-session-db.md](references/current-session-db.md) for portable notes about SuperRack's current-state SQLite database behavior.
 Use [xps-rack-presets.md](references/xps-rack-presets.md) for SuperRack rack-chain preset `.xps` backups/exports.
 
 ## Helper Scripts

@@ -24,6 +24,10 @@ baselines/
 local-waves-plugin-catalog.md
 local-waves-plugin-inventory.json
 
+# Local SuperRack reverse-engineering probes/screenshots
+superrack-live-probe/
+superrack-*.png
+
 # OS/editor noise
 .DS_Store
 Thumbs.db
