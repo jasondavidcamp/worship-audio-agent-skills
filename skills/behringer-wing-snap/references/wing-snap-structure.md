@@ -127,9 +127,11 @@ Observed groups include:
 
 - `USB`: USB output patch.
 - `CRD`: card/W-LIVE output patch.
-- `MOD`: module/card routing used for SuperRack insert paths in the observed setup.
+- `MOD`: module/card routing, sometimes used for SuperRack insert paths in SoundGrid workflows.
 - `LCL`: local outputs.
 - `A`, `B`, `C`: AES50/stagebox groups or physical port groups depending on console setup.
+
+Do not hard-code this list. The analyzer should inspect all groups under `ae_data.io.out` because firmware, expansion cards, and user configuration can expose different group names.
 
 ## Issue Heuristics
 
@@ -144,6 +146,8 @@ Flag these for human review:
 - Routed channel is muted or fader is `-144` where live use is expected.
 - WING sample rate differs from the connected audio/plugin host session.
 - Duplicate physical sources feed multiple active channels unexpectedly.
+- Snapshot scopes exclude the area being judged, for example output routing omitted when the user expects a routing snapshot.
+- Virtual-soundcheck or playback routes are still active in a live-service snapshot.
 
 Do not assume every mismatch is wrong. Some WING channels intentionally use different labels from physical patch names.
 

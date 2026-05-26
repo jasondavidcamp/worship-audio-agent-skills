@@ -18,7 +18,9 @@ Use this skill to keep mix decisions anchored to a named musical target instead 
 5. Preserve congregational priorities: lyric intelligibility, stable lead vocal, supportive band energy, and low fatigue matter more than record-polish alone.
 6. Use copyrighted reference audio only for private analysis. Do not copy it into skill folders or generated deliverables.
 7. Treat user taste calls as stronger calibration than public reference matching when they conflict.
-8. Convert repeated user reactions into durable rules in the local/private taste-call log for the deployment.
+8. Convert repeated user reactions into durable rules in a deployment-local taste-call log kept outside public skill repositories.
+9. Classify the style family before recommending a target: natural congregational, acoustic/folk, modern arena, ambient/spontaneous, track-heavy pop, gospel-influenced, or hybrid.
+10. Keep objective profile fields separate from value judgments; a bright/wide/compressed reference may be correct for one style and wrong for another.
 
 ## Workflow
 
@@ -26,6 +28,7 @@ Use this skill to keep mix decisions anchored to a named musical target instead 
    - Reference track path(s).
    - Target section(s): full chorus, down verse, bridge, outro, or whole track.
    - Desired application: livestream mix, vocal bus, band bus, drum bus, mains, or rehearsal/studio render.
+   - Reference role: primary sound target, secondary feature target, translation check, or negative reference.
 
 2. Build a qualitative profile:
    - Energy: restrained, driving, intimate, celebratory, wide, dry, roomy, polished, raw.
@@ -33,6 +36,7 @@ Use this skill to keep mix decisions anchored to a named musical target instead 
    - Band relationship: acoustic-led, piano-led, drum-led, guitar-led, dense/full, open/sparse.
    - Low-end stance: warm/supportive, tight/controlled, modern/sub-heavy, light.
    - Top-end stance: smooth, airy, bright, aggressive, dark.
+   - Style family and arrangement density.
 
 3. Analyze the reference:
    - Use `scripts/analyze_reference_audio.py` for loudness, peak/RMS, crest factor, section-level energy, and broad frequency bands.
@@ -51,7 +55,7 @@ Use this skill to keep mix decisions anchored to a named musical target instead 
 
 6. Capture taste feedback:
    - Ask for small A/B taste calls when two candidates trade clarity, warmth, vocal pocket, BGV blend, ambience, or band energy.
-   - Read the deployment's private taste-call log before interpreting a taste call when one exists.
+   - Read any deployment-local taste-call log before interpreting a taste call when one exists.
    - Convert the user's reaction into a reusable rule, not just a one-off note.
    - Let `live-worship-mix-engineering` handle detailed grading, diagnosis, and plugin-chain moves.
 
@@ -63,9 +67,14 @@ Use the user's direct taste calls for the church's acceptable vocal level, BGV b
 
 ## Reference Files
 
+- Read `references/reference-selection-and-comparison.md` when choosing, vetting, or comparing reference tracks.
+- Read `references/worship-style-families.md` when the user names an artist/style or needs a broader target than a single reference track.
+- Read `references/congregational-arrangement-aimpoints.md` when the target depends on singability, team size, multitracks/stems, key/tempo, or arrangement density.
+- Read `references/aimpoint-profile-schema.md` when creating or updating a reusable reference profile.
+- Read `references/worship-mix-hierarchy-examples.md` when turning a style target into practical vocal/band/BGV/low-end priorities.
 - Read or update `references/aimpoint-vocabulary.md` when the user describes taste preferences.
 - Read `references/training-intake.md` when deciding whether outside material is useful for aimpoint calibration or whether the question requires a user taste call.
-- Add private reference profiles under `references/` only when the user has rights to analyze the source material and the repo will remain private.
+- Keep private reference profiles, purchased-stem notes, and deployment-specific taste logs outside public repos; include only sanitized schemas or public summaries here.
 - Keep copyrighted reference audio and purchased stem analysis out of public repos unless the analysis is intentionally licensed for sharing.
 
 ## Helper Script

@@ -54,8 +54,8 @@ def resolve_source(ae_data: dict, grp: str, n: int | str) -> str:
     return f"{grp}.{n}"
 
 
-def mod_output_source(ae_data: dict, n: int | str) -> tuple[str, str]:
-    item = ae_data.get("io", {}).get("out", {}).get("MOD", {}).get(str(n), {})
+def output_source(ae_data: dict, group: str, n: int | str) -> tuple[str, str]:
+    item = ae_data.get("io", {}).get("out", {}).get(group, {}).get(str(n), {})
     grp = item.get("grp", "OFF")
     inn = item.get("in", 1)
     return f"{grp}.{inn}", resolve_source(ae_data, grp, inn)
@@ -131,11 +131,12 @@ def build_report(data: dict, sr_names: dict[int, str] | None = None) -> dict:
     for key, fx in sorted(ae.get("fx", {}).items(), key=lambda kv: int(kv[0])):
         if fx.get("mdl") == "EXT":
             ein = fx.get("ein")
-            out_ref, out_name = mod_output_source(ae, ein) if fx.get("egrp") == "MOD" else ("", "")
+            egrp = fx.get("egrp")
+            out_ref, out_name = output_source(ae, egrp, ein) if egrp else ("", "")
             external_inserts.append(
                 {
                     "fx": f"FX{key}",
-                    "return": f"{fx.get('egrp')}.{ein}",
+                    "return": f"{egrp}.{ein}",
                     "send_source": out_ref,
                     "send_source_name": out_name,
                     "lat": fx.get("lat"),
@@ -145,9 +146,9 @@ def build_report(data: dict, sr_names: dict[int, str] | None = None) -> dict:
     report["external_inserts"] = external_inserts
 
     output_patches = {}
-    for group in ("USB", "CRD", "MOD", "LCL"):
+    for group, entries in sorted(ae.get("io", {}).get("out", {}).items()):
         rows = []
-        for key, item in sorted(ae.get("io", {}).get("out", {}).get(group, {}).items(), key=lambda kv: int(kv[0])):
+        for key, item in sorted(entries.items(), key=lambda kv: int(kv[0])):
             if item.get("grp") != "OFF":
                 rows.append(
                     {
@@ -174,6 +175,7 @@ def build_report(data: dict, sr_names: dict[int, str] | None = None) -> dict:
         report["superrack_compare_mod"] = comparisons
 
     issues = []
+    active_inputs: dict[str, list[dict]] = {}
     for row in channels:
         if row["mute"] and row["fader"] != -144:
             issues.append({"severity": "note", "kind": "muted_with_fader_up", "path": f"ch{row['ch']:02d}", "name": row["name"]})
@@ -189,8 +191,29 @@ def build_report(data: dict, sr_names: dict[int, str] | None = None) -> dict:
                     "input_name": row["input_name"],
                 }
             )
+        if not row["input"].startswith("OFF") and row["fader"] != -144 and not row["mute"]:
+            active_inputs.setdefault(row["input"], []).append(row)
+    for source, rows in sorted(active_inputs.items()):
+        if len(rows) > 1:
+            issues.append(
+                {
+                    "severity": "note",
+                    "kind": "duplicate_active_source",
+                    "source": source,
+                    "channels": [f"ch{row['ch']:02d} {row['name']}".strip() for row in rows],
+                }
+            )
     for row in external_inserts:
-        if row["send_source"].startswith("SEND."):
+        if row["send_source"].startswith("OFF."):
+            issues.append(
+                {
+                    "severity": "warning",
+                    "kind": "external_insert_send_off",
+                    "fx": row["fx"],
+                    "return": row["return"],
+                }
+            )
+        elif row["send_source"].startswith("SEND."):
             send_n = int(row["send_source"].split(".")[1])
             fx_n = int(row["fx"][2:])
             expected = 2 * fx_n - 1
@@ -228,6 +251,17 @@ def summarize_scopes(scopes: dict) -> dict:
             enabled = [key for key, val in values.items() if val is True]
             disabled = [key for key, val in values.items() if val is False]
             summary[group] = {
+                "enabled_count": len(enabled),
+                "disabled_count": len(disabled),
+                "enabled": enabled[:80],
+                "disabled": disabled[:80],
+            }
+        elif isinstance(values, str):
+            enabled = [str(i + 1) for i, char in enumerate(values) if char in ("+", "1", "T", "t")]
+            disabled = [str(i + 1) for i, char in enumerate(values) if char in ("-", "0", "F", "f")]
+            summary[group] = {
+                "format": "compact_string",
+                "length": len(values),
                 "enabled_count": len(enabled),
                 "disabled_count": len(disabled),
                 "enabled": enabled[:80],

@@ -32,6 +32,14 @@ When comparing to SuperRack:
 
 Read `references/wing-snap-structure.md` when you need field notes, learned path meanings, or comparison cautions.
 
+Use the focused references below when the question is more specific:
+
+- `references/wing-source-routing-playbook.md`: source patching, channel source vs channel processing, alternate sources, user signals, stereo pair risks.
+- `references/wing-recording-virtual-soundcheck.md`: USB/W-LIVE/card routing, recording/playback, virtual soundcheck, stream/record feeds.
+- `references/wing-snapshot-scope-recall.md`: snapshot scopes, recall safety, scope mismatch, scene hygiene.
+- `references/wing-superrack-soundgrid-routing.md`: AoIP-WSG/SoundGrid, SuperRack external inserts, FX SEND lanes, 64x64 checks.
+- `references/wing-output-bus-matrix-checks.md`: buses, mains, matrices, local/AES50/card outputs, livestream and lobby/feed sanity checks.
+
 ## Analysis Checklist
 
 For standalone WING snapshots, inspect:
@@ -40,10 +48,11 @@ For standalone WING snapshots, inspect:
 - Snapshot scopes when present: `scopes.ch`, `aux`, `bus`, `main`, `mtx`, `fx`, `routin`, `routout`, `cfg`, `area`, and `data`.
 - Global audio state: `ae_globals.clkrate`, `clksrc`, USB/card config.
 - Input channels: names, source `grp/in`, alt source, mute, fader, inserts.
+- Source patching: distinguish source labels from channel names; inspect source group, source number, alt source, stereo role, and user signal/tap path when present.
 - Buses, mains, and matrices: names, mono/stereo state, fader, mute, sends, insert state.
 - FX external inserts: `fx[*].mdl == EXT`, return group/input, latency, mix, and matching `SEND` source pair.
-- Output patches: `ae_data.io.out` for `USB`, `CRD`, `MOD`, local outputs, AES, etc.
-- Potential mistakes: shifted names, L/R swaps, routed-but-muted channels, fader `-144`, off sources, duplicate source assignments, unexplained external inserts.
+- Output patches: inspect every group under `ae_data.io.out`, not only `USB`, `CRD`, `MOD`, and local outputs.
+- Potential mistakes: shifted names, L/R swaps, routed-but-muted channels, fader `-144`, off sources, duplicate source assignments, unexplained external inserts, stale virtual-soundcheck alt sources, and output groups patched from the wrong tap/source.
 
 For WING-to-SuperRack comparisons:
 
@@ -52,8 +61,9 @@ For WING-to-SuperRack comparisons:
 - Check external insert returns, especially bus inserts returning on `MOD` channels.
 - Decode `SEND.n` output sources as FX-send lanes when possible: `SEND.1/2 = FX1 L/R`, `SEND.25/26 = FX13 L/R`, etc.
 - Verify sample rate compatibility.
-- Verify bus names and intended insert paths: e.g. `VOCALS -> Vocal Bus`, `BAND -> Band Bus`, `DRUMS -> Drum Bus`, `LIVSTR -> Livestream`.
+- Verify bus names and intended insert paths without assuming house-specific bus numbers: e.g. `<bus/main name> -> FX slot -> card/module return -> SuperRack rack name`.
 - Keep Waves plugin-chain judgments in `waves-live-plugin-chains` and SuperRack file judgments in `superrack-session-files`; use this skill for WING topology and mixer-state evidence.
+- If SoundGrid routing is involved, read `references/wing-superrack-soundgrid-routing.md` before judging insert send/return pairs.
 
 ## Documentation Anchors
 
@@ -62,16 +72,15 @@ Use official Behringer/WING docs as anchors, then validate against the actual `.
 - WING product documentation confirms the console architecture: 40 stereo input channels, 8 stereo aux input channels, 16 aux stereo buses, 4 mains, 8 matrices, 16 true-stereo FX engines, integrated 48x48 USB audio, and optional 64-channel AoIP cards.
 - The AoIP-WSG quick start guide documents 64 channels from console to SoundGrid and 64 return channels back to WING. It also documents EXTERNAL FX insertion on channels/buses and routing FX SEND L/R lanes through selected SoundGrid channels.
 - WING remote/OSC documentation describes snapfiles as JSON trees and defines snapshot scopes for saved/recallable parameter groups.
+- WING source-channel architecture separates source capture from channel processing; do not assume channel numbers equal physical input numbers.
+- W-LIVE/USB/card routing can carry recording, playback, virtual soundcheck, broadcast, or insert paths; identify the source group and tap before calling a route wrong.
 
 ## Learned Pattern
 
 - WING `.snap` is JSON.
 - WING sample rate is often `48000`, but confirm from the file.
-- WING external inserts used `FX` rows with `mdl: EXT`.
-- Bus insert returns may use `MOD` channels in SoundGrid-card workflows, for example:
-  - `bus01 VOCALS -> FX13 -> MOD.49 -> SuperRack Vocal Bus`
-  - `bus03 BAND -> FX14 -> MOD.51 -> SuperRack Band Bus`
-  - `bus05 DRUMS -> FX15 -> MOD.53 -> SuperRack Drum Bus`
-  - `main04 LIVSTR -> FX16 -> MOD.60 -> SuperRack Livestream`
+- WING external inserts commonly appear as `FX` rows with `mdl: EXT`.
+- In SoundGrid-card workflows, an inserted bus or main may follow `<bus/main path> <name> -> FXn -> <card group>.<return channel> -> SuperRack <rack name>`.
+- The matching card output should often be sourced from the FX SEND lane for that FX slot, but the exact group/channel numbers are deployment-specific.
 
-These are examples, not universal constants. Re-detect every time.
+Re-detect every time. Do not treat example FX, bus, or card channel numbers as constants.

@@ -6,12 +6,14 @@ Use this note before rendering through `reapy`, REAPER MCP, or any unattended RE
 
 - Store bulky render output outside the skill repo, preferably on a dedicated audio/render volume. Do not commit rendered audio or generated preset exports.
 - The generic MCP helper assumption that `RENDER_BOUNDSFLAG=1` means "time selection" was wrong in the active REAPER 7.61 setup.
-- In this setup, `RENDER_BOUNDSFLAG=2` correctly rendered the active time selection.
+- In the tested automation path, `RENDER_BOUNDSFLAG=2` correctly rendered the active time selection. Re-verify this after REAPER or API changes.
 - `RENDER_BOUNDSFLAG=0` produced a "Nothing to render!" error when no custom render range was set.
 - A project can inherit `RENDER_SETTINGS=32` / `RENDER_BOUNDSFLAG=4` from selected-media-item rendering. With no selected items this raises "Nothing to render!" even if a valid time selection was set. Force `RENDER_SETTINGS=0` for master mix and `RENDER_BOUNDSFLAG=2` for time selection before command `41824`.
 - An accidental wrong render-bounds value can start a full 16-minute render even when a 30-second clip was intended.
 - If a render dialog says "Rendering to file..." for much longer than the requested range should take, stop/cancel the render and close any "Render Incomplete" prompt instead of waiting.
-- A 2026-05-24 live-capture project had a blank `MASTERHWOUT` line, leaving the master unrouted to output 1/2, while each track still had direct `HWOUT` routes. Before playback or render checks, verify the master has a stereo hardware send to output 1/2 (`I_DSTCHAN=0`, `I_SRCCHAN=0`, unity volume, unmuted), clear unwanted per-track hardware/ReaRoute outputs, keep the normal track-to-master parent sends, and set the render source to master mix. File size alone is not enough; always measure non-silence after render.
+- After every render or render batch, close any REAPER render-complete, render-progress, or confirmation popup before continuing. Prefer focusing REAPER and sending `Esc`, then verify the reapy/MCP API responds. Do not leave render result windows open for the user.
+- If REAPER asks "Loop/time selections locked, unlock now and remove?", cancel/escape the prompt unless the user explicitly asked to unlock or remove loop/time selections. Do not click `OK` as part of render cleanup.
+- Imported or live-capture projects can have missing or unexpected master hardware outputs while tracks retain direct hardware/ReaRoute outputs. Before playback or render checks, verify the master has a stereo hardware send to output 1/2 (`I_DSTCHAN=0`, `I_SRCCHAN=0`, unity volume, unmuted), clear unwanted per-track hardware/ReaRoute outputs, keep the normal track-to-master parent sends, and set the render source to master mix. File size alone is not enough; always measure non-silence after render.
 - If track items point at valid WAV files but master renders are silent or near plugin-noise level, check whether REAPER's PCM source handle is stale/offline. Rebinding the take to a fresh `PCM_Source_CreateFromFile(<same wav path>)` can restore normal rendering without copying tracks. Confirm with a short raw-control render before adding plugin candidates.
 
 ## Required Render Pattern
@@ -28,6 +30,7 @@ For snippets and full-song bounces:
 8. Verify it is non-silent with peak/RMS analysis before offering it as a listening sample.
 9. If the raw-control render is silent while the source WAV is not, refresh/rebind the media sources or create a disposable staging track from the same file, then rerender the control.
 10. Analyze peak/LUFS before making further gain moves.
+11. Close render-complete/progress/confirmation popups, then run a quick API ping before starting the next render or returning control to the user.
 
 For a "full project" render, do not use an ambiguous whole-project bounds mode. Instead, find the max media-item end time and render `0` to that value as a time selection.
 
