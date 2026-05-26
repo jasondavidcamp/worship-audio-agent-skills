@@ -14,6 +14,7 @@ AI-agent skills and helper tools for live worship audio: mix aimpoints, worship 
 ## Workflows
 
 - [REAPER to SuperRack Iteration](workflows/reaper-to-superrack-iteration.md): how the skills work together to design Waves chains in REAPER, transfer them into SuperRack, and validate deployment state.
+- [Backlog](BACKLOG.md): future experiments and improvements that are not ready to become skill instructions yet.
 
 ## Layout
 
