@@ -11,6 +11,10 @@ AI-agent skills and helper tools for live worship audio: mix aimpoints, worship 
 - `behringer-wing-snap`: inspect Behringer WING `.snap` files and compare routing against SuperRack sessions.
 - `superrack-session-files`: inspect, validate, and carefully patch Waves SuperRack `.sprk` session databases and `.xps` rack presets.
 
+## Workflows
+
+- [REAPER to SuperRack Iteration](workflows/reaper-to-superrack-iteration.md): how the skills work together to design Waves chains in REAPER, transfer them into SuperRack, and validate deployment state.
+
 ## Layout
 
 Each folder under `skills/` is a Codex-style skill:
