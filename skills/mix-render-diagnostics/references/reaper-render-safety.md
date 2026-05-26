@@ -1,8 +1,8 @@
-# REAPER Render Safety
+# REAPER Render Safety And Local Automation Lessons
 
 Use this note before rendering through `reapy`, REAPER MCP, or any unattended REAPER automation.
 
-## Local Lessons Learned
+## REAPER-Specific Lessons Learned
 
 - Store bulky render output outside the skill repo, preferably on a dedicated audio/render volume. Do not commit rendered audio or generated preset exports.
 - The generic MCP helper assumption that `RENDER_BOUNDSFLAG=1` means "time selection" was wrong in the active REAPER 7.61 setup.
@@ -15,6 +15,7 @@ Use this note before rendering through `reapy`, REAPER MCP, or any unattended RE
 - If REAPER asks "Loop/time selections locked, unlock now and remove?", cancel/escape the prompt unless the user explicitly asked to unlock or remove loop/time selections. Do not click `OK` as part of render cleanup.
 - Imported or live-capture projects can have missing or unexpected master hardware outputs while tracks retain direct hardware/ReaRoute outputs. Before playback or render checks, verify the master has a stereo hardware send to output 1/2 (`I_DSTCHAN=0`, `I_SRCCHAN=0`, unity volume, unmuted), clear unwanted per-track hardware/ReaRoute outputs, keep the normal track-to-master parent sends, and set the render source to master mix. File size alone is not enough; always measure non-silence after render.
 - If track items point at valid WAV files but master renders are silent or near plugin-noise level, check whether REAPER's PCM source handle is stale/offline. Rebinding the take to a fresh `PCM_Source_CreateFromFile(<same wav path>)` can restore normal rendering without copying tracks. Confirm with a short raw-control render before adding plugin candidates.
+- When writing track Volume envelope points through ReaScript, do not pass raw linear volume values directly unless the envelope scaling mode has been checked. In one tested REAPER 7.61 setup, track Volume envelopes used scaling mode `1`; use `GetEnvelopeScalingMode` plus `ScaleToEnvelopeMode` before `InsertEnvelopePoint`. Passing raw values like `1.0` into a scaled Volume envelope can render the track nearly silent. After creating a Volume envelope, REAPER may move the visible fader to `0 dB`; the envelope then carries the fader-equivalent level.
 
 ## Required Render Pattern
 
@@ -51,8 +52,8 @@ If the user reports static, crackle, hash, or gritty corruption while peak/LUFS 
 - Compare against a known-good rerendered baseline.
 - Check whether the render was printed faster-than-realtime or through a plugin chain that behaves badly during render.
 - If render speed cannot be reliably controlled by API, use a manual/GUI-confirmed render mode or a short user-confirmed spot check before printing full-length candidates.
-- Do not offer A/B taste calls from a render batch that may have been printed faster-than-realtime.
-- Do not learn mix-preference rules from any batch the user describes as static-y, crackly, corrupted, or horrible.
+- Do not offer A/B listening decisions from a render batch that may have been printed faster-than-realtime.
+- Do not learn mix-decision rules from any batch the user describes as static-y, crackly, corrupted, or horrible.
 
 ## Required Compare-Batch Gate
 
@@ -65,7 +66,7 @@ For future A/B compare batches:
 5. If the candidate snippets pass automated checks, ask for short spot-checks when the user is available or clearly mark the snippets as "unverified by ear."
 6. Only render full-length candidates after all required snippet sections are clean.
 7. After a full-length render, spot-check the full rendered file at the same timestamps used for the snippets plus any quiet/open sections. Snippet files can be clean while the full-length render or playback path still has artifacts.
-8. If any candidate in a batch has shared static/crackle, invalidate the taste-call batch and isolate source/FX/bus/plugin render behavior before continuing.
+8. If any candidate in a batch has shared static/crackle, invalidate the compare batch and isolate source/FX/bus/plugin render behavior before continuing.
 
 For unattended work, prefer preparing short snippets and a targeted listening checklist over rendering multiple full-length candidates that have not passed a human or audible-artifact sanity check.
 

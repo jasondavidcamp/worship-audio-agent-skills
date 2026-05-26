@@ -7,7 +7,7 @@ AI-agent skills and helper tools for live worship audio: mix aimpoints, worship 
 - `band-sound-aimpoint`: define reference targets, style vocabulary, and taste-call calibration for worship mixes.
 - `live-worship-mix-engineering`: critique worship mix renders, diagnose weak points, and choose practical brand-neutral next moves.
 - `waves-live-plugin-chains`: choose source-specific live-safe Waves plugin chains for SuperRack SoundGrid/Performer, or for LV1/REAPER-staged chains that must transfer safely to SuperRack.
-- `reaper-render-reference`: use REAPER as a staging host for render comparisons and plugin/SuperRack transfer notes.
+- `mix-render-diagnostics`: analyze render candidates, references, stems, and delivery exports; includes REAPER staging and SuperRack transfer notes.
 - `behringer-wing-snap`: inspect Behringer WING `.snap` files and compare routing against SuperRack sessions.
 - `superrack-session-files`: inspect, validate, and carefully patch Waves SuperRack `.sprk` session databases and `.xps` rack presets.
 

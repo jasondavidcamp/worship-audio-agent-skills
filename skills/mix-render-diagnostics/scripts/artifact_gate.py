@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Screen WAV renders for static/crackle-like artifacts before taste calls.
+"""Screen WAV renders for static/crackle-like artifacts before listening checks.
 
 This is a guardrail, not a replacement for listening. It catches obvious
 high-frequency/hash differences and format problems, then prints PASS/WARN.

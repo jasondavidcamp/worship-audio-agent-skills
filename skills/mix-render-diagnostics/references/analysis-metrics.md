@@ -1,6 +1,6 @@
 # Analysis Metrics
 
-Use metrics to narrow the search before asking for taste calls. Always note whether a metric is measured, estimated from a tool, or inferred.
+Use metrics to narrow the search before making listening or A/B decisions. Always note whether a metric is measured, estimated from a tool, or inferred.
 
 ## Baseline Checks
 

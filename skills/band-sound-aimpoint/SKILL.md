@@ -51,7 +51,7 @@ Use this skill to keep mix decisions anchored to a named musical target instead 
 5. Turn analysis into moves:
    - Recommend small, reversible changes first.
    - Tie each suggestion to the aimpoint: "more lead-forward," "less low-mid cloud," "more acoustic transient," "less cymbal edge."
-   - When plugin iteration is needed, use `reaper-render-reference`.
+   - When plugin iteration or render diagnostics are needed, use `mix-render-diagnostics`.
 
 6. Capture taste feedback:
    - Ask for small A/B taste calls when two candidates trade clarity, warmth, vocal pocket, BGV blend, ambience, or band energy.
@@ -109,7 +109,7 @@ wsl.exe -d Ubuntu -- /path/to/venv/bin/python "/mnt/c/path/to/skills/band-sound-
 
 ## Related Skills
 
-- Use `reaper-render-reference` for REAPER staging, render iteration, and candidate ranking.
+- Use `mix-render-diagnostics` for REAPER staging, render diagnostics, and candidate ranking.
 - Use `live-worship-mix-engineering` for scoring, section diagnosis, plugin-chain judgment, and next-move selection.
 - Use `waves-live-plugin-chains` when the aimpoint needs to become Waves plugin-chain choices.
 - Use `superrack-session-files` only after an approved candidate needs to move into a Waves SuperRack session file.

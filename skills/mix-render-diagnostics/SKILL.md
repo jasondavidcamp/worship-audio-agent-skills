@@ -1,13 +1,17 @@
 ---
-name: reaper-render-reference
-description: Use REAPER as an audio staging host to build serial processing/plugin chains, render candidates, compare them against source/reference audio, rank settings, and document/export plugin state for later transfer. Use when iterating mixes, plugin settings, vocal/band/bus processing, reference matching, offline renders, REAPER MCP control, Waves chain auditioning, or REAPER-to-SuperRack preset/state transfer.
+name: mix-render-diagnostics
+description: Analyze rendered audio, staged mix candidates, stems, references, and delivery exports to diagnose mix issues and guide repeatable next tests. Use when comparing source/candidate/reference WAVs, section-level worship mix renders, REAPER-staged plugin chains, vocal/band/drum/bus/livestream processing, artifact gates, loudness/spectrum/dynamics/mono/codec checks, Waves chain auditioning, or REAPER-to-SuperRack preset transfer.
 ---
 
-# REAPER Render Reference
+# Mix Render Diagnostics
 
 ## Purpose
 
-Use REAPER as a disposable staging area for fast plugin-setting iteration before committing settings to a live host. Keep this skill focused on home/studio auditioning, render analysis, and settings capture; use `superrack-session-files` only when writing back to a `.sprk` session.
+Use this skill to turn rendered audio evidence into repeatable diagnostic decisions: what changed, what failed, what still needs listening, and what next reversible test should be run.
+
+REAPER remains the primary staging host for plugin-setting iteration, but it is a host adapter inside this broader skill. Keep REAPER-specific learnings in the REAPER references, and keep general mix diagnostics in `analysis-metrics.md` and scripts that work on WAV files from any source.
+
+This skill does not score emotional impact, immersion, or worship feel. Translate subjective reports into measurable or inspectable hypotheses such as clipping, loudness drift, flattened crest factor, transient loss, high-band excess, low-mid buildup, mono loss, side-energy imbalance, phase damage, codec artifacts, excessive reverb tail, or lost intelligibility.
 
 ## Operating Rules
 
@@ -15,7 +19,7 @@ Use REAPER as a disposable staging area for fast plugin-setting iteration before
 2. Keep test chains serial. Do not use parallel FX chains unless the final target is known to support the same topology.
 3. Bypass or disable ReaInsert/live I/O FX during offline rendering so hardware routing does not affect analysis.
 4. Match gain before judging tone. Record input loudness, output loudness, peak headroom, and compensation used.
-5. Treat objective metrics as triage, not final taste. Use them to narrow candidates, then ask for human taste calls on top contenders.
+5. Treat metrics as gates and proxies, not aesthetic scores. Report what changed, what failed, and the next reversible test to run.
 6. Preserve plugin versions, mono/stereo format, sample rate, oversampling, and latency mode in run notes.
 7. Prefer exported Waves preset/settings files when transferring to SuperRack. Use REAPER normalized parameters only as a fallback or diagnostic view.
 8. Before any master-mix render or listening check, verify the routing matrix has the master routed to output 1/2 (`MASTERHWOUT 0 0 1...`, stereo/MC output 1). Remove direct per-track hardware/ReaRoute outputs unless they are deliberately part of the test; keep normal track-to-master parent routing. A blank master hardware output can produce silent renders, and per-track hardware outputs can create misleading monitoring/routing behavior.
@@ -49,13 +53,14 @@ Use REAPER as a disposable staging area for fast plugin-setting iteration before
    - Before a compare batch, render known-good baseline snippets and candidate snippets for at least three sections: loud/dense, mid-song, and late-song. Do not print full-length candidates until the multi-section snippet batch passes the artifact gate.
    - For short clip analysis, prefer a temporary 30-second media item plus "apply track/take FX to item" over full project render. Copy the resulting WAV to the analysis folder and delete the temporary track/item.
    - Compare source, candidate, and reference with the metrics in `references/analysis-metrics.md`.
-   - For drum or drum-bus compares aimed at a specific artist/reference, read the relevant deployment-local aimpoint profile before ranking candidates. Keep those private profiles outside public skill repositories.
+   - For drum or drum-bus compares aimed at a specific artist/reference, read the relevant deployment-local aimpoint profile only for target tolerances and reference ranges. Keep those private profiles outside public skill repositories.
    - Before translating offline DSP prototypes into Waves chains, use `waves-live-plugin-chains` and any locally generated Waves plugin catalog.
    - Use `scripts/analyze_wav.py` for quick dependency-free WAV peak/RMS/crest checks.
-   - Use `scripts/artifact_gate.py` to compare candidate snippets against known-good baseline snippets before scoring. Treat user-reported static/crackle/hash as a hard failure for that render file, but isolate whether the issue is the candidate chain, a specific section, the full-length render, or playback before learning mix taste.
+   - Use `scripts/artifact_gate.py` to compare candidate snippets against known-good baseline snippets before A/B comparison. Treat user-reported static/crackle/hash as a hard failure for that render file, but isolate whether the issue is the candidate chain, a specific section, the full-length render, or playback before making any mix judgment.
    - For deeper reference/candidate descriptors, use `band-sound-aimpoint/scripts/analyze_reference_audio.py --essentia` when Essentia is available; otherwise rely on the librosa/LUFS fields.
    - Use `scripts/render_time_range.py` for REAPER renders when possible; it sets an explicit range, validates the range, and avoids the local "Nothing to render" / accidental full-project render trap.
    - Rank candidates by target-specific fit and reject obvious failures: clipping, static/crackle/hash, severe loudness drift, harshness, low-mid buildup, pumping, phase damage, or lost intelligibility.
+   - When a render fails, prescribe one concrete next test: reduce or bypass the suspected processor, render the same time range, and compare the same metrics again.
 
 5. Prepare handoff:
    - Export Waves plugin settings from REAPER when possible and record the exact file path.
@@ -85,14 +90,18 @@ candidates:
     analysis:
       lufs_i: -18.4
       true_peak_dbfs: -3.1
-      notes: "Closer presence match, slight 300 Hz buildup remains."
-    decision: keep
+      gates:
+        clipping: pass
+        artifact_gate: pass
+      notes: "Presence range closer to reference; 300 Hz remains elevated."
+      next_test: "Try 1.5 dB dynamic cut around 300 Hz and rerender chorus_1."
+    decision: keep_for_listening
 ```
 
 ## References
 
-- Read `references/analysis-metrics.md` when choosing objective checks or scoring render candidates.
-- Read `references/render-safety.md` before rendering from REAPER, especially after changing render bounds, full-song renders, or time selections.
+- Read `references/analysis-metrics.md` when choosing objective checks and comparing render candidates.
+- Read `references/reaper-render-safety.md` before rendering from REAPER, especially after changing render bounds, full-song renders, or time selections.
 - Read and update `references/reaper-superrack-transfer.md` when learning how a Waves setting exported from REAPER imports into SuperRack.
 - Read `references/reaper-mcp-setup.md` when checking the local REAPER MCP install, Codex config entry, or reapy connection requirements.
 
@@ -124,6 +133,7 @@ Extract Waves `.xps` preset files from an `.rpp` into one folder per track/chann
 
 ## Related Skills
 
+- Use `live-worship-mix-engineering` to translate diagnostics into brand-neutral live worship mix moves.
 - Use `waves-live-plugin-chains` when the question is which Waves plugin or chain to try.
 - Use `superrack-session-files` after a REAPER candidate is approved and the task becomes SuperRack `.sprk` inspection, patching, or validation.
-- Use `behringer-wing-snap` only when the workflow involves the WING console, Church routing, SoundGrid card channels, or external insert mapping.
+- Use `behringer-wing-snap` only when the workflow involves the WING console, church routing, SoundGrid card channels, or external insert mapping.
