@@ -1,6 +1,6 @@
 ---
 name: mix-render-diagnostics
-description: Analyze rendered audio, staged mix candidates, stems, references, and delivery exports to diagnose mix issues and guide repeatable next tests. Use when comparing source/candidate/reference WAVs, section-level worship mix renders, REAPER-staged plugin chains, vocal/band/drum/bus/livestream processing, artifact gates, loudness/spectrum/dynamics/mono/codec checks, Waves chain auditioning, or REAPER-to-SuperRack preset transfer.
+description: Analyze rendered audio, staged mix candidates, stems, references, and delivery exports to diagnose mix issues and guide repeatable next tests. Use when comparing source/candidate/reference WAVs, section-level worship mix renders, REAPER-staged plugin chains, vocal/band/drum/bus/livestream processing, artifact gates, loudness/spectrum/dynamics/mono/codec checks, vocal masking, transient punch, reverb tail buildup, candidate reports, Waves chain auditioning, or REAPER-to-SuperRack preset transfer.
 ---
 
 # Mix Render Diagnostics
@@ -52,6 +52,7 @@ This skill does not score emotional impact, immersion, or worship feel. Translat
    - Always render a raw-control snippet before Waves/plugin candidates. If the control is silent even though the source WAV has audio, refresh the take's PCM source from the same file path or use a disposable staging track, then rerender the control before continuing.
    - Before a compare batch, render known-good baseline snippets and candidate snippets for at least three sections: loud/dense, mid-song, and late-song. Do not print full-length candidates until the multi-section snippet batch passes the artifact gate.
    - For short clip analysis, prefer a temporary 30-second media item plus "apply track/take FX to item" over full project render. Copy the resulting WAV to the analysis folder and delete the temporary track/item.
+   - For section-aware diagnostics, vocal masking, transient/punch, reverb/tail, stereo/mono, codec, or candidate report work, read `references/diagnostic-modules.md` and run `scripts/render_diagnostic_report.py`.
    - Compare source, candidate, and reference with the metrics in `references/analysis-metrics.md`.
    - For drum or drum-bus compares aimed at a specific artist/reference, read the relevant deployment-local aimpoint profile only for target tolerances and reference ranges. Keep those private profiles outside public skill repositories.
    - Before translating offline DSP prototypes into Waves chains, use `waves-live-plugin-chains` and any locally generated Waves plugin catalog.
@@ -101,6 +102,7 @@ candidates:
 ## References
 
 - Read `references/analysis-metrics.md` when choosing objective checks and comparing render candidates.
+- Read `references/diagnostic-modules.md` when diagnosing section-specific failures, vocal masking, transient loss, tail buildup, stereo/mono translation, codec delivery, or candidate report shape.
 - Read `references/reaper-render-safety.md` before rendering from REAPER, especially after changing render bounds, full-song renders, or time selections.
 - Read and update `references/reaper-superrack-transfer.md` when learning how a Waves setting exported from REAPER imports into SuperRack.
 - Read `references/reaper-mcp-setup.md` when checking the local REAPER MCP install, Codex config entry, or reapy connection requirements.
@@ -117,6 +119,12 @@ Run a static/artifact gate against a known-good snippet:
 
 ```powershell
 & "<python>" scripts/artifact_gate.py "<candidate-snippet.wav>" --baseline "<known-good-snippet.wav>" --pretty
+```
+
+Generate a section-aware diagnostic report:
+
+```powershell
+& "<python>" scripts/render_diagnostic_report.py --candidate "C:\path\candidate.wav" --baseline "C:\path\baseline.wav" --reference "C:\path\reference.wav" --section "verse:45:75" --section "chorus:90:120" --md-output "C:\path\report.md" --json-output "C:\path\report.json"
 ```
 
 Render a known-safe REAPER time range:

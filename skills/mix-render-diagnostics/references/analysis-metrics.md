@@ -9,7 +9,8 @@ Use metrics to narrow the search before making listening or A/B decisions. Alway
 - True peak and sample peak: reject candidates that clip or lose required headroom.
 - Loudness compensation: compare tonal changes at matched perceived loudness when possible.
 - Crest factor / dynamic range: flag candidates that flatten transients or pump audibly.
-- Artifact gate: compare a short candidate snippet against a known-good baseline with `scripts/artifact_gate.py`; do not score taste if static/crackle/hash is suspected or reported.
+- Artifact gate: compare a short candidate snippet against a known-good baseline with `scripts/artifact_gate.py`; do not make mix judgments if static/crackle/hash is suspected or reported.
+- Section report: use `scripts/render_diagnostic_report.py` when a single integrated value may hide verse/chorus/bridge differences.
 
 ## Spectral Checks
 
@@ -18,6 +19,18 @@ Use metrics to narrow the search before making listening or A/B decisions. Alway
 - Presence: watch roughly 1.5-5 kHz for intelligibility versus harshness.
 - Sibilance/edge: watch roughly 5-10 kHz for vocal bite, cymbal hash, and de-essing side effects.
 - Air: check high-band openness without hiss or brittle top.
+
+## Diagnostic Module Checks
+
+Use `references/diagnostic-modules.md` when the problem is bigger than a single metric:
+
+- Section-aware diagnostics: compare the same candidate across sparse, dense, loud, late-song, and problem timestamp sections.
+- Vocal masking: compare vocal and band stems when available; otherwise call findings mix-level proxies.
+- Transient/punch: inspect crest, attack-to-body proxy, transient density, and baseline deltas.
+- Reverb/tail buildup: inspect quiet-floor-to-body ratio and sparse-section wash risk.
+- Stereo/mono translation: inspect correlation, mono delta, and side-to-mid energy by band.
+- Codec delivery: compare a decoded codec round-trip when available; mark codec untested when unavailable.
+- Candidate report: produce JSON/Markdown with warnings and one next test per section.
 
 ## Optional Essentia Checks
 
