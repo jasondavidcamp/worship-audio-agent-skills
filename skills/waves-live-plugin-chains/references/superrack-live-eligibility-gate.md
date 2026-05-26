@@ -9,7 +9,9 @@ Use this before recommending any plugin chain for a live Waves workflow. The goa
 - Waves SuperRack Performer product/support page: SuperRack Performer supports Waves V16/V15 plugins in V15 and can run natively on Core Audio/ASIO, but this skill still limits recommendations to Waves/SuperRack-deployable chains.
 - Waves Supported Platforms chart: per-plugin SuperRack SoundGrid and SuperRack Native/Performer support.
 - Waves Plugin Latency chart: per-plugin latency and live/full mode differences.
+- Waves Channel Components chart: per-plugin mono/stereo/rack-format availability.
 - Waves Live Common Questions: SoundGrid latency is affected by I/O conversion, server buffer, driver buffer, plugin latency, and routing; rack latency is displayed in SuperRack.
+- Waves SuperRack Performer audio-artifact troubleshooting: heavy plugins, buffer size, sample rate, cables/hubs, and interface drivers/firmware affect crackles/dropouts.
 - Waves Clarix LB product page: SoundGrid-compatible broadcast cleanup with 47 ms latency, not intended for in-venue concert audio.
 
 ## Hard Gate
@@ -22,6 +24,7 @@ Recommend a plugin in a live chain only when all are true:
 4. The rack format can load it. Mono racks will not show stereo-only plugins.
 5. CPU/load is realistic for the show. If SuperRack Performer audio or CPU indicators turn yellow/red, lighten the chain or raise buffer.
 6. The chain uses the live component or low-latency mode when the plugin has both full/studio and live modes.
+7. The target host and path are named: SoundGrid, Performer, LV1, REAPER staging, FOH, monitor, livestream, or broadcast-only.
 
 ## Version Gate
 
@@ -51,7 +54,7 @@ Official Waves data indicates these common candidates are SuperRack SoundGrid an
 | CLA-2A | 0 samples | Core live smooth leveling |
 | Sibilance | Live/full no-lookahead 0 samples; full lookahead adds latency | Use live/no-lookahead mode |
 | Waves Tune Real-Time | Zero or near-zero depending on pitch | Core live when key/scale are known |
-| Vocal Rider | Live mode 240 samples at 48 kHz | Conditional live; verify feel/latency |
+| Vocal Rider | 0 samples | Core live; verify musical phrasing |
 | Silk Vocal | Live component 64 samples; full component is high latency | Use Silk Vocal Live only for venue paths |
 | C1 Compressor | Comp/gate 0 samples; some sidechain variants add latency | Use simple live modules first |
 | C6 | 64 samples | Core/conditional live multiband control |
@@ -69,11 +72,14 @@ Official Waves data indicates these common candidates are SuperRack SoundGrid an
 | L4 | Live mode 168 samples at 48 kHz | Conditional stream/output protection |
 | WLM Plus | WLM 0, WLM Plus 80 samples | Metering/correction; prefer metering live |
 | Clarix LB | 2192 samples / 47 ms | Broadcast-only; not in-venue |
+| InTrigger Drum Replacer | Live 0 samples; low-latency mode 72 samples; full mode much higher | Use Live/low-latency only on venue paths |
+| Torque | Torque Live 0 samples; regular component adds latency | Use Torque Live on venue paths |
 
 ## Refusal And Replacement Rules
 
 - If a proposed plugin is not confirmed for SuperRack, do not recommend it as a chain plugin. Offer a SuperRack-safe replacement.
 - If a plugin is compatible but high-latency, mark it as broadcast-only or verify-first.
 - If a studio/full component has a live component, name the live component explicitly.
+- If Performer crackles, drops out, or shows yellow/red audio/CPU indicators, simplify the chain and apply `superrack-host-latency-cpu-planning.md` before adding plugins.
 - If the user is staging in REAPER, still design for the final SuperRack host, not for every plugin REAPER can load.
 - If the plugin appears in inventory but not in the target rack, suspect version, license, format, unsupported platform, or mono/stereo mismatch before suggesting a workaround.

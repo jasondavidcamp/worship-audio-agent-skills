@@ -14,6 +14,7 @@ First read `superrack-live-eligibility-gate.md`. If this matrix and the gate dis
 6. Treat installed plugins as candidates, not automatic recommendations. Verify uncertain plugins in the actual SuperRack target.
 7. Use only official SuperRack-supported Waves plugins or plugins verified in the target SuperRack instance.
 8. Prefer the live component or low-latency mode when a plugin has both live and full/studio modes.
+9. Separate latency risk from musical risk. Vocal Rider is low-latency, but can still fight worship phrasing; Bass Rider Live has more latency and should be checked against the path.
 
 ## Drum Chain Starting Points
 
@@ -51,7 +52,7 @@ Preferred starting tools:
 | De-essing | Sibilance, RDeEsser, DeEsser, F6 | MannyM-TripleD | Dulling the whole vocal |
 | Tuning | Waves Tune Real-Time | Waves Tune/LT offline only | Wrong key/scale or too-fast correction |
 | Smart polish | Silk Vocal Live component | CLA Vocals, Butch Vig Vocals only if SuperRack-verified | Letting a one-knob plugin hide artifacts |
-| Level consistency | Vocal Rider live posture, R-Vox | MV2 with caution | Rider fighting worship phrasing |
+| Level consistency | Vocal Rider, R-Vox | MV2 with caution | Rider fighting worship phrasing |
 | FX | H-Delay, H-Reverb, RVerb, IRLive, CLA Epic | Space Rider | Serial wet effects that cannot transfer cleanly |
 
 ## Band/Buses
@@ -71,7 +72,9 @@ Preferred starting tools:
 
 - Clarix LB: SuperRack-compatible for live broadcast, but high latency and Titan/server requirements make it broadcast-only, not in-venue FOH/monitor processing.
 - Clarity Vx family: useful restoration/noise tools in studio contexts, but do not make them default SuperRack chains unless the exact target host proves support, latency, and CPU behavior.
-- Silk Vocal, Bass Rider, L4, Sibilance, and InTrigger: use the live component/mode where available; avoid full/lookahead/studio modes on in-venue sources.
+- Silk Vocal, Bass Rider, L4, Sibilance, Torque, and InTrigger: use the live component/mode where available; avoid full/lookahead/studio modes on in-venue sources.
+- Vocal Rider: official latency is low, but verify that it follows the singer's intent instead of flattening worship phrasing.
+- X-FDBK and feedback tools: useful live utilities, but verify CPU/load and do not let them replace gain structure, mic choice, monitor placement, or source discipline.
 - Linear-phase EQ, IR reverbs, tape emulations, and large mastering chains: useful in the right place, but require latency/CPU/artifact checks before live use.
 - StudioVerse: installed, but do not rely on it for SuperRack workflows unless explicitly verified.
 - Surround/immersive/headphone tools: usually irrelevant for mono-first church workflows.

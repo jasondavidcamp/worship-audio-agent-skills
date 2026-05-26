@@ -55,6 +55,7 @@ Keep `live-worship-mix-engineering` Waves-neutral. Use this skill only after the
 ## Reference Files
 
 - Read `references/superrack-live-eligibility-gate.md` first when a chain will be used live. It is the compatibility, version, latency, format, and CPU gate.
+- Read `references/superrack-host-latency-cpu-planning.md` when choosing between SuperRack SoundGrid, SuperRack Performer, LV1, REAPER staging, broadcast-only use, or when CPU/artifact/latency risk affects the chain.
 - Read `references/waves-plugin-decision-matrix.md` for source-specific plugin choices and first-line alternatives.
 - Read `references/waves-superrack-operational-reference.md` for live-safety, latency posture, SoundGrid/Performer cautions, and operational metadata.
 - Read `references/waves-next-move-map.md` when translating common worship-mix diagnoses into Waves-specific next moves.

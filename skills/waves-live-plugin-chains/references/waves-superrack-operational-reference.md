@@ -19,6 +19,18 @@ When adding plugin knowledge, prefer this shape:
 }
 ```
 
+## Host And Path Gate
+
+Before choosing plugins, name the actual destination:
+
+- SuperRack SoundGrid: prefer for FOH, monitor, and critical in-room insert paths when SoundGrid hardware/server infrastructure is available.
+- SuperRack Performer: design around native CPU, ASIO/Core Audio buffer, interface stability, and plugin load.
+- LV1/SuperRack-compatible live host: use the same official compatibility, latency, and channel-component gates.
+- REAPER staging: acceptable for auditioning, but final recommendations must still transfer to the SuperRack target.
+- Broadcast-only/livestream paths: can tolerate more latency when audio/video sync is managed; FOH and monitors cannot.
+
+If the host or path is unknown, mark the recommendation `verify-in-target` instead of approving a final chain.
+
 ## Safe Live Defaults
 
 These are strong default candidates for church/SuperRack workflows:
@@ -63,6 +75,8 @@ These are strong default candidates for church/SuperRack workflows:
 | API 2500 | Low | Excellent | Drum bus and mix bus punch/glue. |
 | C6 | Medium | Safe | Multiband vocal harshness, mix bus control, drum taming. |
 | MV2 | Very low | Excellent | Livestream speech/vocal detail enhancement; use carefully so it does not over-lift noise. |
+| Vocal Rider | Very low | Useful | Automatic vocal level help; verify that it follows singer intent and does not flatten phrasing. |
+| Bass Rider Live | Medium | Conditional | Bass level consistency; check path latency and make sure it does not fight musical dynamics. |
 
 ## Gates, Expansion, And Transients
 
@@ -103,7 +117,8 @@ These are strong default candidates for church/SuperRack workflows:
 | --- | --- | --- | --- |
 | X-FDBK | Very low | Excellent | Feedback suppression for pastor mics, wedges, difficult rooms. |
 | InPhase | Low | Safe | Drum alignment and multi-mic phase correction. |
-| Torque | Low | Safe | Subtle kick/tom pitch adjustment. |
+| Torque Live | Very low | Safe | Subtle kick/tom pitch adjustment on venue paths. |
+| InTrigger Live | Very low | Safe | Drum trigger/reinforcement support when live replacement is explicitly desired. |
 
 ## Limiters And Loudness
 

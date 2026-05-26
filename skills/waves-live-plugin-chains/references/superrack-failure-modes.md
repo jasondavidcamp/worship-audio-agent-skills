@@ -7,6 +7,8 @@ Use this before recommending riskier Waves choices in a live SuperRack chain. Ru
 - Waves SuperRack Support Notes: SuperRack/Performer version compatibility, CPU indicators, plugin known issues, MIDI/plugin limitations, and heavy-plugin CPU spike cautions.
 - Waves Plugin Latency chart: live/full mode differences for Sibilance, Bass Rider, Silk Vocal, L4, InTrigger, and high latency for Clarix LB.
 - Waves Supported Platforms chart: whether a plugin is supported in SuperRack SoundGrid and SuperRack Native/Performer.
+- Waves Live Common Questions: SoundGrid latency depends on I/O conversion, server buffer, driver buffer, plugin latency, and internal routing; SuperRack displays rack/plugin latency.
+- Waves SuperRack Performer audio-artifact troubleshooting: heavy plugins, buffers, sample rate, cables/hubs, and interface drivers/firmware can cause crackles/dropouts.
 - Waves Clarix LB page: broadcast-only posture due to 47 ms latency and Titan/server requirements.
 
 ## General Rule
@@ -38,6 +40,24 @@ AI or restoration latency:
 - Typical plugins: Clarix LB, Clarity-family tools.
 - Symptom: excellent cleanup but unusable in the room, sync problems, CPU pressure.
 - Fix: broadcast-only use, latency sync, Titan/server requirement check, or replace with F6/MV2/RVox/source cleanup.
+
+Performer CPU overload:
+
+- Typical plugins: heavy reverbs/convolution, CLA Epic, OVox, PRS SuperModels, CLA MixHub, Scheps Parallel Particles, Manny Marroquin Tone Shaper, Abbey Road TG Mastering Chain, X-FDBK.
+- Symptom: crackles, dropouts, yellow/red CPU or AUDIO indicators, stable render but unstable live host.
+- Fix: disable suspected heavy plugins instead of bypassing, raise buffer if latency allows, lower sample rate if appropriate, simplify the chain, verify cables/interface drivers/firmware, and retest in the target host.
+
+Wrong host assumption:
+
+- Typical cause: a chain was designed for REAPER or a native DAW but will be deployed in SoundGrid, Performer, LV1, or a different rack format.
+- Symptom: plugin missing, channel format mismatch, unexpected latency, third-party VST3 not available, or chain cannot be recalled cleanly.
+- Fix: state the final host and path before recommending plugins; rerun the live eligibility gate against that host.
+
+Wrong rack format:
+
+- Typical cause: plugin has stereo or mono-to-stereo components but not the mono component needed by the rack.
+- Symptom: officially supported plugin does not appear in the rack plugin menu.
+- Fix: verify Waves Channel Components, change rack format only if the live routing can support it, or choose a mono-capable replacement.
 
 Tuning artifacts:
 
