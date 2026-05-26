@@ -83,7 +83,7 @@ Use recordings as the least-confrontational feedback tool.
 4. Convert each problem into a next-Sunday action.
 5. Update the template only after the issue repeats or the fix is clearly useful.
 
-Avoid turning review into taste chaos. Anchor comments to the worship mix priorities:
+Avoid turning review into subjective preference chaos. Anchor comments to the worship mix priorities, and use `band-sound-aimpoint` when a preference should become a reusable rule:
 
 - Can the congregation understand the words?
 - Does the band support singing?

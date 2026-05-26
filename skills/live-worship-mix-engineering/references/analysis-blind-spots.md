@@ -36,19 +36,19 @@ Do not under-score a render because:
 Before a final grade:
 
 - Verify no clipping or render-bound error occurred.
-- Verify no static/crackle/artifact report exists for the render path; if the user reports one, invalidate the batch before taste scoring.
+- Verify no static/crackle/artifact report exists for the render path; if the user reports one, invalidate the batch before scoring.
 - Loudness-match candidates before judging tone.
 - Check at least one sparse vocal section and one dense chorus/bridge.
-- Decide whether the issue is source, bus, master, arrangement, or taste.
-- Compare against the user's last explicit taste call.
+- Decide whether the issue is source, bus, master, arrangement, or aimpoint mismatch.
+- Compare against the active aimpoint or preference rule from `band-sound-aimpoint`.
 
-## When To Ask The User
+## When To Hand Off To Band Sound Aimpoint
 
-Ask for a short taste call when:
+Use `band-sound-aimpoint` for a short taste call when:
 
 - Two candidates trade clarity against warmth.
 - Tuning or compression audibility is the main risk.
 - Reverb/delay depth changes emotional feel.
-- The candidate is technically better but might not fit the church's taste.
+- The candidate is technically better but may conflict with the church's active aimpoint.
 
 Avoid asking when the render has an objective failure; fix that first.

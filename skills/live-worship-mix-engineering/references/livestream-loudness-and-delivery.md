@@ -52,7 +52,7 @@ Before a livestream or uploaded service:
 
 ## Practical Worship Targets
 
-Do not hard-code a single LUFS target as universal. Platform behavior, service length, music/speech ratio, and church taste all matter.
+Do not hard-code a single LUFS target as universal. Platform behavior, service length, music/speech ratio, and the active church aimpoint all matter.
 
 Useful posture:
 

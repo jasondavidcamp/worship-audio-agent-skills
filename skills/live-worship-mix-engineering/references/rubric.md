@@ -98,10 +98,10 @@ Check:
 
 ## Grade Shape
 
-- `95-100`: excellent and taste-approved.
-- `90-94`: strong candidate; only small preference changes remain.
+- `95-100`: excellent and aligned with the active aimpoint.
+- `90-94`: strong candidate; only small aimpoint adjustments remain.
 - `85-89`: usable but one meaningful weakness remains.
 - `75-84`: directionally okay, needs another engineering pass.
 - `<75`: not aligned with aimpoint or has technical failures.
 
-Never give a high score to a clipped render, a vocal-buried render, or a mix that fails the user's explicit taste call.
+Never give a high score to a clipped render, a vocal-buried render, or a mix that conflicts with the active aimpoint or a confirmed preference rule from `band-sound-aimpoint`.
