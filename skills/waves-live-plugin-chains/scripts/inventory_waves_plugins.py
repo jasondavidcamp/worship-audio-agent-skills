@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a local Waves plugin catalog for live worship mix decisions."""
+"""Build a local Waves plugin catalog for live SuperRack mix decisions."""
 
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ class Rule:
 
 RULES = [
     Rule(("Primary Source Expander",), "gate/expander", "Bleed control on live vocals, close drums, and stage mics.", "core live", "Excellent first-stage cleanup when used gently."),
-    Rule(("F6",), "dynamic EQ", "Dynamic/static EQ, vocal pocketing, harshness/low-mid control, bus shaping.", "core live", "One of the safest default problem-solvers for worship mixes."),
+    Rule(("F6",), "dynamic EQ", "Dynamic/static EQ, vocal pocketing, harshness/low-mid control, bus shaping.", "core live", "One of the safest default problem-solvers for live SuperRack mixes."),
     Rule(("C6",), "multiband dynamics", "Vocal/bus multiband control, low-mid and presence management.", "core live", "Powerful but easy to overdo; use when F6 needs broader-band control."),
     Rule(("C4",), "multiband dynamics", "Broad multiband smoothing for vocals, bass, band, or drums.", "useful live", "Less surgical than C6/F6."),
     Rule(("RComp",), "compressor", "General compression on vocals, instruments, and buses.", "core live", "Simple, predictable, often better than fancy choices."),
@@ -40,9 +40,9 @@ RULES = [
     Rule(("Silk Vocal", "CLA Vocals", "Butch Vig Vocals", "JJP-Vocals", "Maserati VX1", "Greg Wells VoiceCentric"), "vocal processor", "Fast vocal polish or tonal shaping.", "useful with caution", "Can be great, but may hide what processing is happening. Validate by render/taste."),
     Rule(("Waves Tune Real-Time", "WavesTune", "WavesTune LT"), "pitch", "Live vocal tuning or offline pitch correction.", "useful live", "Tune Real-Time is the live choice; offline Tune variants are less relevant to SuperRack live use."),
     Rule(("Vocal Rider", "Bass Rider", "PlaylistRider"), "rider/leveler", "Automatic level riding before/after compression.", "useful with caution", "Can help consistency; verify it does not fight musical phrasing."),
-    Rule(("H-Delay", "SuperTap", "MannyM-Delay", "CLA Epic", "CLA EchoSphere", "Space Rider"), "delay", "Vocal/instrument delay and worship FX throws.", "useful live", "Prefer aux-style use when final topology allows; SuperRack serial chains need restraint."),
+    Rule(("H-Delay", "SuperTap", "MannyM-Delay", "CLA Epic", "CLA EchoSphere", "Space Rider"), "delay", "Vocal/instrument delay and live FX throws.", "useful live", "Prefer aux-style use when final topology allows; SuperRack serial chains need restraint."),
     Rule(("H-Reverb", "RVerb", "TrueVerb", "IRLive", "IR-1", "ARPlates", "Abbey Road Chambers", "MagmaSprings", "MannyM-Reverb", "CLA Epic", "Lofi Space"), "reverb", "Vocal and instrument space.", "useful with caution", "Latency/CPU/tail management matters; keep mono deployment in mind."),
-    Rule(("Smack Attack", "TransX", "Torque", "InTrigger Live", "InTrigger"), "drum shaping/trigger", "Transient shaping, drum tone correction, trigger/sample support.", "useful live", "Great for drums; avoid making church drums feel over-produced."),
+    Rule(("Smack Attack", "TransX", "Torque", "InTrigger Drum Replacer", "InTrigger"), "drum shaping/trigger", "Transient shaping, drum tone correction, trigger/sample support.", "useful live", "Use InTrigger live/low-latency modes for SuperRack; avoid making drums feel over-processed."),
     Rule(("Sub Align", "InPhase", "InPhase LT"), "phase/time alignment", "Kick/sub/bass alignment and phase diagnosis.", "useful live", "Use deliberately; phase moves can break more than they fix."),
     Rule(("RBass", "MaxxBass", "LoAir", "Submarine", "MaxxVolume", "MV2"), "low-end/level enhancement", "Bass/kick extension or low-level density.", "useful with caution", "Useful on small systems; risky for headroom and mono PA if overused."),
     Rule(("NLS", "J37", "KramerTape", "Abbey Road Saturator", "BB Tubes", "Lil Tube", "REDD17", "REDD37-51", "Saphira", "Vitamin", "Aphex AX"), "saturation/exciter", "Warmth, harmonic density, and controlled excitement.", "useful with caution", "Check for static/grain and cymbal hash before learning taste from it."),
@@ -54,10 +54,10 @@ RULES = [
     Rule(("API-550", "API-560", "Scheps 73", "PuigTec", "VEQ3", "VEQ4", "KramerHLS", "RS56", "TG12345"), "analog EQ/color", "Tone-shaping EQ with color.", "useful live", "Great for musical shaping after cleanup is stable."),
     Rule(("L1", "L2", "L3", "L3 Multi", "L3 Ultra", "L3-LL", "L3-16", "L4 Ultramaximizer", "UM", "WLM", "WLM Plus"), "limiter/loudness", "Peak protection, loudness measurement, or final-bus control.", "useful with caution", "Avoid loudness chasing during mix-shape work; LL variants are more live-minded."),
     Rule(("PAZ", "VU Meter", "Dorrough", "AR TG Meter Bridge", "SignalGenerator"), "metering/utility", "Metering, calibration, and troubleshooting.", "safe utility", "Useful for diagnostics; not tone processors."),
-    Rule(("Clarity Vx", "Clarity Vx Pro", "Clarity Vx DeReverb", "Clarity Vx DeReverb Pro", "WNS", "NS1", "W43", "X-Click", "X-Crackle", "X-FDBK", "X-Hum", "X-Noise", "Z-Noise", "DeBreath"), "noise/restoration", "Noise, breath, feedback, and restoration control.", "useful with caution", "Some are native/latency/CPU-sensitive; verify in the actual SuperRack target before relying on them live."),
+    Rule(("Clarix LB", "Clarity Vx", "Clarity Vx Pro", "Clarity Vx DeReverb", "Clarity Vx DeReverb Pro", "WNS", "NS1", "W43", "X-Click", "X-Crackle", "X-FDBK", "X-Hum", "X-Noise", "Z-Noise", "DeBreath"), "noise/restoration", "Noise, breath, feedback, and restoration control.", "verify-first/broadcast", "Clarix LB is broadcast-only for this skill; other restoration tools are latency/CPU/support-sensitive and must be verified in the actual SuperRack target."),
     Rule(("Feedback Hunter",), "feedback control", "Feedback detection/suppression.", "useful live", "Potentially valuable for monitors/FOH, but do not replace good gain structure."),
     Rule(("GTR", "GTRAmp", "GTRSolo", "GTRStomp", "GTRToolRack", "GTRTuner", "PRS Supermodels", "Voltage Amps Guitar", "Voltage Amps Bass", "Maserati GTi", "CLA Guitars", "JJP-Guitars"), "guitar/amp", "Guitar/bass amp and instrument processing.", "situational live", "Useful if SuperRack is hosting guitar processing; otherwise leave to source/amp modeler."),
-    Rule(("CLA Drums", "JJP-Drums", "JJP-Cymb-Perc", "Maserati DRM", "EddieKramer DR"), "drum multi-processor", "Fast drum coloration.", "useful with caution", "Can sound impressive soloed; compare against the CityAlight drum aimpoint before committing."),
+    Rule(("CLA Drums", "JJP-Drums", "JJP-Cymb-Perc", "Maserati DRM", "EddieKramer DR"), "drum multi-processor", "Fast drum coloration.", "useful with caution", "Can sound impressive soloed; compare against the requested drum target before committing."),
     Rule(("CLA Bass", "JJP-Bass", "Maserati B72", "EddieKramer BA", "RenAxx"), "bass processor", "Bass tone and dynamics.", "useful live", "Good for bass pocketing, but protect vocal/kick relationship."),
     Rule(("Center", "S1", "PS22", "Doubler", "Reel ADT", "UltraPitch", "Waves Harmony", "OVox", "Vocal Bender", "Brauer Motion", "MondoMod", "MetaFlanger", "MetaFilter", "Kaleidoscopes", "Enigma", "Doppler", "Morphoder", "SoundShifter"), "width/modulation/pitch FX", "Creative width, doubling, movement, harmony, and special effects.", "situational live", "Use for deliberate effects, not core mix correction; mono church deployment reduces value."),
     Rule(("StudioVerse",), "chain browser", "StudioVerse chains/presets.", "avoid for SuperRack", "Do not rely on it for SuperRack/SoundGrid workflows unless explicitly verified."),
@@ -132,7 +132,7 @@ def markdown(rows: list[dict[str, str]]) -> str:
         "",
         "Generated from the installed Waves V16 bundles on the current machine.",
         "",
-        "This is an installed-plugin catalog, not a guarantee that every plugin is appropriate for every SuperRack target. Prefer the `core live` and `useful live` plugins for church work, and verify any `useful with caution`, `situational live`, or `avoid` plugin inside the actual SuperRack target before committing a session.",
+        "This is an installed-plugin catalog, not a guarantee that every plugin is appropriate for every SuperRack target. Prefer the `core live` and `useful live` plugins for live SuperRack work, and verify any `useful with caution`, `verify-first/broadcast`, `situational live`, or `avoid` plugin inside the actual SuperRack target before committing a session.",
         "",
         "## Summary",
         "",
@@ -149,7 +149,7 @@ def markdown(rows: list[dict[str, str]]) -> str:
             "- Control second: RComp, CLA compressors, C6/C4, SSL/API bus compression.",
             "- Polish third: saturation, exciter, delay/reverb, specialty processors.",
             "- For mono-first church workflows, do not reward stereo width processors unless they improve the mono render too.",
-            "- For CityAlight-style drums, prefer PSE/F6/SSL/API/Smack Attack/InTrigger-style utility over one-knob hype processors.",
+            "- For live drums, prefer PSE/F6/SSL/API/Smack Attack/InTrigger-style utility over one-knob hype processors.",
             "",
             "## Installed Bundle Catalog",
             "",

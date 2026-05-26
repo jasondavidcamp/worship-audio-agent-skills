@@ -1,8 +1,6 @@
 # Waves SuperRack Operational Reference
 
-Source: user-provided structured reference, added 2026-05-25.
-
-Use this as an operational plugin-selection guide for Waves SuperRack SoundGrid / SuperRack Performer workflows. It is not a strict licensing/version-completeness document. Cross-check with a locally generated installed-plugin catalog, and verify uncertain plugins inside the actual SuperRack target before committing a session.
+Use this as an operational plugin-selection guide for Waves SuperRack SoundGrid / SuperRack Performer workflows. It is not a strict licensing/version-completeness document. Read `superrack-live-eligibility-gate.md` first; if this file and the gate disagree, the gate wins. Cross-check with a locally generated installed-plugin catalog, and verify uncertain plugins inside the actual SuperRack target before committing a session.
 
 ## Data Model
 
@@ -80,13 +78,13 @@ These are strong default candidates for church/SuperRack workflows:
 | --- | --- | --- | --- |
 | Sibilance | Low | Excellent | Preferred vocal de-esser for modern vocal cleanup. |
 | DeEsser | Very low | Excellent | Lightweight classic de-essing. |
-| Clarity Vx | Medium | Conditional | Livestream/spoken-word cleanup; avoid monitor paths and verify target SuperRack/latency/CPU behavior. |
+| Clarix LB | High | Broadcast only | Real-time broadcast voice cleanup. Not for in-venue FOH/monitor paths; requires the right SuperRack/SoundGrid hardware posture. |
 
 ## Reverb And Delay
 
 | Plugin | Latency | Live posture | Use |
 | --- | --- | --- | --- |
-| H-Reverb | Medium | Safe | Lush modern worship spaces; watch CPU/tails. |
+| H-Reverb | Medium | Safe | Larger live vocal or instrument spaces; watch CPU/tails. |
 | RVerb | Low | Excellent | Reliable general live reverb. |
 | Abbey Road Plates | Medium | Safe | Smooth dense vocal/snare plate tails. |
 | H-Delay | Low | Excellent | Strong default worship delay. |
@@ -142,7 +140,7 @@ Worship ambience:
 
 Livestream cleanup:
 
-1. Clarity Vx
+1. Clarix LB only for broadcast paths that can tolerate its latency and hardware requirements
 2. MV2
 3. L2
 4. WLM Plus
@@ -161,6 +159,6 @@ For automated chain generation, collect or infer:
 
 ## Corroboration Against Local Inventory
 
-Cross-check any local Waves inventory for the major live-safe tools: SSL E/G channels, Scheps Omni Channel, CLA MixHub, F6, Q10, GEQ, PuigTec, R-Vox, CLA-2A, CLA-76, API 2500, C6, MV2, C1, Smack Attack, Sibilance, DeEsser, Clarity Vx, H-Reverb, RVerb, Abbey Road Plates, H-Delay, SuperTap, J37, Kramer Tape, X-FDBK, InPhase, Torque, L2, and WLM Plus.
+Cross-check any local Waves inventory for the major live-safe tools: SSL E/G channels, Scheps Omni Channel, CLA MixHub, F6, Q10, GEQ, PuigTec, R-Vox, CLA-2A, CLA-76, API 2500, C6, MV2, C1, Smack Attack, Sibilance, DeEsser, H-Reverb, RVerb, Abbey Road Plates, H-Delay, SuperTap, J37, Kramer Tape, X-FDBK, InPhase, Torque, L2, and WLM Plus. Treat Clarix LB as broadcast-only and hardware/latency gated.
 
-The list also reinforces the same caution posture already learned locally: AI/restoration, linear phase/mastering, IR/reverb-heavy, tape/saturation, and broad mastering chains need latency/CPU/artifact checks before live use.
+The list also reinforces the same caution posture used throughout this skill: AI/restoration, linear phase/mastering, IR/reverb-heavy, tape/saturation, and broad mastering chains need latency/CPU/artifact checks before live use.
