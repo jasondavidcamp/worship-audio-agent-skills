@@ -1,13 +1,13 @@
 ---
 name: reaper-render-reference
-description: Use REAPER as an audio staging host to build serial Waves plugin chains, render candidates, compare them against source/reference audio, rank settings, and document/export plugin state for later transfer to Waves SuperRack. Use when iterating mixes, plugin settings, vocal/band/bus processing, reference matching, offline renders, REAPER MCP control, or REAPER-to-SuperRack Waves preset/state transfer.
+description: Use REAPER as an audio staging host to build serial processing/plugin chains, render candidates, compare them against source/reference audio, rank settings, and document/export plugin state for later transfer. Use when iterating mixes, plugin settings, vocal/band/bus processing, reference matching, offline renders, REAPER MCP control, Waves chain auditioning, or REAPER-to-SuperRack preset/state transfer.
 ---
 
 # REAPER Render Reference
 
 ## Purpose
 
-Use REAPER as a disposable staging area for fast plugin-setting iteration before committing settings to Waves SuperRack. Keep this skill focused on home/studio auditioning, render analysis, and settings capture; use `superrack-sprk` only when writing back to a `.sprk` session.
+Use REAPER as a disposable staging area for fast plugin-setting iteration before committing settings to a live host. Keep this skill focused on home/studio auditioning, render analysis, and settings capture; use `superrack-session-files` only when writing back to a `.sprk` session.
 
 ## Operating Rules
 
@@ -30,7 +30,7 @@ Use REAPER as a disposable staging area for fast plugin-setting iteration before
 
 2. Stage in REAPER:
    - Create or locate a staging track for the target.
-   - Add Waves plugins directly to normal FX slots in final SuperRack order.
+   - Add plugins directly to normal FX slots in the final target order.
    - Disable ReaInsert and other hardware/live-return effects for test renders.
    - Confirm the master has a stereo hardware send to output 1/2 before judging playback or printing a master render.
    - Clear unwanted per-track `HWOUT` routes in the routing matrix so the only hardware output is the master output 1/2 route; do not remove the normal diagonal parent/master sends.
@@ -50,7 +50,7 @@ Use REAPER as a disposable staging area for fast plugin-setting iteration before
    - For short clip analysis, prefer a temporary 30-second media item plus "apply track/take FX to item" over full project render. Copy the resulting WAV to the analysis folder and delete the temporary track/item.
    - Compare source, candidate, and reference with the metrics in `references/analysis-metrics.md`.
    - For drum or drum-bus compares aimed at a specific artist/reference, read the relevant private aimpoint profile before ranking candidates.
-   - Before translating offline DSP prototypes into Waves chains, consult `live-worship-mix-engineering/references/waves-plugin-decision-matrix.md` and any locally generated plugin catalog.
+   - Before translating offline DSP prototypes into Waves chains, use `waves-live-plugin-chains` and any locally generated Waves plugin catalog.
    - Use `scripts/analyze_wav.py` for quick dependency-free WAV peak/RMS/crest checks.
    - Use `scripts/artifact_gate.py` to compare candidate snippets against known-good baseline snippets before scoring. Treat user-reported static/crackle/hash as a hard failure for that render file, but isolate whether the issue is the candidate chain, a specific section, the full-length render, or playback before learning mix taste.
    - For deeper reference/candidate descriptors, use `band-sound-aimpoint/scripts/analyze_reference_audio.py --essentia` when Essentia is available; otherwise rely on the librosa/LUFS fields.
@@ -60,7 +60,7 @@ Use REAPER as a disposable staging area for fast plugin-setting iteration before
 5. Prepare handoff:
    - Export Waves plugin settings from REAPER when possible and record the exact file path.
    - Document plugin-state transfer findings in `references/reaper-superrack-transfer.md`.
-   - Once a candidate is approved, use `superrack-sprk` to inspect or patch the SuperRack session; do not let this skill edit `.sprk` files directly.
+   - Once a candidate is approved, use `superrack-session-files` to inspect or patch the SuperRack session; do not let this skill edit `.sprk` files directly.
 
 ## Run Log Shape
 
@@ -76,7 +76,7 @@ candidates:
   - id: vocalbus-001
     render: C:\path\renders\vocalbus-001.wav
     chain:
-      - plugin: Waves F6-RTA
+      - plugin: Dynamic EQ
         slot: 1
         preset_export: C:\path\presets\vocalbus-001-f6.xps
         changed_controls:
@@ -124,5 +124,6 @@ Extract Waves `.xps` preset files from an `.rpp` into one folder per track/chann
 
 ## Related Skills
 
-- Use `superrack-sprk` after a REAPER candidate is approved and the task becomes SuperRack `.sprk` inspection, patching, or validation.
+- Use `waves-live-plugin-chains` when the question is which Waves plugin or chain to try.
+- Use `superrack-session-files` after a REAPER candidate is approved and the task becomes SuperRack `.sprk` inspection, patching, or validation.
 - Use `behringer-wing-snap` only when the workflow involves the WING console, Church routing, SoundGrid card channels, or external insert mapping.

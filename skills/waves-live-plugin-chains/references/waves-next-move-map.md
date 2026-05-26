@@ -6,32 +6,32 @@ Use targeted moves. Avoid changing the entire chain when one relationship is wea
 
 Vocal clear but sharp:
 
-- Try de-esser threshold/frequency refinement.
-- Try dynamic EQ or multiband control around 3-7 kHz.
-- If a smart vocal/resonance tool is available, test gentle resonance smoothing before broad EQ cuts.
+- Try de-esser/Sibilance threshold refinement.
+- Try F6 dynamic range around 3-7 kHz.
+- If Silk Vocal is available, test gentle resonance smoothing before broad EQ cuts.
 - Avoid broad top cuts until dynamic control fails.
 
 Vocal warm but buried:
 
 - Pocket band/piano/guitars before boosting vocal top.
-- Try dynamic band-bus EQ keyed by vocal if the system supports it.
+- Try dynamic band-bus F6 sidechain keyed by vocal.
 - Reduce piano/acoustic low-mid density.
-- If the vocal path lacks expansion before compression, test gentle expansion/gating or lower compressor input to prevent raised bleed.
+- If the vocal chain lacks expansion before compression, test PSE or lower compressor input to prevent raised bleed.
 - Confirm gain staging first; an over-driven vocal or band bus can make the vocal feel cloudy even after EQ.
 
 Vocal loud but not intelligible:
 
 - Check 1.5-4 kHz masking.
 - Reduce reverb/delay wetness.
-- Check compressor attack/release and makeup/output level.
-- If using fast compression or multiband dynamics, verify it is not flattening consonants or over-controlling presence.
+- Check compressor attack/release and RVox output.
+- If using CLA-76/C6, verify the fast compressor is not flattening consonants and the multiband stage is not over-controlling presence.
 
 Vocal processed or detached:
 
 - Back off compression or tuning.
 - Reduce serial effects on the vocal bus.
 - Reassess whether the lead is too constant dynamically.
-- If tuning is active, check key/scale/speed before changing downstream EQ.
+- If Tune Real-Time is first, check key/scale/speed before changing downstream EQ.
 
 ## Band Problems
 

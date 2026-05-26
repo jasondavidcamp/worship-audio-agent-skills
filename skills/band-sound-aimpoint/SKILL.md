@@ -102,4 +102,5 @@ wsl.exe -d Ubuntu -- /path/to/venv/bin/python "/mnt/c/path/to/skills/band-sound-
 
 - Use `reaper-render-reference` for REAPER staging, render iteration, and candidate ranking.
 - Use `live-worship-mix-engineering` for scoring, section diagnosis, plugin-chain judgment, and next-move selection.
-- Use `superrack-sprk` only after an approved candidate needs to move into a Waves SuperRack session.
+- Use `waves-live-plugin-chains` when the aimpoint needs to become Waves plugin-chain choices.
+- Use `superrack-session-files` only after an approved candidate needs to move into a Waves SuperRack session file.

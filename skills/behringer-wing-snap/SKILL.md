@@ -53,7 +53,7 @@ For WING-to-SuperRack comparisons:
 - Decode `SEND.n` output sources as FX-send lanes when possible: `SEND.1/2 = FX1 L/R`, `SEND.25/26 = FX13 L/R`, etc.
 - Verify sample rate compatibility.
 - Verify bus names and intended insert paths: e.g. `VOCALS -> Vocal Bus`, `BAND -> Band Bus`, `DRUMS -> Drum Bus`, `LIVSTR -> Livestream`.
-- Keep SuperRack plugin judgments in the SuperRack skill; use this skill for WING topology and mixer-state evidence.
+- Keep Waves plugin-chain judgments in `waves-live-plugin-chains` and SuperRack file judgments in `superrack-session-files`; use this skill for WING topology and mixer-state evidence.
 
 ## Documentation Anchors
 

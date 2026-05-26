@@ -30,7 +30,7 @@ From Waves SuperRack Performer and SuperRack documentation:
 - Treat `plug.ignore_latency` as operationally significant. It can make the UI/plugin latency look different from compensation behavior.
 - Do not assume copied/inserted plugin states apply to stored snapshots. Compare `snapshot_plugin` rows by `snapshot_id`.
 - Do not move, disable, remove, or insert plugins directly in the database unless the user explicitly asks and a SuperRack-generated template makes the edit safe.
-- For this user's live setup, plugin recommendations should be constrained to SuperRack SoundGrid-compatible Waves plugins unless the user explicitly asks about SuperRack Performer-only or third-party VST3 options.
+- Plugin recommendations belong in `waves-live-plugin-chains`; file edits here should preserve the session's existing plugin choices unless the user explicitly asks for a change and a safe SuperRack-generated template exists.
 
 ## Snapshot And Support Caveats
 

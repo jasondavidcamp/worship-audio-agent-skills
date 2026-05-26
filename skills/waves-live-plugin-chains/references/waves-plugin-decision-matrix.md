@@ -1,8 +1,8 @@
 # Waves Plugin Decision Matrix
 
-Use this before selecting Waves plugins for a REAPER/SuperRack worship-audio workflow. For the full installed list, generate a local catalog with `scripts/inventory_waves_plugins.py`.
+Use this before selecting Waves plugins for a REAPER/SuperRack/LV1/MultiRack worship-audio workflow. For the full installed list, generate a local catalog with `scripts/inventory_waves_plugins.py`.
 
-Also read `waves-superrack-operational-reference.md` for user-provided latency/live-safety notes and SuperRack-oriented decision rules.
+Also read `waves-superrack-operational-reference.md` for latency/live-safety notes and SuperRack-oriented decision rules.
 
 ## Selection Rules
 
@@ -30,7 +30,7 @@ Preferred starting tools:
 | Drum warmth | NLS, J37, Abbey Road Saturator, BB Tubes | KramerTape, REDD | Grain/static/cymbal hash |
 | Trigger/reinforcement | InTrigger Live, InTrigger | Torque for pitch/body correction | Obvious sample replacement unless requested |
 
-For Pass K translation, start with:
+For a warm, centered live-worship drum translation, start with:
 
 - Kick: PSE or C1 keyed/guided by Kick Hybrid feel, F6/SSL EQ for sub vs 60-120, optional very light RComp.
 - Kick Hybrid: InTrigger Live or direct hybrid track very low, EQ dulled above 3 kHz, used mostly for 60-120 support.

@@ -1,4 +1,4 @@
 interface:
   display_name: "REAPER Render Reference"
-  short_description: "Iterate REAPER/Waves render candidates against reference audio."
-  default_prompt: "Use REAPER as a staging host to render, analyze, compare, and document serial Waves plugin-chain candidates before transferring settings to SuperRack."
+  short_description: "Iterate REAPER render candidates against reference audio."
+  default_prompt: "Use REAPER as a staging host to render, analyze, compare, and document serial processing/plugin-chain candidates before transferring settings to a live host."

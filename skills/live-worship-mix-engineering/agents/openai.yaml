@@ -1,4 +1,4 @@
 interface:
   display_name: "Live Worship Mix Engineering"
   short_description: "Critique and improve live worship mixes."
-  default_prompt: "Use live worship mix engineering judgment to diagnose worship mix renders, grade section-level strengths and weaknesses, interpret taste calls, and translate aimpoints, metrics, and Waves/SuperRack-safe chain options into practical next moves."
+  default_prompt: "Use live worship mix engineering judgment to diagnose worship mix renders, grade section-level strengths and weaknesses, interpret taste calls, and translate aimpoints and metrics into practical console/DAW-neutral next moves."

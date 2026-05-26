@@ -1,0 +1,4 @@
+interface:
+  display_name: "SuperRack Session Files"
+  short_description: "Inspect and patch SuperRack session files."
+  default_prompt: "Use this skill when working with Waves SuperRack .sprk session databases, .xps rack presets, snapshots, routing, sidechains, or file-level validation."

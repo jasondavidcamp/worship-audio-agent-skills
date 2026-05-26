@@ -26,7 +26,7 @@ When testing a plugin-state transfer, record:
 - REAPER normalized parameter values may not map cleanly to SuperRack preset payloads.
 - Menu controls, hidden parameters, sidechain routing, and plugin version differences can break naive translation.
 - SuperRack SoundGrid compatibility matters; a Waves plugin available in REAPER is not automatically a valid live SoundGrid plugin.
-- Plugin bypass, disabled state, latency, and snapshot recall behavior are SuperRack session concerns and should be handled by `superrack-sprk`.
+- Plugin bypass, disabled state, latency, and snapshot recall behavior are SuperRack session concerns and should be handled by `superrack-session-files`.
 
 ## XPS Extraction Notes
 

@@ -1,14 +1,15 @@
 # Worship Audio Agent Skills
 
-AI-agent skills and helper tools for live worship audio: mix aimpoints, REAPER render comparison, Behringer WING snapshots, Waves SuperRack sessions, and practical mix-engineering workflows.
+AI-agent skills and helper tools for live worship audio: mix aimpoints, worship mix diagnosis, REAPER render comparison, Behringer WING snapshots, Waves plugin-chain choices, SuperRack session files, and practical mix-engineering workflows.
 
 ## Skills
 
 - `band-sound-aimpoint`: define reference targets, style vocabulary, and taste-call calibration for worship mixes.
-- `live-worship-mix-engineering`: critique worship mix renders, diagnose weak points, and choose practical next moves.
-- `reaper-render-reference`: use REAPER as a staging host for render comparisons and Waves/SuperRack transfer notes.
+- `live-worship-mix-engineering`: critique worship mix renders, diagnose weak points, and choose practical brand-neutral next moves.
+- `waves-live-plugin-chains`: choose source-specific live-safe Waves plugin chains for SuperRack, LV1, MultiRack, or REAPER-hosted Waves workflows.
+- `reaper-render-reference`: use REAPER as a staging host for render comparisons and plugin/SuperRack transfer notes.
 - `behringer-wing-snap`: inspect Behringer WING `.snap` files and compare routing against SuperRack sessions.
-- `superrack-sprk`: inspect, validate, and carefully patch Waves SuperRack `.sprk` session databases.
+- `superrack-session-files`: inspect, validate, and carefully patch Waves SuperRack `.sprk` session databases and `.xps` rack presets.
 
 ## Layout
 

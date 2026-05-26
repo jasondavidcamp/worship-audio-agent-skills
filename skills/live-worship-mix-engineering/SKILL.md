@@ -1,6 +1,6 @@
 ---
 name: live-worship-mix-engineering
-description: Apply and calibrate live worship audio engineering judgment for vocals, band, drums, buses, and livestream mixes using aimpoints, section-level render metrics, taste calls, REAPER staging, and Waves/SuperRack-safe plugin chains. Use when deciding what mix move to try next, critiquing or grading worship mix candidates, diagnosing why a render feels wrong, interpreting loudness/spectrum/dynamics/mono analysis, choosing serial Waves chains, adapting Worship Sound Guy or Drew Brashler-style live vocal approaches, or balancing lyric clarity, warmth, low-mid control, smooth top end, band energy, and congregational feel.
+description: Apply and calibrate live worship audio engineering judgment for vocals, band, drums, buses, rooms, and livestream mixes using aimpoints, section-level render metrics, taste calls, console/DAW-neutral processing, and volunteer-safe mix moves. Use when deciding what mix move to try next, critiquing or grading worship mix candidates, diagnosing why a render feels wrong, interpreting loudness/spectrum/dynamics/mono analysis, improving lyric clarity, warmth, low-mid control, smooth top end, band energy, congregational feel, room-to-stream translation, or choosing practical fader/EQ/dynamics/effects moves without assuming a specific plugin brand.
 ---
 
 # Live Worship Mix Engineering
@@ -15,10 +15,10 @@ Use this skill as the judgment and calibration layer between measured audio data
 2. Favor small reversible moves before large chain changes.
 3. Use metrics to diagnose direction, not to overrule taste calls.
 4. Loudness-match before judging tonal changes.
-5. Prefer live-safe serial Waves chains that can transfer to SuperRack.
+5. Prefer moves that transfer across common church systems: fader balance, gain staging, HPF/EQ, dynamics, buses, matrices, reverb/delay, and section automation.
 6. Avoid stacking processors just because they are respected; every plugin must have a job.
-7. When testing plugin choices, use `reaper-render-reference` and rank candidates before recommending final settings.
-8. When patching or validating `.sprk` sessions, switch to `superrack-sprk`.
+7. When testing processing choices in a DAW, use `reaper-render-reference` and rank candidates before recommending final settings.
+8. When the user specifically wants Waves plugin choices, switch to `waves-live-plugin-chains`; when patching or validating SuperRack session files, switch to `superrack-session-files`.
 9. Compare sections, not only whole songs: sparse verse, first chorus, biggest chorus/bridge, outro, and any user-reported problem timestamp.
 10. Separate diagnosis from prescription: name the audible problem before choosing a plugin or fader move.
 11. Preserve mono clarity when the deployment is mono-first.
@@ -42,8 +42,8 @@ Use this skill as the judgment and calibration layer between measured audio data
    - Read `references/analysis-blind-spots.md` before trusting a grade or metric-driven conclusion.
 
 4. Choose the lowest-risk move:
-   - Cleanup first: HPF, PSE, low-mid dynamic EQ.
-   - Control second: compression/expansion/multiband only where needed.
+   - Cleanup first: HPF, corrective EQ, bleed/spill reduction, and low-mid control.
+   - Control second: compression, expansion, gates, or multiband only where needed.
    - Polish third: saturation, exciter, width, reverb/delay.
    - Tuning only when appropriate and verified.
    - Use `references/next-move-map.md` when a common diagnosis needs a targeted next move.
@@ -60,7 +60,7 @@ Use this skill as the judgment and calibration layer between measured audio data
 
 ## Common Diagnoses
 
-- Clear but sharp: reduce dynamic presence/edge before cutting static high shelf; try de-esser, F6 high band, or gentler smart vocal processing.
+- Clear but sharp: reduce dynamic presence/edge before cutting static high shelf; try de-essing or dynamic EQ before dulling the whole vocal.
 - Warm but buried: reduce low-mid masking before boosting top.
 - Big but cloudy: HPF/low-band dynamic EQ, then reassess body.
 - Smooth but dull: add presence gently; do not over-compress to create excitement.
@@ -80,17 +80,17 @@ Use `references/next-move-map.md` to translate a diagnosis into one or two targe
 
 Public training material can teach techniques, plugin roles, and vocabulary. User taste calls decide how far to push vocal level, tuning, compression, ambience, drum energy, and mono-first compromises for the actual church.
 
-## Chain Archetypes
+## Plugin-Specific Paths
 
-Use `references/waves-superrack-operational-reference.md` for user-provided SuperRack/SoundGrid-oriented latency, live-safety, and decision-rule notes.
+Keep this skill brand-neutral. For plugin-specific choices, switch skills:
 
-Use `references/waves-plugin-decision-matrix.md` for faster source-specific plugin selection after confirming the available Waves plugin catalog.
-
-Use `scripts/inventory_waves_plugins.py` to generate a local installed-plugin catalog after Waves Central installs, license changes, or plugin upgrades. Keep generated inventories private unless they are intentionally sanitized.
+- Use `waves-live-plugin-chains` for Waves, SuperRack, LV1, MultiRack, or REAPER-hosted Waves chains.
+- Use `superrack-session-files` only for SuperRack `.sprk`/`.xps` file inspection, validation, or patching.
 
 ## Related Skills
 
 - `band-sound-aimpoint`: define and analyze the musical target.
 - `reaper-render-reference`: stage plugins, render candidates, analyze/rank results.
-- `superrack-sprk`: inspect or patch SuperRack sessions and `.xps` rack presets.
+- `waves-live-plugin-chains`: choose Waves plugin chains when Waves/SuperRack is part of the actual workflow.
+- `superrack-session-files`: inspect or patch SuperRack sessions and `.xps` rack presets.
 - `behringer-wing-snap`: bring WING routing/topology back into scope for Church deployment.

@@ -1,9 +1,9 @@
 ---
-name: superrack-sprk
-description: Inspect, validate, and safely modify Waves SuperRack Performer .sprk session files. Use when working with SuperRack/SoundGrid session databases, racks, buses, plugin chains, sidechains, routing, snapshots, F6/F6-RTA dynamic EQ pocketing, or SQLite-based .sprk edits.
+name: superrack-session-files
+description: Inspect, validate, and safely modify Waves SuperRack session files and rack preset exports. Use when working with SuperRack/SoundGrid or SuperRack Performer `.sprk` SQLite session databases, `.xps` rack presets, racks, buses, plugin ordering, sidechains, routing, snapshots, recall-safe state, bypass/disable state, latency flags, or file-level SuperRack troubleshooting.
 ---
 
-# SuperRack SPRK
+# SuperRack Session Files
 
 ## Safety Workflow
 
@@ -21,15 +21,13 @@ If plugin state serialization cannot be safely regenerated, stop and document ma
 
 If SuperRack is open with the session already loaded, warn that saving from the UI can overwrite external database edits from the app's in-memory session state. For reliable DB patching, close the session/app or reload the modified `.sprk` after the patch before making further UI changes.
 
-## Plugin Selection Scope
+## Scope Boundary
 
-Default all plugin recommendations, chain edits, and compatibility judgments to **SuperRack SoundGrid** use, not the broader SuperRack Performer/VST3 universe.
+Keep this skill focused on SuperRack files and session structure.
 
-- Prefer Waves plugins that are known or strongly expected to run in SuperRack SoundGrid.
-- Do not recommend third-party VST3 plugins, StudioVerse-only chains, or Performer-only options unless the user explicitly asks for them.
-- When Waves Creative Access makes many plugins available, still filter choices through live SoundGrid suitability: low latency, stability, recall behavior, and SoundGrid compatibility matter more than studio-only feature depth.
-- If a plugin's SoundGrid compatibility is uncertain, flag it as uncertain and verify against official Waves compatibility/plugin documentation before recommending or patching it into a session.
-- For plugin selection, consult `live-worship-mix-engineering/references/waves-plugin-decision-matrix.md` and any locally generated installed-plugin catalog; those files are guides, not substitutes for actual SuperRack session verification.
+- Use `waves-live-plugin-chains` for Waves plugin selection, live-safe chain design, and SoundGrid/Performer plugin suitability.
+- Use this skill when the task is to inspect, validate, compare, back up, or carefully patch `.sprk` or `.xps` file content.
+- Do not invent plugin preset serialization. Prefer SuperRack-generated rows or native `.xps` exports as templates.
 
 ## Core Tables
 
