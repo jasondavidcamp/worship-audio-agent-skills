@@ -76,7 +76,7 @@ Common masking checks:
 
 ### Low End
 
-For CityAlight-style worship, low end should support rather than dominate.
+For acoustic-leaning congregational worship, low end should support rather than dominate.
 
 Score down when:
 

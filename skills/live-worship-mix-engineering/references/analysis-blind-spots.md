@@ -9,7 +9,7 @@ Use this before giving a grade or deciding the next render.
 - A chorus can be louder without feeling bigger if drums, BGVs, and harmonic density do not change musically.
 - Low peak level does not mean the mix is safe if bus processing is audibly crunchy.
 - Clean LUFS/peak/spectrum/mono metrics do not prove a render is usable; static, crackle, plugin hash, or corrupted-sounding artifacts can pass numeric checks.
-- High mono correlation is good for this church context, but it does not guarantee good balance.
+- High mono correlation is useful for mono-first church contexts, but it does not guarantee good balance.
 - A smoother vocal is not always better if it loses consonants, urgency, or congregational leadership.
 
 ## Common False Positives
