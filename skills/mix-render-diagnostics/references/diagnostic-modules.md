@@ -14,6 +14,8 @@ Compare multiple short regions before full-length judgment:
 
 For each section, capture loudness proxy, peak, crest factor, spectral bands, mid/side balance, mono delta, transient proxy, and artifact status. Flag section-specific failures instead of averaging them away.
 
+Use `references/section-manifest.md` and `render_diagnostic_report.py --section-manifest` when the same sections will be reused across candidates.
+
 ## 2. Vocal Intelligibility And Masking
 
 Best evidence comes from a full mix plus vocal and band stems for the same section.
@@ -78,6 +80,8 @@ Check a codec round-trip when possible:
 - flag high-band smear, sample-peak overs, mono/stereo shifts, and distortion-like difference energy.
 
 If the script receives only WAV input, mark codec risk as untested instead of assuming delivery safety.
+
+Use `references/codec-delivery.md` and `scripts/codec_roundtrip.py` when a real encode/decode check is needed.
 
 ## 7. Candidate Report Generation
 

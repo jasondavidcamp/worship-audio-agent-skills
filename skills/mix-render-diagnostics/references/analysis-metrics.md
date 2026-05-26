@@ -10,7 +10,7 @@ Use metrics to narrow the search before making listening or A/B decisions. Alway
 - Loudness compensation: compare tonal changes at matched perceived loudness when possible.
 - Crest factor / dynamic range: flag candidates that flatten transients or pump audibly.
 - Artifact gate: compare a short candidate snippet against a known-good baseline with `scripts/artifact_gate.py`; do not make mix judgments if static/crackle/hash is suspected or reported.
-- Section report: use `scripts/render_diagnostic_report.py` when a single integrated value may hide verse/chorus/bridge differences.
+- Section report: use `scripts/render_diagnostic_report.py` when a single integrated value may hide verse/chorus/bridge differences. Use `--section-manifest` for repeatable named sections.
 
 ## Spectral Checks
 
@@ -29,7 +29,7 @@ Use `references/diagnostic-modules.md` when the problem is bigger than a single 
 - Transient/punch: inspect crest, attack-to-body proxy, transient density, and baseline deltas.
 - Reverb/tail buildup: inspect quiet-floor-to-body ratio and sparse-section wash risk.
 - Stereo/mono translation: inspect correlation, mono delta, and side-to-mid energy by band.
-- Codec delivery: compare a decoded codec round-trip when available; mark codec untested when unavailable.
+- Codec delivery: compare a decoded codec round-trip when available; use `scripts/codec_roundtrip.py` when `ffmpeg` is available, and mark codec untested when unavailable.
 - Candidate report: produce JSON/Markdown with warnings and one next test per section.
 
 ## Optional Essentia Checks

@@ -53,6 +53,8 @@ This skill does not score emotional impact, immersion, or worship feel. Translat
    - Before a compare batch, render known-good baseline snippets and candidate snippets for at least three sections: loud/dense, mid-song, and late-song. Do not print full-length candidates until the multi-section snippet batch passes the artifact gate.
    - For short clip analysis, prefer a temporary 30-second media item plus "apply track/take FX to item" over full project render. Copy the resulting WAV to the analysis folder and delete the temporary track/item.
    - For section-aware diagnostics, vocal masking, transient/punch, reverb/tail, stereo/mono, codec, or candidate report work, read `references/diagnostic-modules.md` and run `scripts/render_diagnostic_report.py`.
+   - For repeated section comparisons, use a section manifest instead of retyping section timestamps.
+   - For delivery-risk checks, run a codec roundtrip only after the WAV passes basic render/artifact/headroom checks.
    - Compare source, candidate, and reference with the metrics in `references/analysis-metrics.md`.
    - For drum or drum-bus compares aimed at a specific artist/reference, read the relevant deployment-local aimpoint profile only for target tolerances and reference ranges. Keep those private profiles outside public skill repositories.
    - Before translating offline DSP prototypes into Waves chains, use `waves-live-plugin-chains` and any locally generated Waves plugin catalog.
@@ -103,6 +105,8 @@ candidates:
 
 - Read `references/analysis-metrics.md` when choosing objective checks and comparing render candidates.
 - Read `references/diagnostic-modules.md` when diagnosing section-specific failures, vocal masking, transient loss, tail buildup, stereo/mono translation, codec delivery, or candidate report shape.
+- Read `references/section-manifest.md` when a song, service, or candidate set needs repeatable named sections.
+- Read `references/codec-delivery.md` when checking livestream, video, podcast, social, or mastered-export codec risk.
 - Read `references/reaper-render-safety.md` before rendering from REAPER, especially after changing render bounds, full-song renders, or time selections.
 - Read and update `references/reaper-superrack-transfer.md` when learning how a Waves setting exported from REAPER imports into SuperRack.
 - Read `references/reaper-mcp-setup.md` when checking the local REAPER MCP install, Codex config entry, or reapy connection requirements.
@@ -125,6 +129,18 @@ Generate a section-aware diagnostic report:
 
 ```powershell
 & "<python>" scripts/render_diagnostic_report.py --candidate "C:\path\candidate.wav" --baseline "C:\path\baseline.wav" --reference "C:\path\reference.wav" --section "verse:45:75" --section "chorus:90:120" --md-output "C:\path\report.md" --json-output "C:\path\report.json"
+```
+
+Generate the same report from a section manifest:
+
+```powershell
+& "<python>" scripts/render_diagnostic_report.py --candidate "C:\path\candidate.wav" --baseline "C:\path\baseline.wav" --section-manifest "C:\path\sections.yaml" --md-output "C:\path\report.md"
+```
+
+Run a codec roundtrip and optional delivery-risk report:
+
+```powershell
+& "<python>" scripts/codec_roundtrip.py "C:\path\candidate.wav" --codec aac --bitrate 192k --section-manifest "C:\path\sections.yaml" --report-md "C:\path\codec-report.md" --pretty
 ```
 
 Render a known-safe REAPER time range:

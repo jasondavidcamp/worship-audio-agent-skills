@@ -30,6 +30,7 @@ class Section:
     name: str
     start: float | None
     end: float | None
+    purpose: str | None = None
 
 
 def db(value: float) -> float:
@@ -92,6 +93,79 @@ def parse_section(value: str) -> Section:
     if end_f <= start_f:
         raise argparse.ArgumentTypeError("Section end must be greater than start")
     return Section(name=name, start=start_f, end=end_f)
+
+
+def _coerce_section(row: dict, source: Path | None = None) -> Section:
+    try:
+        name = str(row["name"])
+        start = float(row["start"])
+        end = float(row["end"])
+    except KeyError as exc:
+        label = f" in {source}" if source else ""
+        raise ValueError(f"Manifest section missing required key {exc!s}{label}") from exc
+    except (TypeError, ValueError) as exc:
+        label = f" in {source}" if source else ""
+        raise ValueError(f"Manifest section start/end must be numeric{label}") from exc
+    if end <= start:
+        label = f" in {source}" if source else ""
+        raise ValueError(f"Manifest section {name!r} end must be greater than start{label}")
+    purpose = row.get("purpose")
+    return Section(name=name, start=start, end=end, purpose=str(purpose) if purpose is not None else None)
+
+
+def _parse_scalar(value: str) -> str | float:
+    value = value.strip().strip('"').strip("'")
+    try:
+        return float(value)
+    except ValueError:
+        return value
+
+
+def _parse_simple_yaml_manifest(path: Path) -> dict:
+    rows: list[dict] = []
+    current: dict | None = None
+    in_sections = False
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.split("#", 1)[0].rstrip()
+        if not line.strip():
+            continue
+        stripped = line.strip()
+        if stripped == "sections:":
+            in_sections = True
+            continue
+        if not in_sections:
+            continue
+        if stripped.startswith("- "):
+            if current:
+                rows.append(current)
+            current = {}
+            item = stripped[2:].strip()
+            if item:
+                if ":" not in item:
+                    raise ValueError(f"Unsupported manifest list item in {path}: {raw_line}")
+                key, value = item.split(":", 1)
+                current[key.strip()] = _parse_scalar(value)
+            continue
+        if current is not None and ":" in stripped:
+            key, value = stripped.split(":", 1)
+            current[key.strip()] = _parse_scalar(value)
+    if current:
+        rows.append(current)
+    if not rows:
+        raise ValueError(f"No sections found in manifest {path}")
+    return {"sections": rows}
+
+
+def load_section_manifest(path: Path) -> list[Section]:
+    suffix = path.suffix.lower()
+    if suffix == ".json":
+        data = json.loads(path.read_text(encoding="utf-8"))
+    else:
+        data = _parse_simple_yaml_manifest(path)
+    rows = data.get("sections")
+    if not isinstance(rows, list):
+        raise ValueError(f"Manifest {path} must contain a sections list")
+    return [_coerce_section(row, path) for row in rows]
 
 
 def slice_section(data: np.ndarray, sr: int, section: Section) -> np.ndarray:
@@ -229,6 +303,7 @@ def analyze_section(data: np.ndarray, sr: int, section: Section) -> dict:
     rms_dbfs = db(rms_value)
     return {
         "section": section.name,
+        "purpose": section.purpose,
         "start_s": section.start,
         "end_s": section.end,
         "duration_s": round(len(mono) / sr, 3) if sr else 0,
@@ -413,7 +488,10 @@ def next_test(warnings: list[str]) -> str:
 
 
 def build_report(args: argparse.Namespace) -> dict:
-    sections = args.section
+    sections = []
+    if args.section_manifest:
+        sections.extend(load_section_manifest(args.section_manifest))
+    sections.extend(args.section)
     candidate = analyze_file(args.candidate, sections)
     baseline = analyze_file(args.baseline, sections) if args.baseline else None
     reference = analyze_file(args.reference, sections) if args.reference else None
@@ -455,6 +533,7 @@ def build_report(args: argparse.Namespace) -> dict:
             "vocal_stem": str(args.vocal_stem) if args.vocal_stem else None,
             "band_stem": str(args.band_stem) if args.band_stem else None,
             "codec_roundtrip": str(args.codec_roundtrip) if args.codec_roundtrip else None,
+            "section_manifest": str(args.section_manifest) if args.section_manifest else None,
             "section_count": len(candidates),
         },
         "candidate_file": candidate,
@@ -480,6 +559,8 @@ def markdown(report: dict) -> str:
         metrics = section["metrics"]
         lines.append(f"### {section['section']}")
         lines.append("")
+        if metrics.get("purpose"):
+            lines.append(f"- purpose: {metrics['purpose']}")
         lines.append(f"- peak: {metrics['peak_dbfs']} dBFS")
         lines.append(f"- rms proxy: {metrics['rms_dbfs']} dBFS")
         lines.append(f"- crest: {metrics['crest_db']} dB")
@@ -536,6 +617,7 @@ def main() -> int:
     parser.add_argument("--band-stem", type=Path)
     parser.add_argument("--codec-roundtrip", type=Path, help="Decoded WAV after the intended codec encode/decode path.")
     parser.add_argument("--section", action="append", type=parse_section, default=[], help="Section as name:start:end seconds.")
+    parser.add_argument("--section-manifest", type=Path, help="JSON or simple YAML file with sections list.")
     parser.add_argument("--json-output", type=Path)
     parser.add_argument("--md-output", type=Path)
     parser.add_argument("--pretty", action="store_true")
