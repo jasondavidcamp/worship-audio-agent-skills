@@ -15,7 +15,7 @@ This skill does not score emotional impact, immersion, or worship feel. Translat
 
 ## Operating Rules
 
-1. Work in a copy or disposable REAPER project unless the user explicitly asks to modify their working project.
+1. For file-only analysis, treat input renders and stems as read-only evidence. For REAPER staging, work in a copy or disposable project unless the user explicitly asks to modify their working project.
 2. Keep test chains serial. Do not use parallel FX chains unless the final target is known to support the same topology.
 3. Bypass or disable ReaInsert/live I/O FX during offline rendering so hardware routing does not affect analysis.
 4. Match gain before judging tone. Record input loudness, output loudness, peak headroom, and compensation used.
