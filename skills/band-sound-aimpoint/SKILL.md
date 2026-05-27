@@ -7,7 +7,9 @@ description: Define, analyze, calibrate, and apply a target sound for church ban
 
 ## Purpose
 
-Use this skill to keep mix decisions anchored to a named musical target instead of isolated plugin tweaks. Combine subjective language, reference-track evidence, objective metrics, and deployment-local taste history so Codex can make better engineering recommendations before asking for more taste calls.
+Use this skill to keep mix decisions anchored to a named musical target instead of isolated plugin tweaks. Combine subjective language, reference-track evidence, objective metrics, and deployment-local taste history so Codex can make better engineering recommendations.
+
+This skill owns taste calls: asking for them, interpreting them, resolving conflicts with references, and converting repeated reactions into deployment-local calibration rules. Other audio skills may consume an aimpoint or preference rule from this skill, but they should not maintain their own taste-call memory.
 
 ## Operating Rules
 
@@ -57,7 +59,30 @@ Use this skill to keep mix decisions anchored to a named musical target instead 
    - Ask for small A/B taste calls when two candidates trade clarity, warmth, vocal pocket, BGV blend, ambience, or band energy.
    - Read any deployment-local taste-call log before interpreting a taste call when one exists.
    - Convert the user's reaction into a reusable rule, not just a one-off note.
-   - Let `live-worship-mix-engineering` handle detailed grading, diagnosis, and plugin-chain moves.
+   - Export the resulting aimpoint or preference rule in concrete mix language that `live-worship-mix-engineering`, `mix-render-diagnostics`, or `waves-live-plugin-chains` can consume.
+   - Let `live-worship-mix-engineering` handle detailed diagnosis and practical next-move selection after the taste preference has been translated into an aimpoint.
+
+## Taste Call Ownership
+
+Use this skill whenever the user is choosing between subjective tradeoffs, including:
+
+- Clarity versus warmth.
+- Vocal-forward versus blended.
+- Dry/intimate versus ambient/spacious.
+- Natural drums versus sample-forward impact.
+- Smooth top versus bright excitement.
+- Congregational/natural versus polished/modern.
+- Mono-first stability versus stereo width.
+
+Record taste calls as:
+
+- Exact user language.
+- Candidate or reference context.
+- Inferred durable preference.
+- Confidence level: one-off reaction, repeated pattern, or confirmed rule.
+- Deployment scope: this song, this service, this church, or general preference.
+
+Do not let render metrics overrule a confirmed taste rule unless the render has an objective failure such as clipping, artifacts, lost intelligibility, mono collapse, or unsafe delivery headroom.
 
 ## Calibration Sources
 
@@ -110,6 +135,6 @@ wsl.exe -d Ubuntu -- /path/to/venv/bin/python "/mnt/c/path/to/skills/band-sound-
 ## Related Skills
 
 - Use `mix-render-diagnostics` for REAPER staging, render diagnostics, and candidate ranking.
-- Use `live-worship-mix-engineering` for scoring, section diagnosis, plugin-chain judgment, and next-move selection.
+- Use `live-worship-mix-engineering` for section diagnosis, plugin-chain judgment, and next-move selection after the aimpoint or taste rule is known.
 - Use `waves-live-plugin-chains` when the aimpoint needs to become Waves plugin-chain choices.
 - Use `superrack-session-files` only after an approved candidate needs to move into a Waves SuperRack session file.
