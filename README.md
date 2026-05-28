@@ -2,6 +2,12 @@
 
 AI-agent skills and helper tools for live worship audio: mix aimpoints, worship mix diagnosis, REAPER render comparison, Behringer WING snapshots, Waves plugin-chain choices, SuperRack session files, and practical mix-engineering workflows.
 
+## Project Story
+
+![The Problem: A Knowledge Gap](graphics/problem-knowledge-gap.png)
+
+This project exists to help bridge the gap between hearing mix problems in live worship audio and having the language, depth, patterns, and repeatable workflow to fix them consistently.
+
 ## Skills
 
 - `band-sound-aimpoint`: define reference targets, style vocabulary, and taste-call calibration for worship mixes.
