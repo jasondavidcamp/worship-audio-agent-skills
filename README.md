@@ -8,6 +8,12 @@ AI-agent skills and helper tools for live worship audio: mix aimpoints, worship 
 
 This project exists to help bridge the gap between hearing mix problems in live worship audio and having the language, depth, patterns, and repeatable workflow to fix them consistently.
 
+## Watch the Demo
+
+[![AI Mix Iteration in REAPER for Worship Audio](https://img.youtube.com/vi/QWoHhcW5Gcg/maxresdefault.jpg)](https://www.youtube.com/watch?v=QWoHhcW5Gcg)
+
+See the workflow in action: capture Sunday multitracks, define a mix aimpoint, let Codex iterate REAPER/Waves plugin-chain candidates during the week, grade the results, collect engineer feedback, and move approved Waves settings toward SuperRack for the next service.
+
 ## Skills
 
 - `band-sound-aimpoint`: define reference targets, style vocabulary, and taste-call calibration for worship mixes.
