@@ -47,6 +47,7 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
    - For track or FX edits, identify exact track index and plugin display names from REAPER's installed FX cache or current session.
    - If probing plugin availability, label the work as discovery, capture exact plugin names/parameter lists, and remove or bypass trial inserts that are not part of the chosen chain.
    - Before claiming an iteration, list the intended chain, the parameter or preset changes from the previous pass, and the evidence that will be rendered or inspected.
+   - Before multi-pass Waves plugin iteration, ask `waves-live-plugin-chains` for a source-specific candidate palette and include topology variety unless the user explicitly asks for refinement only. Prior approved/exported chains for the same source should appear early or be explicitly excluded.
    - For render work, read `references/reaper-render-safety.md` before starting.
    - For REAPER-to-SuperRack artifacts, read `references/reaper-superrack-transfer.md` before exporting or interpreting Waves state.
    - When source-staleness has already been seen in the project, refresh target-track audio takes that overlap the test range before the raw-control render: recreate the `PCM_Source` from the same existing file path, preserve take start offset and item timing, then log the refresh as preflight rather than as a failed iteration.

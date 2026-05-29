@@ -23,9 +23,10 @@ Keep `live-worship-mix-engineering` Waves-neutral. Use this skill only after the
 8. Treat installed plugins as candidates, not automatic recommendations.
 9. Do not count a plugin as tested just because it loaded with default settings. A useful candidate needs a source-specific role, deliberate starting settings or preset choice, and evidence from the same comparison section.
 10. For multi-pass chain iteration, define what would improve the aimpoint grade before choosing settings, then require a score or `grade_pending` after the candidate is rendered.
-11. Loudness-match insert/bypass and candidate renders before ranking.
-12. Reject clipping, crackle, hash, pumping, obvious tuning artifacts, over-expanded phrases, or lost lyric intelligibility before asking for taste.
-13. If the task becomes `.sprk` or `.xps` file inspection/patching, switch to `superrack-session-files`.
+11. Before multi-pass Waves iteration, build a source-specific candidate palette. Include prior approved/exported chains for the same source early, plus at least one alternate topology unless the user explicitly asks for refinement only.
+12. Loudness-match insert/bypass and candidate renders before ranking.
+13. Reject clipping, crackle, hash, pumping, obvious tuning artifacts, over-expanded phrases, or lost lyric intelligibility before asking for taste.
+14. If the task becomes `.sprk` or `.xps` file inspection/patching, switch to `superrack-session-files`.
 
 ## Chain Decision Flow
 
@@ -42,7 +43,14 @@ Keep `live-worship-mix-engineering` Waves-neutral. Use this skill only after the
    - Protection/measurement: L2/L3-LL/L4, WLM, meters.
    - If the only known fact is "this plugin is installed," stop at inventory/discovery and ask `reaper-session-automation` to verify exact names or parameters instead of presenting it as a mix candidate.
 
-3. Pick the simplest live-safe chain:
+3. Build a candidate palette for iteration:
+   - Read `references/source-candidate-palettes.md` for the source type.
+   - Check for prior approved/exported chains or presets for the same source; include one early or state why it does not apply.
+   - For 5-pass iterations, include topology variety: prior/current chain, clean utility chain, alternate dynamics, color/channel-strip chain, and keeper refinement.
+   - For 10-20 pass iterations, broaden into a plugin-family shootout before narrowing.
+   - Name the audible hypothesis for each topology, not only the plugin list.
+
+4. Pick the simplest live-safe chain:
    - Remove noise, bleed, and masking before adding brightness or loudness.
    - Add compression only after the source lane is clear enough to compress safely.
    - Add ambience or width only after lyric clarity and mono translation survive.
@@ -50,7 +58,7 @@ Keep `live-worship-mix-engineering` Waves-neutral. Use this skill only after the
    - Include the first intentional settings to try, not only plugin names.
    - For each candidate, state the expected grade movement: what should score higher if the move works, and what tradeoff could lower the score.
 
-4. Document transfer constraints:
+5. Document transfer constraints:
    - Host: SuperRack SoundGrid or SuperRack Performer. LV1/REAPER references are acceptable only when the same chain is expected to transfer to SuperRack.
    - Mono/stereo format.
    - Sidechain needs.
@@ -63,6 +71,7 @@ Keep `live-worship-mix-engineering` Waves-neutral. Use this skill only after the
 - Read `references/superrack-host-latency-cpu-planning.md` when choosing between SuperRack SoundGrid, SuperRack Performer, LV1, REAPER staging, broadcast-only use, or when CPU/artifact/latency risk affects the chain.
 - Read `references/waves-plugin-decision-matrix.md` for source-specific plugin choices and first-line alternatives.
 - Read `references/waves-superrack-operational-reference.md` for live-safety, latency posture, SoundGrid/Performer cautions, and operational metadata.
+- Read `references/source-candidate-palettes.md` before multi-pass Waves iterations, especially when the user wants broader exploration across instruments, voice types, or plugin families.
 - Read `references/waves-next-move-map.md` when translating common worship-mix diagnoses into Waves-specific next moves.
 - Read `references/superrack-vocal-speech-chains.md` for lead vocal, BGV/choir, and spoken-word/pastor mic chains.
 - Read `references/superrack-rhythm-band-bus-chains.md` for drums, kick/bass/low-end, band bus, mix bus, and livestream bus chains.
