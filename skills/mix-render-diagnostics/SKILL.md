@@ -23,6 +23,7 @@ This skill does not own emotional target language or live-chain design. Translat
 6. Reject obvious failures before taste calls: clipping, static/crackle/hash, severe loudness drift, harshness, low-mid buildup, pumping, phase damage, mono collapse, or lost intelligibility.
 7. Do not learn mix-decision rules from any batch the user describes as static-y, crackly, corrupted, or horrible. Isolate the artifact source first.
 8. Use user taste calls and aimpoint profiles only after the render passes basic artifact, headroom, and non-silence checks.
+9. For candidate batches or repeated iterations, produce a scored run log. Each candidate needs gates, metric movement, aimpoint grade, confidence, grade reason, and next test.
 
 ## Workflow
 
@@ -48,6 +49,7 @@ This skill does not own emotional target language or live-chain design. Translat
 
 4. Decide:
    - Rank candidates by target-specific fit and reject objective failures first.
+   - Grade each real candidate pass from 1-10 against the active aimpoint, and include confidence plus the reason the score changed.
    - Explain metric movement in audible terms: louder/softer, brighter/darker, more/less low-mid cloud, more/less transient punch, wider/narrower, more/less tail buildup.
    - When a render fails, prescribe one concrete next test: reduce or bypass the suspected processor, render the same time range, and compare the same metrics again.
    - When a candidate passes objective checks but the choice is subjective, ask for a focused A/B taste call.
@@ -80,6 +82,10 @@ candidates:
         clipping: pass
         artifact_gate: pass
       notes: "Presence range closer to reference; 300 Hz remains elevated."
+      aimpoint_grade: 7.1
+      confidence: medium
+      grade_reason: "Closer to the reference in presence and level stability, but low-mid buildup still masks the pocket."
+      movement: closer
       next_test: "Try 1.5 dB less 300 Hz in the processor chain and rerender chorus_1."
     decision: keep_for_listening
 ```

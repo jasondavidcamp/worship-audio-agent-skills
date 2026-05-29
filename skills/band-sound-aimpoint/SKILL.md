@@ -20,9 +20,10 @@ This skill owns taste calls: asking for them, interpreting them, resolving confl
 5. Preserve congregational priorities: lyric intelligibility, stable lead vocal, supportive band energy, and low fatigue matter more than record-polish alone.
 6. Use copyrighted reference audio only for private analysis. Do not copy it into skill folders or generated deliverables.
 7. Treat user taste calls as stronger calibration than public reference matching when they conflict.
-8. Convert repeated user reactions into durable rules in a deployment-local taste-call log kept outside public skill repositories.
-9. Classify the style family before recommending a target: natural congregational, acoustic/folk, modern arena, ambient/spontaneous, track-heavy pop, gospel-influenced, or hybrid.
-10. Keep objective profile fields separate from value judgments; a bright/wide/compressed reference may be correct for one style and wrong for another.
+8. When the user asks to iterate toward an aimpoint, require a per-pass aimpoint grade with confidence, reason, and next move. Do not let ungraded plugin changes count as aimpoint iteration.
+9. Convert repeated user reactions into durable rules in a deployment-local taste-call log kept outside public skill repositories.
+10. Classify the style family before recommending a target: natural congregational, acoustic/folk, modern arena, ambient/spontaneous, track-heavy pop, gospel-influenced, or hybrid.
+11. Keep objective profile fields separate from value judgments; a bright/wide/compressed reference may be correct for one style and wrong for another.
 
 ## Workflow
 
@@ -49,6 +50,7 @@ This skill owns taste calls: asking for them, interpreting them, resolving confl
    - Use the same kind of section from a trustworthy REAPER render, stem, or other source.
    - Loudness-match the candidate render to the reference before judging tone.
    - Compare broad bands and dynamics, then write an engineering interpretation.
+   - For iteration batches, assign an `aimpoint_grade` from 1-10, a confidence level, a one-sentence reason, and whether it moved closer, farther, or stayed flat versus the prior pass.
 
 5. Turn analysis into moves:
    - Recommend small, reversible changes first.
@@ -83,6 +85,23 @@ Record taste calls as:
 - Deployment scope: this song, this service, this church, or general preference.
 
 Do not let render metrics overrule a confirmed taste rule unless the render has an objective failure such as clipping, artifacts, lost intelligibility, mono collapse, or unsafe delivery headroom.
+
+## Aimpoint Iteration Grade
+
+For any multi-pass request using words such as "iterate," "try N times," "get closer," "candidate batch," or "toward the aimpoint," keep a compact score for every real pass:
+
+```yaml
+iteration: 3
+target: Bass Guitar
+section: chorus_1 142.5-147.5s
+aimpoint_grade: 7.1
+confidence: medium
+movement: closer
+reason: "Low-mid cloud improved and bass supports the downbeat better, but note attack still feels too soft."
+next_move: "Keep the EQ cut; try slightly faster compression release and rerender the same section."
+```
+
+Use `low` confidence when the grade is based only on metrics or session-state evidence. Use `medium` or `high` only when trustworthy audio, a reference/baseline, and either listening notes or strong diagnostic evidence support the call.
 
 ## Calibration Sources
 

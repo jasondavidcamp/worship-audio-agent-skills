@@ -22,9 +22,10 @@ Keep `live-worship-mix-engineering` Waves-neutral. Use this skill only after the
 7. Mark high-latency AI cleanup, heavy restoration, mastering, or analysis plugins as broadcast-only/verify-first unless official Waves data says they are suitable for the target live path.
 8. Treat installed plugins as candidates, not automatic recommendations.
 9. Do not count a plugin as tested just because it loaded with default settings. A useful candidate needs a source-specific role, deliberate starting settings or preset choice, and evidence from the same comparison section.
-10. Loudness-match insert/bypass and candidate renders before ranking.
-11. Reject clipping, crackle, hash, pumping, obvious tuning artifacts, over-expanded phrases, or lost lyric intelligibility before asking for taste.
-12. If the task becomes `.sprk` or `.xps` file inspection/patching, switch to `superrack-session-files`.
+10. For multi-pass chain iteration, define what would improve the aimpoint grade before choosing settings, then require a score or `grade_pending` after the candidate is rendered.
+11. Loudness-match insert/bypass and candidate renders before ranking.
+12. Reject clipping, crackle, hash, pumping, obvious tuning artifacts, over-expanded phrases, or lost lyric intelligibility before asking for taste.
+13. If the task becomes `.sprk` or `.xps` file inspection/patching, switch to `superrack-session-files`.
 
 ## Chain Decision Flow
 
@@ -47,6 +48,7 @@ Keep `live-worship-mix-engineering` Waves-neutral. Use this skill only after the
    - Add ambience or width only after lyric clarity and mono translation survive.
    - If any proposed plugin fails the SuperRack/latency gate, replace it or label it as a verified-only exception.
    - Include the first intentional settings to try, not only plugin names.
+   - For each candidate, state the expected grade movement: what should score higher if the move works, and what tradeoff could lower the score.
 
 4. Document transfer constraints:
    - Host: SuperRack SoundGrid or SuperRack Performer. LV1/REAPER references are acceptable only when the same chain is expected to transfer to SuperRack.

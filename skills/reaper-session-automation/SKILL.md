@@ -24,7 +24,8 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 9. For plugin work, verify plugin display names and formatted parameter values in REAPER. Normalized parameters are a fallback representation, not a reliable transfer format by themselves.
 10. Separate plugin discovery from mix iteration. Loading plugins, checking whether they instantiate, or cycling through default inserts is discovery only; do not count it as a mix pass.
 11. Count a plugin iteration only when it has a stated audible goal, a deliberate chain/settings change, a verified render or session-state artifact, and a short comparison note.
-12. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
+12. When the user asks to iterate toward an aimpoint, every counted REAPER pass must include or hand off enough evidence for an aimpoint grade. If no grade can be produced, label the pass as setup, discovery, or render-only.
+13. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
 
 ## Workflow
 
@@ -54,6 +55,7 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 
 5. Handoff:
    - Return concise session facts: project path, target track, FX chain, settings changed, render path, and any REAPER warnings.
+   - For iteration requests, include a run-log row for each counted pass: iteration id, audible goal, changed plugins/parameters, render section/path, verification gates, and grade/status. Use `grade_pending` only when audio judgment is explicitly being handed to another skill or the user.
    - Send rendered WAV comparison and artifact analysis to `mix-render-diagnostics`.
    - Send live Waves chain design to `waves-live-plugin-chains`.
    - Send approved SuperRack `.sprk` inspection or patching to `superrack-session-files`.
