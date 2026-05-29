@@ -23,13 +23,15 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 8. Treat render-popup cleanup as part of the render, not a courtesy afterthought. A render is not complete until the render progress/results popup has been closed and a ReaPy/MCP API ping succeeds.
 9. For plugin work, verify plugin display names and formatted parameter values in REAPER. Normalized parameters are a fallback representation, not a reliable transfer format by themselves.
 10. When changing parameters on a plugin, focus the exact plugin window before setting its parameters so a human shoulder-surfing REAPER can see the change. A hidden/offscreen parameter write is not enough for user-visible automation.
-11. Separate plugin discovery from mix iteration. Loading plugins, checking whether they instantiate, or cycling through default inserts is discovery only; do not count it as a mix pass.
-12. Count a plugin iteration only when it has a stated audible goal, a deliberate chain/settings change, a verified render or session-state artifact, and a short comparison note.
-13. When the user asks to iterate toward an aimpoint, every counted REAPER pass must include or hand off enough evidence for an aimpoint grade. If no grade can be produced, label the pass as setup, discovery, or render-only.
-14. Before rendering, state the render source being used: real target track, selected track/stem, selected item, master mix, or disposable staging track. Match the source to the task instead of reusing the last successful render helper by habit.
-15. Default to the real target track for plugin edits and source-specific iteration when it passes a raw-control render. Use disposable staging tracks only as an explicit fallback, and state why the real track path could not be trusted.
-16. Treat temporary loop/time selections as borrowed state. After the final render in a run, restore the previous user selection if one existed; otherwise clear the temporary selection.
-17. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
+11. Before judging track-FX changes, verify both the individual FX enabled states and the track-wide FX chain switch (`I_FXEN`). A track can show enabled inserts while the whole FX chain is bypassed, causing rendered files to ignore every plugin parameter change.
+12. While shoulder-surfing plugin settings, avoid exhaustive formatted-value searches on every parameter. Use known or locally calibrated normalized mappings for routine moves, verify only the important displayed values, and keep visible pauses short enough for the user to follow without waiting through busywork.
+13. Separate plugin discovery from mix iteration. Loading plugins, checking whether they instantiate, or cycling through default inserts is discovery only; do not count it as a mix pass.
+14. Count a plugin iteration only when it has a stated audible goal, a deliberate chain/settings change, a verified render or session-state artifact, and a short comparison note.
+15. When the user asks to iterate toward an aimpoint, every counted REAPER pass must include or hand off enough evidence for an aimpoint grade. If no grade can be produced, label the pass as setup, discovery, or render-only.
+16. Before rendering, state the render source being used: real target track, selected track/stem, selected item, master mix, or disposable staging track. Match the source to the task instead of reusing the last successful render helper by habit.
+17. Default to the real target track for plugin edits and source-specific iteration when it passes a raw-control render. Use disposable staging tracks only as an explicit fallback, and state why the real track path could not be trusted.
+18. Treat temporary loop/time selections as borrowed state. After the final render in a run, restore the previous user selection if one existed; otherwise clear the temporary selection.
+19. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
 
 ## Workflow
 
@@ -49,7 +51,9 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
    - Use serial FX chains unless the final host supports the same routing.
    - Before setting parameters on a particular FX, select the target track and call `TrackFX_Show(track, fx_index, 1)` or the host-equivalent focus/open command for that exact plugin. If setting several plugins, focus each plugin before its own parameter block.
    - Pause or update the UI briefly after focusing a plugin when the user is shoulder-surfing, then state which plugin and parameter group is being changed.
+   - For track FX, confirm the track-wide FX chain is enabled (`I_FXEN=1`) before rendering or grading. If it was off and the user asked for audible plugin work, enable it and log that change.
    - Verify parameter names and formatted values after each important setting change.
+   - Do not spend a shoulder-surfed iteration binary-searching every parameter to exact display values. Calibrate a small mapping when needed, set routine values directly, and verify the handful of controls that matter musically.
    - If the plugin cannot be focused or its UI cannot be made visible, say so and mark the change as non-visible automation rather than implying the human could watch it happen.
    - Do not cycle plugins on a track as a substitute for parameter work. If no setting changes were made, report "plugin discovery only" and do not advance an iteration counter.
    - Avoid long-running render commands while probing plugin parameters or project state.
@@ -64,6 +68,7 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
    - Immediately after every render command, close the render progress/results popup. When using custom ReaScript instead of `scripts/render_time_range.py`, copy or call that script's render-window cleanup routine before analysis or the next action.
    - After the last render in the run, restore the previous loop/time selection if one existed; if the selection was created only for the render, clear it with `GetSet_LoopTimeRange2(..., 0.0, 0.0, ...)`.
    - Verify output file existence, non-zero size, duration, non-silence, popup cleanup, and loop/time selection cleanup before offering it as a listening or analysis artifact.
+   - For plugin-iteration batches, compare candidate files against a baseline or prior pass at least with a simple sample-difference check. If multiple candidates are byte-identical after deliberate FX moves, stop and inspect render source, track-wide FX enable, plugin bypass/offline state, and routing before continuing.
 
 5. Handoff:
    - Return concise session facts: project path, target track, FX chain, settings changed, render path, and any REAPER warnings.
