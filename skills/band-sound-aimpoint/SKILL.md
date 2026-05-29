@@ -50,7 +50,7 @@ This skill owns taste calls: asking for them, interpreting them, resolving confl
    - Use the same kind of section from a trustworthy REAPER render, stem, or other source.
    - Loudness-match the candidate render to the reference before judging tone.
    - Compare broad bands and dynamics, then write an engineering interpretation.
-   - For iteration batches, assign an `aimpoint_grade` from 1-10, a confidence level, a one-sentence reason, and whether it moved closer, farther, or stayed flat versus the prior pass.
+   - For iteration batches, assign an `aimpoint_grade` on a 0-100 scale, a confidence level, a one-sentence reason, and whether it moved closer, farther, or stayed flat versus the prior pass.
 
 5. Turn analysis into moves:
    - Recommend small, reversible changes first.
@@ -94,12 +94,14 @@ For any multi-pass request using words such as "iterate," "try N times," "get cl
 iteration: 3
 target: Bass Guitar
 section: chorus_1 142.5-147.5s
-aimpoint_grade: 7.1
+aimpoint_grade: 71
 confidence: medium
 movement: closer
 reason: "Low-mid cloud improved and bass supports the downbeat better, but note attack still feels too soft."
 next_move: "Keep the EQ cut; try slightly faster compression release and rerender the same section."
 ```
+
+Use a 0-100 grade where `100` means the pass fully serves the active aimpoint for the evaluated scope. Prefer whole numbers unless a decimal is genuinely useful. Anchor scores roughly as: `90-100` excellent/near-target, `80-89` strong, `70-79` usable but clearly improvable, `60-69` noticeably off, and below `60` a poor fit or failed pass.
 
 Use `low` confidence when the grade is based only on metrics or session-state evidence. Use `medium` or `high` only when trustworthy audio, a reference/baseline, and either listening notes or strong diagnostic evidence support the call.
 
