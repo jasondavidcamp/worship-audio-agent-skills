@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import platform
+import time
 import wave
 from pathlib import Path
 
@@ -12,6 +14,13 @@ from reapy import reascript_api as RPR
 
 
 MAX_DURATION_DRIFT_SECONDS = 0.5
+RENDER_WINDOW_CLOSE_TIMEOUT_SECONDS = 5.0
+RENDER_WINDOW_APPEAR_GRACE_SECONDS = 1.0
+RENDER_WINDOW_TITLE_TERMS = (
+    "render",
+    "rendering",
+    "finished in",
+)
 
 
 def _media_end() -> float:
@@ -56,6 +65,106 @@ def _wav_duration_seconds(path: Path) -> float:
         return wav.getnframes() / float(wav.getframerate())
 
 
+def close_reaper_render_windows(timeout: float = RENDER_WINDOW_CLOSE_TIMEOUT_SECONDS) -> dict[str, list[str]]:
+    """Close visible REAPER render progress/results windows on Windows.
+
+    Returns a small report with closed and remaining render-window titles. On
+    non-Windows hosts this is a no-op because REAPER window management differs
+    by platform.
+    """
+    if platform.system() != "Windows":
+        return {"closed": [], "remaining": []}
+
+    import ctypes
+    from ctypes import wintypes
+
+    user32 = ctypes.WinDLL("user32", use_last_error=True)
+    kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+
+    enum_proc_type = ctypes.WINFUNCTYPE(ctypes.c_bool, wintypes.HWND, wintypes.LPARAM)
+    process_query_limited_information = 0x1000
+    wm_close = 0x0010
+
+    user32.EnumWindows.argtypes = [enum_proc_type, wintypes.LPARAM]
+    user32.IsWindowVisible.argtypes = [wintypes.HWND]
+    user32.GetWindowTextLengthW.argtypes = [wintypes.HWND]
+    user32.GetWindowTextW.argtypes = [wintypes.HWND, wintypes.LPWSTR, ctypes.c_int]
+    user32.GetWindowThreadProcessId.argtypes = [wintypes.HWND, ctypes.POINTER(wintypes.DWORD)]
+    user32.PostMessageW.argtypes = [wintypes.HWND, wintypes.UINT, wintypes.WPARAM, wintypes.LPARAM]
+    kernel32.OpenProcess.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
+    kernel32.CloseHandle.argtypes = [wintypes.HANDLE]
+    kernel32.QueryFullProcessImageNameW.argtypes = [
+        wintypes.HANDLE,
+        wintypes.DWORD,
+        wintypes.LPWSTR,
+        ctypes.POINTER(wintypes.DWORD),
+    ]
+
+    def title_for(hwnd: int) -> str:
+        length = user32.GetWindowTextLengthW(hwnd)
+        if length <= 0:
+            return ""
+        buf = ctypes.create_unicode_buffer(length + 1)
+        user32.GetWindowTextW(hwnd, buf, length + 1)
+        return buf.value
+
+    def process_path_for(hwnd: int) -> str:
+        pid = wintypes.DWORD()
+        user32.GetWindowThreadProcessId(hwnd, ctypes.byref(pid))
+        handle = kernel32.OpenProcess(process_query_limited_information, False, pid.value)
+        if not handle:
+            return ""
+        try:
+            size = wintypes.DWORD(4096)
+            buf = ctypes.create_unicode_buffer(size.value)
+            if kernel32.QueryFullProcessImageNameW(handle, 0, buf, ctypes.byref(size)):
+                return buf.value
+            return ""
+        finally:
+            kernel32.CloseHandle(handle)
+
+    def render_windows() -> list[tuple[int, str]]:
+        matches: list[tuple[int, str]] = []
+
+        @enum_proc_type
+        def enum_window(hwnd: int, _lparam: int) -> bool:
+            if not user32.IsWindowVisible(hwnd):
+                return True
+            title = title_for(hwnd)
+            if not title:
+                return True
+            process_path = process_path_for(hwnd).lower()
+            title_lower = title.lower()
+            is_reaper = process_path.endswith("\\reaper.exe") or process_path.endswith("/reaper")
+            is_render_window = any(term in title_lower for term in RENDER_WINDOW_TITLE_TERMS)
+            if is_reaper and is_render_window:
+                matches.append((hwnd, title))
+            return True
+
+        user32.EnumWindows(enum_window, 0)
+        return matches
+
+    closed: list[str] = []
+    started = time.monotonic()
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        windows = render_windows()
+        if not windows and closed:
+            break
+        if not windows and time.monotonic() - started >= RENDER_WINDOW_APPEAR_GRACE_SECONDS:
+            break
+        if not windows:
+            time.sleep(0.1)
+            continue
+        for hwnd, title in windows:
+            user32.PostMessageW(hwnd, wm_close, 0, 0)
+            closed.append(title)
+        time.sleep(0.25)
+
+    remaining = [title for _hwnd, title in render_windows()]
+    return {"closed": closed, "remaining": remaining}
+
+
 def render_time_range(output_path: Path, start: float, end: float) -> Path:
     if end <= start:
         raise ValueError(f"Refusing empty render range: start={start}, end={end}")
@@ -79,6 +188,10 @@ def render_time_range(output_path: Path, start: float, end: float) -> Path:
     RPR.GetSetProjectInfo(0, "RENDER_CHANNELS", 2.0, True)
     RPR.GetSetProjectInfo(0, "RENDER_BOUNDSFLAG", 2.0, True)  # local time selection mode
     RPR.Main_OnCommand(41824, 0)
+    cleanup_report = close_reaper_render_windows()
+    if cleanup_report["remaining"]:
+        raise RuntimeError(f"Render popup cleanup failed: {cleanup_report}")
+    RPR.CountTracks(0)
 
     if not output_path.exists() or output_path.stat().st_size <= 0:
         raise RuntimeError(f"Render did not produce a non-empty file: {output_path}")

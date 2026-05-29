@@ -20,7 +20,7 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 5. For small sections, translate the request into explicit `start` and `end` seconds before rendering. Do not trust the current selection length unless it has been read back and reported.
 6. For snippets under 60 seconds, never call raw render actions, generic MCP render helpers, or "most recent render settings" commands directly. Use `scripts/render_time_range.py` or a disposable item/take FX workflow, then verify the WAV duration is close to `end - start`.
 7. If REAPER shows a render countdown much longer than the requested range, cancel the render and treat the render path as unsafe until bounds are fixed.
-8. Close render progress, render complete, and confirmation popups before continuing automation. Verify the MCP/ReaPy API responds before the next operation.
+8. Treat render-popup cleanup as part of the render, not a courtesy afterthought. A render is not complete until the render progress/results popup has been closed and a ReaPy/MCP API ping succeeds.
 9. For plugin work, verify plugin display names and formatted parameter values in REAPER. Normalized parameters are a fallback representation, not a reliable transfer format by themselves.
 10. Separate plugin discovery from mix iteration. Loading plugins, checking whether they instantiate, or cycling through default inserts is discovery only; do not count it as a mix pass.
 11. Count a plugin iteration only when it has a stated audible goal, a deliberate chain/settings change, a verified render or session-state artifact, and a short comparison note.
@@ -54,7 +54,8 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
    - Use `scripts/render_time_range.py` only for explicit master-mix time ranges.
    - For single-source FX iteration, prefer a selected-track/stem render or a disposable staging track from the source media unless the real master path has already produced a non-silent raw control for the same section.
    - For very short checks, prefer disposable media-item/take FX workflows when full master renders are unnecessary.
-   - Verify output file existence, non-zero size, duration, and non-silence before offering it as a listening or analysis artifact.
+   - Immediately after every render command, close the render progress/results popup. When using custom ReaScript instead of `scripts/render_time_range.py`, copy or call that script's render-window cleanup routine before analysis or the next action.
+   - Verify output file existence, non-zero size, duration, non-silence, and popup cleanup before offering it as a listening or analysis artifact.
 
 5. Handoff:
    - Return concise session facts: project path, target track, FX chain, settings changed, render path, and any REAPER warnings.

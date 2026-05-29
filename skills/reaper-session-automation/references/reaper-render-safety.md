@@ -13,7 +13,7 @@ Use this note before rendering through `reapy`, REAPER MCP, or any unattended RE
 - For requested snippets under 60 seconds, never rely on generic MCP render helpers, raw render actions, or "most recent render settings" actions. Use `scripts/render_time_range.py` or a disposable media-item apply-FX workflow, then confirm the WAV duration is close to `end - start`.
 - `scripts/render_time_range.py` is a master-mix render helper. It sets `RENDER_SETTINGS=0`; do not assume it is rendering selected tracks, stems, or the currently selected item.
 - If a render dialog says "Rendering to file..." for much longer than the requested range should take, stop/cancel the render and close any "Render Incomplete" prompt instead of waiting.
-- After every render or render batch, close any REAPER render-complete, render-progress, or confirmation popup before continuing. Prefer focusing REAPER and sending `Esc`, then verify the reapy/MCP API responds. Do not leave render result windows open for the user.
+- After every render or render batch, close any REAPER render-complete, render-progress, or confirmation popup before continuing. Prefer an explicit window-close helper such as `scripts/render_time_range.py`'s cleanup routine; use focusing REAPER and sending `Esc` only as a fallback. Verify the reapy/MCP API responds after cleanup. Do not leave render result windows open for the user.
 - If REAPER asks "Loop/time selections locked, unlock now and remove?", cancel/escape the prompt unless the user explicitly asked to unlock or remove loop/time selections. Do not click `OK` as part of render cleanup.
 - Imported or live-capture projects can have missing or unexpected master hardware outputs while tracks retain direct hardware/ReaRoute outputs. Before playback or render checks, verify the master has a stereo hardware send to output 1/2 (`I_DSTCHAN=0`, `I_SRCCHAN=0`, unity volume, unmuted), clear unwanted per-track hardware/ReaRoute outputs, keep the normal track-to-master parent sends, and set the render source to master mix. File size alone is not enough; always measure non-silence after render.
 - If track items point at valid WAV files but master renders are silent or near plugin-noise level, check whether REAPER's PCM source handle is stale/offline. Rebinding the take to a fresh `PCM_Source_CreateFromFile(<same wav path>)` can restore normal rendering without copying tracks. Confirm with a short raw-control render before adding plugin candidates.
@@ -38,12 +38,21 @@ For master-mix snippets and full-song bounces:
 4. Set output directory with `RENDER_FILE` and filename stem with `RENDER_PATTERN`.
 5. Set `RENDER_SETTINGS=0` for master mix and `RENDER_BOUNDSFLAG=2` for the time selection.
 6. Render with command `41824`.
-7. Verify the expected file exists and has non-zero size.
-8. Verify the rendered WAV duration is close to `end - start`; if a 5-second request produces a long render or long file, delete/reject it and fix render bounds before continuing.
-9. Verify it is non-silent with peak/RMS analysis before offering it as a listening sample.
-10. If the raw-control render is silent while the source WAV is not, refresh/rebind the media sources or create a disposable staging track from the same file, then rerender the control.
-11. Analyze peak/LUFS before making further gain moves.
-12. Close render-complete/progress/confirmation popups, then run a quick API ping before starting the next render or returning control to the user.
+7. Close render-complete/progress/confirmation popups with an explicit cleanup routine, then run a quick API ping. Do this before analysis, the next render, or returning control to the user.
+8. Verify the expected file exists and has non-zero size.
+9. Verify the rendered WAV duration is close to `end - start`; if a 5-second request produces a long render or long file, delete/reject it and fix render bounds before continuing.
+10. Verify it is non-silent with peak/RMS analysis before offering it as a listening sample.
+11. If the raw-control render is silent while the source WAV is not, refresh/rebind the media sources or create a disposable staging track from the same file, then rerender the control.
+12. Analyze peak/LUFS before making further gain moves.
+
+## Render Window Cleanup Gate
+
+Do not report a render as finished while REAPER's render popup is still visible.
+
+- With `scripts/render_time_range.py`, rely on the built-in cleanup after `Main_OnCommand(41824)`.
+- With ad hoc ReaScript/ReaPy render code, include the same cleanup step immediately after `Main_OnCommand(41824)` and before output analysis.
+- On Windows, close visible REAPER windows whose titles contain render/progress/result terms. REAPER's finished render-results window may be titled only `Finished in 0:00...`, with no word "render", so include `finished in` as a render-result title. Then enumerate again and verify no render windows remain.
+- If cleanup fails, stop the automation and tell the user the popup is still open instead of continuing to plugin edits, another render, or final reporting.
 
 For a "full project" render, do not use an ambiguous whole-project bounds mode. Instead, find the max media-item end time and render `0` to that value as a time selection.
 
