@@ -30,8 +30,9 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 15. When the user asks to iterate toward an aimpoint, every counted REAPER pass must include or hand off enough evidence for an aimpoint grade. If no grade can be produced, label the pass as setup, discovery, or render-only.
 16. Before rendering, state the render source being used: real target track, selected track/stem, selected item, master mix, or disposable staging track. Match the source to the task instead of reusing the last successful render helper by habit.
 17. Default to the real target track for plugin edits and source-specific iteration when it passes a raw-control render. Use disposable staging tracks only as an explicit fallback, and state why the real track path could not be trusted.
-18. Treat temporary loop/time selections as borrowed state. After the final render in a run, restore the previous user selection if one existed; otherwise clear the temporary selection.
-19. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
+18. After an iteration chooses a keeper chain, remove rejected audition plugins from the target track instead of leaving them bypassed. Keep a disabled plugin only when it has a stated future-use reason, such as a live failover or explicit A/B request, and report that reason.
+19. Treat temporary loop/time selections as borrowed state. After the final render in a run, restore the previous user selection if one existed; otherwise clear the temporary selection.
+20. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
 
 ## Workflow
 
@@ -57,6 +58,7 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
    - If the plugin cannot be focused or its UI cannot be made visible, say so and mark the change as non-visible automation rather than implying the human could watch it happen.
    - Do not cycle plugins on a track as a substitute for parameter work. If no setting changes were made, report "plugin discovery only" and do not advance an iteration counter.
    - Avoid long-running render commands while probing plugin parameters or project state.
+   - At the end of a plugin iteration, clean the target track's FX chain so it contains the chosen keeper plugins only. Delete rejected audition plugins that are merely bypassed or disabled, unless the user asked to keep them or there is a named operational reason.
 
 4. Render or print evidence only through safe paths:
    - For a requested short sample, choose and state concrete bounds such as `chorus_1 = 93.0-98.0s`; if the user requested "5 seconds," verify `end - start = 5.0` before rendering.
@@ -72,7 +74,7 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 
 5. Handoff:
    - Return concise session facts: project path, target track, FX chain, settings changed, render path, and any REAPER warnings.
-   - For iteration requests, include a run-log row for each counted pass: iteration id, audible goal, changed plugins/parameters, plugin focus/visibility status, render section/path, verification gates, and grade/status. Also state final loop/time selection cleanup status. Use `grade_pending` only when audio judgment is explicitly being handed to another skill or the user.
+   - For iteration requests, include a run-log row for each counted pass: iteration id, audible goal, changed plugins/parameters, plugin focus/visibility status, render section/path, verification gates, and grade/status. Also state final FX-chain cleanup and final loop/time selection cleanup status. Use `grade_pending` only when audio judgment is explicitly being handed to another skill or the user.
    - Send rendered WAV comparison and artifact analysis to `mix-render-diagnostics`.
    - Send live Waves chain design to `waves-live-plugin-chains`.
    - Send approved SuperRack `.sprk` inspection or patching to `superrack-session-files`.
