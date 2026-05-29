@@ -31,9 +31,10 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 16. Before rendering, state the render source being used: real target track, selected track/stem, selected item, master mix, or disposable staging track. Match the source to the task instead of reusing the last successful render helper by habit.
 17. Default to the real target track for plugin edits and source-specific iteration when it passes a raw-control render. Use disposable staging tracks only as an explicit fallback, and state why the real track path could not be trusted.
 18. For imported/live-capture projects, or any project/track that has previously produced a silent render from a valid source file, proactively refresh the target audio take source before the first raw-control render instead of waiting for another silent-render failure.
-19. After an iteration chooses a keeper chain, remove rejected audition plugins from the target track instead of leaving them bypassed. Keep a disabled plugin only when it has a stated future-use reason, such as a live failover or explicit A/B request, and report that reason.
-20. Treat temporary loop/time selections as borrowed state. After the final render in a run, restore the previous user selection if one existed; otherwise clear the temporary selection.
-21. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
+19. For multi-pass iteration, show a compact reviewer-facing thought log for each counted pass so the human can follow the goal, change, evidence, gates, grade, reasoning, and next move.
+20. After an iteration chooses a keeper chain, remove rejected audition plugins from the target track instead of leaving them bypassed. Keep a disabled plugin only when it has a stated future-use reason, such as a live failover or explicit A/B request, and report that reason.
+21. Treat temporary loop/time selections as borrowed state. After the final render in a run, restore the previous user selection if one existed; otherwise clear the temporary selection.
+22. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
 
 ## Workflow
 
@@ -77,7 +78,21 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 
 5. Handoff:
    - Return concise session facts: project path, target track, FX chain, settings changed, render path, and any REAPER warnings.
-   - For iteration requests, include a run-log row for each counted pass: iteration id, audible goal, changed plugins/parameters, plugin focus/visibility status, render section/path, verification gates, and grade/status. Also state final FX-chain cleanup and final loop/time selection cleanup status. Use `grade_pending` only when audio judgment is explicitly being handed to another skill or the user.
+   - For iteration requests, include a run-log row for each counted pass: iteration id, audible goal, changed plugins/parameters, plugin focus/visibility status, render section/path, verification gates, and grade/status. Prefer this reviewer-facing shape for each pass:
+
+```text
+Iteration 2
+Goal: tighter bass support without masking vocal/piano
+Change: F6 cut 180 Hz -2.0 dB; RComp 3:1, slower release
+Focus: F6 visible, RComp visible
+Render: bass_check_02 = 142.500-147.500s
+Gates: duration pass, non-silent pass, clipping pass, popup closed, selection restored/cleared
+Aimpoint grade: 68/100, medium confidence
+Why: low-mid cloud improved, but attack is still soft and level jumps on chorus push
+Next: add gentler leveling before EQ; avoid more low-end boost
+```
+
+   - Also state final FX-chain cleanup and final loop/time selection cleanup status. Use `grade_pending` only when audio judgment is explicitly being handed to another skill or the user.
    - Send rendered WAV comparison and artifact analysis to `mix-render-diagnostics`.
    - Send live Waves chain design to `waves-live-plugin-chains`.
    - Send approved SuperRack `.sprk` inspection or patching to `superrack-session-files`.
