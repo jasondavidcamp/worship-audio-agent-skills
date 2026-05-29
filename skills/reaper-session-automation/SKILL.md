@@ -30,9 +30,10 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 15. When the user asks to iterate toward an aimpoint, every counted REAPER pass must include or hand off enough evidence for an aimpoint grade. If no grade can be produced, label the pass as setup, discovery, or render-only.
 16. Before rendering, state the render source being used: real target track, selected track/stem, selected item, master mix, or disposable staging track. Match the source to the task instead of reusing the last successful render helper by habit.
 17. Default to the real target track for plugin edits and source-specific iteration when it passes a raw-control render. Use disposable staging tracks only as an explicit fallback, and state why the real track path could not be trusted.
-18. After an iteration chooses a keeper chain, remove rejected audition plugins from the target track instead of leaving them bypassed. Keep a disabled plugin only when it has a stated future-use reason, such as a live failover or explicit A/B request, and report that reason.
-19. Treat temporary loop/time selections as borrowed state. After the final render in a run, restore the previous user selection if one existed; otherwise clear the temporary selection.
-20. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
+18. For imported/live-capture projects, or any project/track that has previously produced a silent render from a valid source file, proactively refresh the target audio take source before the first raw-control render instead of waiting for another silent-render failure.
+19. After an iteration chooses a keeper chain, remove rejected audition plugins from the target track instead of leaving them bypassed. Keep a disabled plugin only when it has a stated future-use reason, such as a live failover or explicit A/B request, and report that reason.
+20. Treat temporary loop/time selections as borrowed state. After the final render in a run, restore the previous user selection if one existed; otherwise clear the temporary selection.
+21. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
 
 ## Workflow
 
@@ -47,6 +48,7 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
    - Before claiming an iteration, list the intended chain, the parameter or preset changes from the previous pass, and the evidence that will be rendered or inspected.
    - For render work, read `references/reaper-render-safety.md` before starting.
    - For REAPER-to-SuperRack artifacts, read `references/reaper-superrack-transfer.md` before exporting or interpreting Waves state.
+   - When source-staleness has already been seen in the project, refresh target-track audio takes that overlap the test range before the raw-control render: recreate the `PCM_Source` from the same existing file path, preserve take start offset and item timing, then log the refresh as preflight rather than as a failed iteration.
 
 3. Make scoped changes:
    - Use serial FX chains unless the final host supports the same routing.
@@ -65,6 +67,7 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
    - Snapshot the current loop/time selection before setting a temporary render range. When a useful current loop/time selection already exists, read it back first and either use those exact seconds or restore it after setting a temporary test range.
    - Use `scripts/render_time_range.py` only for explicit master-mix time ranges.
    - For single-source FX iteration, first try the real target track: selected-track/stem render, selected-item render, or master mix of only that track, as appropriate. Continue on the real track only after a raw-control render for the same section passes duration, non-silence, and popup-cleanup gates.
+   - In a known stale-source session, run the target-take refresh before that raw-control render. The raw-control render should then validate the refreshed path, not rediscover the same silent-render problem.
    - Use a disposable staging track only when the real target track render fails verification, the session track path is known untrusted, or the user explicitly wants a non-mutating audition. Log the failure or reason before using staging.
    - For very short checks, prefer disposable media-item/take FX workflows when full master renders are unnecessary.
    - Immediately after every render command, close the render progress/results popup. When using custom ReaScript instead of `scripts/render_time_range.py`, copy or call that script's render-window cleanup routine before analysis or the next action.
