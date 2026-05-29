@@ -37,6 +37,18 @@ For snippets and full-song bounces:
 
 For a "full project" render, do not use an ambiguous whole-project bounds mode. Instead, find the max media-item end time and render `0` to that value as a time selection.
 
+## Short Section Selection Pattern
+
+For user requests like "render 5 seconds," "just the chorus hit," or "a quick bass check":
+
+1. Convert the musical request into concrete seconds before touching render commands.
+2. If using the edit cursor, marker, item edge, or existing loop/time selection as the anchor, read back the actual position in seconds.
+3. Compute `end = start + requested_duration`; for "5 seconds," reject any range whose measured duration is not `5.0` seconds before render.
+4. State or log the exact range before rendering: e.g. `bass_check_01 = 142.500-147.500s`.
+5. Set the loop/time selection through ReaScript/ReaPy, then immediately read it back and verify the same `start`/`end`.
+6. After rendering, verify the WAV duration matches the requested duration within a small tolerance before opening, analyzing, or offering the file.
+7. If any render window countdown implies a longer range, cancel immediately and fix the bounds.
+
 ## Headroom Rule
 
 After any bus/master/plugin gain change:

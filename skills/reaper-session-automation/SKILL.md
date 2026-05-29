@@ -17,11 +17,12 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 2. Prefer explicit ReaScript/ReaPy operations over generic "most recent settings" commands when safety depends on exact bounds, routing, or render source.
 3. Do not trust raw MCP project/render helpers when local API behavior has already shown mismatches. Verify with direct ReaScript calls and formatted values.
 4. Snapshot or record render settings before changing them, and restore them when a test changes user-visible render state.
-5. For snippets under 60 seconds, never call raw render actions, generic MCP render helpers, or "most recent render settings" commands directly. Use `scripts/render_time_range.py` or a disposable item/take FX workflow, then verify the WAV duration is close to `end - start`.
-6. If REAPER shows a render countdown much longer than the requested range, cancel the render and treat the render path as unsafe until bounds are fixed.
-7. Close render progress, render complete, and confirmation popups before continuing automation. Verify the MCP/ReaPy API responds before the next operation.
-8. For plugin work, verify plugin display names and formatted parameter values in REAPER. Normalized parameters are a fallback representation, not a reliable transfer format by themselves.
-9. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
+5. For small sections, translate the request into explicit `start` and `end` seconds before rendering. Do not trust the current selection length unless it has been read back and reported.
+6. For snippets under 60 seconds, never call raw render actions, generic MCP render helpers, or "most recent render settings" commands directly. Use `scripts/render_time_range.py` or a disposable item/take FX workflow, then verify the WAV duration is close to `end - start`.
+7. If REAPER shows a render countdown much longer than the requested range, cancel the render and treat the render path as unsafe until bounds are fixed.
+8. Close render progress, render complete, and confirmation popups before continuing automation. Verify the MCP/ReaPy API responds before the next operation.
+9. For plugin work, verify plugin display names and formatted parameter values in REAPER. Normalized parameters are a fallback representation, not a reliable transfer format by themselves.
+10. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
 
 ## Workflow
 
@@ -40,6 +41,8 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
    - Avoid long-running render commands while probing plugin parameters or project state.
 
 4. Render or print evidence only through safe paths:
+   - For a requested short sample, choose and state concrete bounds such as `chorus_1 = 93.0-98.0s`; if the user requested "5 seconds," verify `end - start = 5.0` before rendering.
+   - When a useful current loop/time selection already exists, read it back first and either use those exact seconds or preserve/restore it after setting a temporary test range.
    - Use `scripts/render_time_range.py` for explicit REAPER time ranges.
    - For very short checks, prefer disposable media-item/take FX workflows when full master renders are unnecessary.
    - Verify output file existence, non-zero size, duration, and non-silence before offering it as a listening or analysis artifact.
