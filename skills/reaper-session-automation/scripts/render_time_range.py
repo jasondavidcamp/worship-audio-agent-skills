@@ -65,6 +65,20 @@ def _wav_duration_seconds(path: Path) -> float:
         return wav.getnframes() / float(wav.getframerate())
 
 
+def _current_time_selection() -> tuple[float, float]:
+    selection = RPR.GetSet_LoopTimeRange2(0, False, False, 0.0, 0.0, False)
+    if isinstance(selection, (list, tuple)) and len(selection) >= 5:
+        return float(selection[3]), float(selection[4])
+    return 0.0, 0.0
+
+
+def _restore_time_selection(start: float, end: float) -> None:
+    if end > start:
+        RPR.GetSet_LoopTimeRange2(0, True, False, float(start), float(end), False)
+    else:
+        RPR.GetSet_LoopTimeRange2(0, True, False, 0.0, 0.0, False)
+
+
 def close_reaper_render_windows(timeout: float = RENDER_WINDOW_CLOSE_TIMEOUT_SECONDS) -> dict[str, list[str]]:
     """Close visible REAPER render progress/results windows on Windows.
 
@@ -176,22 +190,26 @@ def render_time_range(output_path: Path, start: float, end: float) -> Path:
 
     reapy.connect()
     _ensure_master_output_1_2()
-    RPR.GetSet_LoopTimeRange2(0, True, False, float(start), float(end), False)
-    RPR.GetSetProjectInfo_String(0, "RENDER_FILE", str(output_path.parent), True)
-    RPR.GetSetProjectInfo_String(0, "RENDER_PATTERN", output_path.stem, True)
-    RPR.GetSetProjectInfo(0, "RENDER_SETTINGS", 0, True)  # master mix only
-    RPR.GetSetProjectInfo(0, "RENDER_STARTPOS", float(start), True)
-    RPR.GetSetProjectInfo(0, "RENDER_ENDPOS", float(end), True)
-    RPR.GetSetProjectInfo(0, "RENDER_FORMAT", 0, True)  # WAV
-    RPR.GetSetProjectInfo(0, "RENDER_FORMAT2", 2, True)  # 24-bit PCM
-    RPR.GetSetProjectInfo(0, "RENDER_SRATE", 48000.0, True)
-    RPR.GetSetProjectInfo(0, "RENDER_CHANNELS", 2.0, True)
-    RPR.GetSetProjectInfo(0, "RENDER_BOUNDSFLAG", 2.0, True)  # local time selection mode
-    RPR.Main_OnCommand(41824, 0)
-    cleanup_report = close_reaper_render_windows()
-    if cleanup_report["remaining"]:
-        raise RuntimeError(f"Render popup cleanup failed: {cleanup_report}")
-    RPR.CountTracks(0)
+    previous_start, previous_end = _current_time_selection()
+    try:
+        RPR.GetSet_LoopTimeRange2(0, True, False, float(start), float(end), False)
+        RPR.GetSetProjectInfo_String(0, "RENDER_FILE", str(output_path.parent), True)
+        RPR.GetSetProjectInfo_String(0, "RENDER_PATTERN", output_path.stem, True)
+        RPR.GetSetProjectInfo(0, "RENDER_SETTINGS", 0, True)  # master mix only
+        RPR.GetSetProjectInfo(0, "RENDER_STARTPOS", float(start), True)
+        RPR.GetSetProjectInfo(0, "RENDER_ENDPOS", float(end), True)
+        RPR.GetSetProjectInfo(0, "RENDER_FORMAT", 0, True)  # WAV
+        RPR.GetSetProjectInfo(0, "RENDER_FORMAT2", 2, True)  # 24-bit PCM
+        RPR.GetSetProjectInfo(0, "RENDER_SRATE", 48000.0, True)
+        RPR.GetSetProjectInfo(0, "RENDER_CHANNELS", 2.0, True)
+        RPR.GetSetProjectInfo(0, "RENDER_BOUNDSFLAG", 2.0, True)  # local time selection mode
+        RPR.Main_OnCommand(41824, 0)
+        cleanup_report = close_reaper_render_windows()
+        if cleanup_report["remaining"]:
+            raise RuntimeError(f"Render popup cleanup failed: {cleanup_report}")
+        RPR.CountTracks(0)
+    finally:
+        _restore_time_selection(previous_start, previous_end)
 
     if not output_path.exists() or output_path.stat().st_size <= 0:
         raise RuntimeError(f"Render did not produce a non-empty file: {output_path}")

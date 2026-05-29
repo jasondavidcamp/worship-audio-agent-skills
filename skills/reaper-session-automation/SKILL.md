@@ -28,7 +28,8 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 13. When the user asks to iterate toward an aimpoint, every counted REAPER pass must include or hand off enough evidence for an aimpoint grade. If no grade can be produced, label the pass as setup, discovery, or render-only.
 14. Before rendering, state the render source being used: real target track, selected track/stem, selected item, master mix, or disposable staging track. Match the source to the task instead of reusing the last successful render helper by habit.
 15. Default to the real target track for plugin edits and source-specific iteration when it passes a raw-control render. Use disposable staging tracks only as an explicit fallback, and state why the real track path could not be trusted.
-16. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
+16. Treat temporary loop/time selections as borrowed state. After the final render in a run, restore the previous user selection if one existed; otherwise clear the temporary selection.
+17. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
 
 ## Workflow
 
@@ -55,17 +56,18 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 
 4. Render or print evidence only through safe paths:
    - For a requested short sample, choose and state concrete bounds such as `chorus_1 = 93.0-98.0s`; if the user requested "5 seconds," verify `end - start = 5.0` before rendering.
-   - When a useful current loop/time selection already exists, read it back first and either use those exact seconds or preserve/restore it after setting a temporary test range.
+   - Snapshot the current loop/time selection before setting a temporary render range. When a useful current loop/time selection already exists, read it back first and either use those exact seconds or restore it after setting a temporary test range.
    - Use `scripts/render_time_range.py` only for explicit master-mix time ranges.
    - For single-source FX iteration, first try the real target track: selected-track/stem render, selected-item render, or master mix of only that track, as appropriate. Continue on the real track only after a raw-control render for the same section passes duration, non-silence, and popup-cleanup gates.
    - Use a disposable staging track only when the real target track render fails verification, the session track path is known untrusted, or the user explicitly wants a non-mutating audition. Log the failure or reason before using staging.
    - For very short checks, prefer disposable media-item/take FX workflows when full master renders are unnecessary.
    - Immediately after every render command, close the render progress/results popup. When using custom ReaScript instead of `scripts/render_time_range.py`, copy or call that script's render-window cleanup routine before analysis or the next action.
-   - Verify output file existence, non-zero size, duration, non-silence, and popup cleanup before offering it as a listening or analysis artifact.
+   - After the last render in the run, restore the previous loop/time selection if one existed; if the selection was created only for the render, clear it with `GetSet_LoopTimeRange2(..., 0.0, 0.0, ...)`.
+   - Verify output file existence, non-zero size, duration, non-silence, popup cleanup, and loop/time selection cleanup before offering it as a listening or analysis artifact.
 
 5. Handoff:
    - Return concise session facts: project path, target track, FX chain, settings changed, render path, and any REAPER warnings.
-   - For iteration requests, include a run-log row for each counted pass: iteration id, audible goal, changed plugins/parameters, plugin focus/visibility status, render section/path, verification gates, and grade/status. Use `grade_pending` only when audio judgment is explicitly being handed to another skill or the user.
+   - For iteration requests, include a run-log row for each counted pass: iteration id, audible goal, changed plugins/parameters, plugin focus/visibility status, render section/path, verification gates, and grade/status. Also state final loop/time selection cleanup status. Use `grade_pending` only when audio judgment is explicitly being handed to another skill or the user.
    - Send rendered WAV comparison and artifact analysis to `mix-render-diagnostics`.
    - Send live Waves chain design to `waves-live-plugin-chains`.
    - Send approved SuperRack `.sprk` inspection or patching to `superrack-session-files`.

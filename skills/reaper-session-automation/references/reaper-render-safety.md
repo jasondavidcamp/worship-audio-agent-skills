@@ -35,16 +35,18 @@ For master-mix snippets and full-song bounces:
 
 1. Compute or choose explicit `start` and `end` seconds.
 2. Reject the render if `end <= start`.
-3. Set REAPER's loop/time selection with `GetSet_LoopTimeRange2(..., start, end, ...)`.
-4. Set output directory with `RENDER_FILE` and filename stem with `RENDER_PATTERN`.
-5. Set `RENDER_SETTINGS=0` for master mix and `RENDER_BOUNDSFLAG=2` for the time selection.
-6. Render with command `41824`.
-7. Close render-complete/progress/confirmation popups with an explicit cleanup routine, then run a quick API ping. Do this before analysis, the next render, or returning control to the user.
-8. Verify the expected file exists and has non-zero size.
-9. Verify the rendered WAV duration is close to `end - start`; if a 5-second request produces a long render or long file, delete/reject it and fix render bounds before continuing.
-10. Verify it is non-silent with peak/RMS analysis before offering it as a listening sample.
-11. If the raw-control render is silent while the source WAV is not, refresh/rebind the media sources or create a disposable staging track from the same file, then rerender the control.
-12. Analyze peak/LUFS before making further gain moves.
+3. Snapshot the existing loop/time selection before setting a temporary render range.
+4. Set REAPER's loop/time selection with `GetSet_LoopTimeRange2(..., start, end, ...)`.
+5. Set output directory with `RENDER_FILE` and filename stem with `RENDER_PATTERN`.
+6. Set `RENDER_SETTINGS=0` for master mix and `RENDER_BOUNDSFLAG=2` for the time selection.
+7. Render with command `41824`.
+8. Close render-complete/progress/confirmation popups with an explicit cleanup routine, then run a quick API ping. Do this before analysis, the next render, or returning control to the user.
+9. Restore the previous loop/time selection if one existed; otherwise clear the temporary selection with `GetSet_LoopTimeRange2(..., 0.0, 0.0, ...)`.
+10. Verify the expected file exists and has non-zero size.
+11. Verify the rendered WAV duration is close to `end - start`; if a 5-second request produces a long render or long file, delete/reject it and fix render bounds before continuing.
+12. Verify it is non-silent with peak/RMS analysis before offering it as a listening sample.
+13. If the raw-control render is silent while the source WAV is not, refresh/rebind the media sources or create a disposable staging track from the same file, then rerender the control.
+14. Analyze peak/LUFS before making further gain moves.
 
 ## Render Window Cleanup Gate
 
@@ -67,7 +69,8 @@ For user requests like "render 5 seconds," "just the chorus hit," or "a quick ba
 4. State or log the exact range before rendering: e.g. `bass_check_01 = 142.500-147.500s`.
 5. Set the loop/time selection through ReaScript/ReaPy, then immediately read it back and verify the same `start`/`end`.
 6. After rendering, verify the WAV duration matches the requested duration within a small tolerance before opening, analyzing, or offering the file.
-7. If any render window countdown implies a longer range, cancel immediately and fix the bounds.
+7. After the final render in the run, clear the temporary 5-second selection or restore the user selection that existed before the render run.
+8. If any render window countdown implies a longer range, cancel immediately and fix the bounds.
 
 ## Headroom Rule
 
