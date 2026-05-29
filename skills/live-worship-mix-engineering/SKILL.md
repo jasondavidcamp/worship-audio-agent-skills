@@ -33,7 +33,8 @@ Taste-call intake, interpretation, and durable preference logging belong to `ban
 ## Routing Map
 
 - Aimpoint, reference matching, style vocabulary, taste calls, or preference memory: use `band-sound-aimpoint`.
-- Render diagnostics, REAPER staging, artifact gates, codec/true-peak/crest/mid-side evidence: use `mix-render-diagnostics`.
+- REAPER staging, render settings, short snippet renders, and session-state reports: use `reaper-session-automation`.
+- Render diagnostics, artifact gates, codec/true-peak/crest/mid-side evidence: use `mix-render-diagnostics`.
 - Waves/SuperRack-compatible plugin choices: use `waves-live-plugin-chains`; `.sprk` or `.xps` inspection/patching: use `superrack-session-files`.
 - Common vocal, band, drum, effects, gate, or master next moves: read `references/next-move-map.md`.
 - Scoring, ranking, or "what is weak?": read `references/rubric.md`, `references/section-analysis.md`, and `references/analysis-blind-spots.md`.
@@ -58,7 +59,8 @@ Keep this skill brand-neutral. For plugin-specific choices, switch skills:
 ## Related Skills
 
 - `band-sound-aimpoint`: define the musical target, interpret taste calls, and maintain deployment-local preference rules.
-- `mix-render-diagnostics`: stage plugins, render candidates, and compare measured results.
+- `reaper-session-automation`: stage plugins, manage render settings, and produce trustworthy REAPER snippets or session reports.
+- `mix-render-diagnostics`: analyze rendered candidates and compare measured results after trustworthy files exist.
 - `waves-live-plugin-chains`: choose Waves plugin chains when Waves/SuperRack is part of the actual workflow.
 - `superrack-session-files`: inspect or patch SuperRack sessions and `.xps` rack presets.
 - `behringer-wing-snap`: bring WING routing/topology back into scope for church deployment.

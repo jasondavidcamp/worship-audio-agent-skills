@@ -1,4 +1,4 @@
 interface:
   display_name: "Mix Render Diagnostics"
   short_description: "Diagnose render sections, stems, references, and delivery risk."
-  default_prompt: "Analyze rendered audio, staged mix candidates, stems, references, and delivery exports to diagnose section-level issues, vocal masking, transient loss, tail buildup, mono/stereo translation, codec risk, and the next repeatable test."
+  default_prompt: "Analyze existing rendered audio, stems, references, and delivery exports to diagnose section-level issues, vocal masking, transient loss, tail buildup, mono/stereo translation, codec risk, and the next repeatable test."

@@ -62,7 +62,7 @@ For band, drums, or livestream buses:
 
 ## Ranking Guidance
 
-Prefer candidates that solve the named problem with the least collateral damage. If two candidates score similarly, keep the simpler chain or the one that transfers more safely to SuperRack.
+Prefer candidates that solve the named problem with the least collateral damage. If two candidates score similarly, keep the simpler chain or the one that is easier to reproduce in the user's target delivery environment.
 
 ## Training Intake Biases
 

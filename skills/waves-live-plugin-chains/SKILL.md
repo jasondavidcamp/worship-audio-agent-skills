@@ -78,5 +78,6 @@ Keep generated inventories private unless intentionally sanitized. They reflect 
 
 - Use `live-worship-mix-engineering` for the general worship-mix diagnosis and non-Waves workflow.
 - Use `band-sound-aimpoint` to define the desired sound or reference target.
-- Use `mix-render-diagnostics` to render and compare Waves chain candidates in REAPER.
+- Use `reaper-session-automation` to stage or render Waves chain candidates in REAPER.
+- Use `mix-render-diagnostics` to compare the resulting WAVs or stems.
 - Use `superrack-session-files` to inspect, validate, or patch SuperRack `.sprk` and `.xps` files.

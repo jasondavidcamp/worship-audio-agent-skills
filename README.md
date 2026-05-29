@@ -1,6 +1,6 @@
 # Worship Audio Agent Skills
 
-AI-agent skills and helper tools for live worship audio: mix aimpoints, worship mix diagnosis, REAPER render comparison, Behringer WING snapshots, Waves plugin-chain choices, SuperRack session files, and practical mix-engineering workflows.
+AI-agent skills and helper tools for live worship audio: mix aimpoints, worship mix diagnosis, render-file diagnostics, REAPER session automation, Behringer WING snapshots, Waves plugin-chain choices, SuperRack session files, and practical mix-engineering workflows.
 
 ## Project Story
 
@@ -18,14 +18,18 @@ See the workflow in action: capture Sunday multitracks, define a mix aimpoint, l
 
 - `band-sound-aimpoint`: define reference targets, style vocabulary, and taste-call calibration for worship mixes.
 - `live-worship-mix-engineering`: critique worship mix renders, diagnose weak points, and choose practical brand-neutral next moves.
+- `reaper-session-automation`: safely operate REAPER projects, tracks, FX chains, render settings, short snippet renders, render-window recovery, and REAPER-to-SuperRack handoffs.
 - `waves-live-plugin-chains`: choose source-specific live-safe Waves plugin chains for SuperRack SoundGrid/Performer, or for LV1/REAPER-staged chains that must transfer safely to SuperRack.
-- `mix-render-diagnostics`: analyze render candidates, references, stems, sections, stereo/mono translation, codec delivery risk, and REAPER/SuperRack transfer notes.
+- `mix-render-diagnostics`: analyze existing render candidates, references, stems, sections, stereo/mono translation, codec delivery risk, artifacts, and candidate reports.
 - `behringer-wing-snap`: inspect Behringer WING `.snap` files and compare routing against SuperRack sessions.
 - `superrack-session-files`: inspect, validate, and carefully patch Waves SuperRack `.sprk` session databases and `.xps` rack presets.
+
+Boundary note: `reaper-session-automation` owns DAW/session operations; `mix-render-diagnostics` starts after trustworthy audio files or stems exist.
 
 ## Workflows
 
 - [REAPER to SuperRack Iteration](workflows/reaper-to-superrack-iteration.md): how the skills work together to design Waves chains in REAPER, transfer them into SuperRack, and validate deployment state.
+- [Live Worship AI Demo Video Kit](workflows/live-worship-ai-demo-video-kit.md): a YouTube-ready product story for the full Sunday multitrack to REAPER iteration to SuperRack deployment workflow.
 - [Backlog](BACKLOG.md): future experiments and improvements that are not ready to become skill instructions yet.
 
 ## Layout

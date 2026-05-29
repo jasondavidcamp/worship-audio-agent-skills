@@ -10,6 +10,7 @@ Use this note before rendering through `reapy`, REAPER MCP, or any unattended RE
 - `RENDER_BOUNDSFLAG=0` produced a "Nothing to render!" error when no custom render range was set.
 - A project can inherit `RENDER_SETTINGS=32` / `RENDER_BOUNDSFLAG=4` from selected-media-item rendering. With no selected items this raises "Nothing to render!" even if a valid time selection was set. Force `RENDER_SETTINGS=0` for master mix and `RENDER_BOUNDSFLAG=2` for time selection before command `41824`.
 - An accidental wrong render-bounds value can start a full 16-minute render even when a 30-second clip was intended.
+- For requested snippets under 60 seconds, never rely on generic MCP render helpers, raw render actions, or "most recent render settings" actions. Use `scripts/render_time_range.py` or a disposable media-item apply-FX workflow, then confirm the WAV duration is close to `end - start`.
 - If a render dialog says "Rendering to file..." for much longer than the requested range should take, stop/cancel the render and close any "Render Incomplete" prompt instead of waiting.
 - After every render or render batch, close any REAPER render-complete, render-progress, or confirmation popup before continuing. Prefer focusing REAPER and sending `Esc`, then verify the reapy/MCP API responds. Do not leave render result windows open for the user.
 - If REAPER asks "Loop/time selections locked, unlock now and remove?", cancel/escape the prompt unless the user explicitly asked to unlock or remove loop/time selections. Do not click `OK` as part of render cleanup.
@@ -28,10 +29,11 @@ For snippets and full-song bounces:
 5. Set `RENDER_SETTINGS=0` for master mix and `RENDER_BOUNDSFLAG=2` for the time selection.
 6. Render with command `41824`.
 7. Verify the expected file exists and has non-zero size.
-8. Verify it is non-silent with peak/RMS analysis before offering it as a listening sample.
-9. If the raw-control render is silent while the source WAV is not, refresh/rebind the media sources or create a disposable staging track from the same file, then rerender the control.
-10. Analyze peak/LUFS before making further gain moves.
-11. Close render-complete/progress/confirmation popups, then run a quick API ping before starting the next render or returning control to the user.
+8. Verify the rendered WAV duration is close to `end - start`; if a 5-second request produces a long render or long file, delete/reject it and fix render bounds before continuing.
+9. Verify it is non-silent with peak/RMS analysis before offering it as a listening sample.
+10. If the raw-control render is silent while the source WAV is not, refresh/rebind the media sources or create a disposable staging track from the same file, then rerender the control.
+11. Analyze peak/LUFS before making further gain moves.
+12. Close render-complete/progress/confirmation popups, then run a quick API ping before starting the next render or returning control to the user.
 
 For a "full project" render, do not use an ambiguous whole-project bounds mode. Instead, find the max media-item end time and render `0` to that value as a time selection.
 

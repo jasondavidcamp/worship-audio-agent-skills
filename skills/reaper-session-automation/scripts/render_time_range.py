@@ -4,10 +4,14 @@
 from __future__ import annotations
 
 import argparse
+import wave
 from pathlib import Path
 
 import reapy
 from reapy import reascript_api as RPR
+
+
+MAX_DURATION_DRIFT_SECONDS = 0.5
 
 
 def _media_end() -> float:
@@ -47,6 +51,11 @@ def _ensure_master_output_1_2() -> None:
     RPR.SetTrackSendInfo_Value(master, 1, send_index, "B_MUTE", 0)
 
 
+def _wav_duration_seconds(path: Path) -> float:
+    with wave.open(str(path), "rb") as wav:
+        return wav.getnframes() / float(wav.getframerate())
+
+
 def render_time_range(output_path: Path, start: float, end: float) -> Path:
     if end <= start:
         raise ValueError(f"Refusing empty render range: start={start}, end={end}")
@@ -73,6 +82,16 @@ def render_time_range(output_path: Path, start: float, end: float) -> Path:
 
     if not output_path.exists() or output_path.stat().st_size <= 0:
         raise RuntimeError(f"Render did not produce a non-empty file: {output_path}")
+
+    expected_duration = float(end) - float(start)
+    actual_duration = _wav_duration_seconds(output_path)
+    drift = abs(actual_duration - expected_duration)
+    if drift > MAX_DURATION_DRIFT_SECONDS:
+        raise RuntimeError(
+            "Rendered WAV duration does not match requested range: "
+            f"requested={expected_duration:.3f}s actual={actual_duration:.3f}s "
+            f"path={output_path}"
+        )
     return output_path
 
 

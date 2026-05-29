@@ -1,6 +1,6 @@
 ---
 name: band-sound-aimpoint
-description: Define, analyze, calibrate, and apply a target sound for church band mixes using reference tracks, user taste calls, and style vocabulary such as CityAlight-style naturalness. Use when comparing band, livestream, vocal, drum, or full-mix renders against a desired style/feel; creating mix aimpoints; describing tonal balance, dynamics, arrangement density, worship-band aesthetic, congregational clarity, reference-track matching, taste preferences, or emotional mix goals; or guiding REAPER/SuperRack plugin iteration toward a known target.
+description: Define, analyze, calibrate, and apply a target sound for church band mixes using reference tracks, user taste calls, and style vocabulary such as CityAlight-style naturalness. Use when comparing band, livestream, vocal, drum, or full-mix renders against a desired style/feel; creating mix aimpoints; describing tonal balance, dynamics, arrangement density, worship-band aesthetic, congregational clarity, reference-track matching, taste preferences, emotional mix goals, or plugin-chain decisions against a known target.
 ---
 
 # Band Sound Aimpoint
@@ -46,14 +46,14 @@ This skill owns taste calls: asking for them, interpreting them, resolving confl
    - Save or update a reference profile in `references/`.
 
 4. Compare the candidate render:
-   - Render the same kind of section from REAPER or another source.
+   - Use the same kind of section from a trustworthy REAPER render, stem, or other source.
    - Loudness-match the candidate render to the reference before judging tone.
    - Compare broad bands and dynamics, then write an engineering interpretation.
 
 5. Turn analysis into moves:
    - Recommend small, reversible changes first.
    - Tie each suggestion to the aimpoint: "more lead-forward," "less low-mid cloud," "more acoustic transient," "less cymbal edge."
-   - When plugin iteration or render diagnostics are needed, use `mix-render-diagnostics`.
+   - When host/session automation is needed, use `reaper-session-automation`; when rendered-audio comparison is needed, use `mix-render-diagnostics`.
 
 6. Capture taste feedback:
    - Ask for small A/B taste calls when two candidates trade clarity, warmth, vocal pocket, BGV blend, ambience, or band energy.
@@ -134,7 +134,8 @@ wsl.exe -d Ubuntu -- /path/to/venv/bin/python "/mnt/c/path/to/skills/band-sound-
 
 ## Related Skills
 
-- Use `mix-render-diagnostics` for REAPER staging, render diagnostics, and candidate ranking.
+- Use `reaper-session-automation` for REAPER staging, snippet renders, and session-state reports.
+- Use `mix-render-diagnostics` for rendered-audio diagnostics and candidate ranking after trustworthy files exist.
 - Use `live-worship-mix-engineering` for section diagnosis, plugin-chain judgment, and next-move selection after the aimpoint or taste rule is known.
 - Use `waves-live-plugin-chains` when the aimpoint needs to become Waves plugin-chain choices.
 - Use `superrack-session-files` only after an approved candidate needs to move into a Waves SuperRack session file.

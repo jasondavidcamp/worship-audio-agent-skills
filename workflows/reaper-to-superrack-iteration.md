@@ -15,7 +15,8 @@ This workflow is strongest when the goal is to compare tone, dynamics, intelligi
 - `band-sound-aimpoint`: define the target sound, reference family, and taste vocabulary.
 - `live-worship-mix-engineering`: diagnose the current mix and choose practical next moves.
 - `waves-live-plugin-chains`: choose live-safe Waves chains that can survive SuperRack deployment.
-- `mix-render-diagnostics`: stage chains in REAPER, render candidates, compare against references, and capture transfer notes.
+- `reaper-session-automation`: stage chains in REAPER, manage render settings, create controlled snippets, and capture transfer notes.
+- `mix-render-diagnostics`: compare rendered candidates against baselines, references, and delivery-risk checks after trustworthy audio exists.
 - `superrack-session-files`: inspect `.sprk` and `.xps` files, validate imported chains, and safely patch known session state.
 - `behringer-wing-snap`: verify WING routing, SoundGrid channels, external inserts, and snapshot scope when the console routing matters.
 
@@ -23,9 +24,9 @@ This workflow is strongest when the goal is to compare tone, dynamics, intelligi
 
 1. Define the target: source, mix goal, reference, target bus or rack, and constraints such as latency or volunteer safety.
 2. Pick a conservative Waves chain with `waves-live-plugin-chains`, using only plugins and topology that SuperRack can run live.
-3. Stage the candidate in REAPER with `mix-render-diagnostics`, keeping the chain serial and disabling ReaInsert or live hardware effects during offline renders.
+3. Stage the candidate in REAPER with `reaper-session-automation`, keeping the chain serial and disabling ReaInsert or live hardware effects during offline renders.
 4. Render controlled snippets: raw baseline, known-good baseline, then candidate sections such as sparse verse, dense chorus, and late-service energy.
-5. Analyze and listen: reject clipping, static, harshness, pumping, low-mid buildup, phase trouble, or lost lyric clarity before doing full-length renders.
+5. Analyze with `mix-render-diagnostics` and listen: reject clipping, static, harshness, pumping, low-mid buildup, phase trouble, or lost lyric clarity before doing full-length renders.
 6. Export the approved Waves settings or rack-chain `.xps` when possible, and record plugin versions, mono/stereo format, sample rate, latency mode, and changed controls.
 7. Bring the chain into SuperRack through a native import or a cautious `.sprk`/`.xps` file workflow.
 8. Validate deployment with `superrack-session-files`: plugin order, bypass state, disabled state, sidechains, rack routing, snapshots, recall-safe state, latency, and SQLite integrity.
