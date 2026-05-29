@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render an explicit REAPER time range safely."""
+"""Render an explicit REAPER master-mix time range safely."""
 
 from __future__ import annotations
 
@@ -70,7 +70,7 @@ def render_time_range(output_path: Path, start: float, end: float) -> Path:
     RPR.GetSet_LoopTimeRange2(0, True, False, float(start), float(end), False)
     RPR.GetSetProjectInfo_String(0, "RENDER_FILE", str(output_path.parent), True)
     RPR.GetSetProjectInfo_String(0, "RENDER_PATTERN", output_path.stem, True)
-    RPR.GetSetProjectInfo(0, "RENDER_SETTINGS", 0, True)  # master mix
+    RPR.GetSetProjectInfo(0, "RENDER_SETTINGS", 0, True)  # master mix only
     RPR.GetSetProjectInfo(0, "RENDER_STARTPOS", float(start), True)
     RPR.GetSetProjectInfo(0, "RENDER_ENDPOS", float(end), True)
     RPR.GetSetProjectInfo(0, "RENDER_FORMAT", 0, True)  # WAV

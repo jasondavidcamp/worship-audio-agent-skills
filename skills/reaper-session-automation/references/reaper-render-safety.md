@@ -11,6 +11,7 @@ Use this note before rendering through `reapy`, REAPER MCP, or any unattended RE
 - A project can inherit `RENDER_SETTINGS=32` / `RENDER_BOUNDSFLAG=4` from selected-media-item rendering. With no selected items this raises "Nothing to render!" even if a valid time selection was set. Force `RENDER_SETTINGS=0` for master mix and `RENDER_BOUNDSFLAG=2` for time selection before command `41824`.
 - An accidental wrong render-bounds value can start a full 16-minute render even when a 30-second clip was intended.
 - For requested snippets under 60 seconds, never rely on generic MCP render helpers, raw render actions, or "most recent render settings" actions. Use `scripts/render_time_range.py` or a disposable media-item apply-FX workflow, then confirm the WAV duration is close to `end - start`.
+- `scripts/render_time_range.py` is a master-mix render helper. It sets `RENDER_SETTINGS=0`; do not assume it is rendering selected tracks, stems, or the currently selected item.
 - If a render dialog says "Rendering to file..." for much longer than the requested range should take, stop/cancel the render and close any "Render Incomplete" prompt instead of waiting.
 - After every render or render batch, close any REAPER render-complete, render-progress, or confirmation popup before continuing. Prefer focusing REAPER and sending `Esc`, then verify the reapy/MCP API responds. Do not leave render result windows open for the user.
 - If REAPER asks "Loop/time selections locked, unlock now and remove?", cancel/escape the prompt unless the user explicitly asked to unlock or remove loop/time selections. Do not click `OK` as part of render cleanup.
@@ -18,9 +19,18 @@ Use this note before rendering through `reapy`, REAPER MCP, or any unattended RE
 - If track items point at valid WAV files but master renders are silent or near plugin-noise level, check whether REAPER's PCM source handle is stale/offline. Rebinding the take to a fresh `PCM_Source_CreateFromFile(<same wav path>)` can restore normal rendering without copying tracks. Confirm with a short raw-control render before adding plugin candidates.
 - When writing track Volume envelope points through ReaScript, do not pass raw linear volume values directly unless the envelope scaling mode has been checked. In one tested REAPER 7.61 setup, track Volume envelopes used scaling mode `1`; use `GetEnvelopeScalingMode` plus `ScaleToEnvelopeMode` before `InsertEnvelopePoint`. Passing raw values like `1.0` into a scaled Volume envelope can render the track nearly silent. After creating a Volume envelope, REAPER may move the visible fader to `0 dB`; the envelope then carries the fader-equivalent level.
 
+## Render Source Selection Gate
+
+Before starting a render loop, write down the intended render source and why it matches the task.
+
+- Use master mix/time selection for full-band, bus, livestream, or aimpoint checks only after a raw-control render from the same section proves the master path is non-silent.
+- Use selected-track/stem rendering, selected-item rendering, or a disposable staging track for single-source FX iteration when the task is about one instrument and the project routing may bypass the master.
+- If the source WAV has signal but both master-mix and isolated real-track renders are silent, treat the REAPER project track path as untrusted. Rebind the take or create a disposable staging track from the same media file, then grade any result with lower confidence until the full-band path is verified.
+- Do not count silent renders as plugin iterations. Label them as render-path diagnosis and fix the render source before changing plugin settings.
+
 ## Required Render Pattern
 
-For snippets and full-song bounces:
+For master-mix snippets and full-song bounces:
 
 1. Compute or choose explicit `start` and `end` seconds.
 2. Reject the render if `end <= start`.

@@ -25,7 +25,8 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 10. Separate plugin discovery from mix iteration. Loading plugins, checking whether they instantiate, or cycling through default inserts is discovery only; do not count it as a mix pass.
 11. Count a plugin iteration only when it has a stated audible goal, a deliberate chain/settings change, a verified render or session-state artifact, and a short comparison note.
 12. When the user asks to iterate toward an aimpoint, every counted REAPER pass must include or hand off enough evidence for an aimpoint grade. If no grade can be produced, label the pass as setup, discovery, or render-only.
-13. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
+13. Before rendering, state the render source being used: master mix, selected track/stem, selected item, or disposable staging track. Match the source to the task instead of reusing the last successful render helper by habit.
+14. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
 
 ## Workflow
 
@@ -50,7 +51,8 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 4. Render or print evidence only through safe paths:
    - For a requested short sample, choose and state concrete bounds such as `chorus_1 = 93.0-98.0s`; if the user requested "5 seconds," verify `end - start = 5.0` before rendering.
    - When a useful current loop/time selection already exists, read it back first and either use those exact seconds or preserve/restore it after setting a temporary test range.
-   - Use `scripts/render_time_range.py` for explicit REAPER time ranges.
+   - Use `scripts/render_time_range.py` only for explicit master-mix time ranges.
+   - For single-source FX iteration, prefer a selected-track/stem render or a disposable staging track from the source media unless the real master path has already produced a non-silent raw control for the same section.
    - For very short checks, prefer disposable media-item/take FX workflows when full master renders are unnecessary.
    - Verify output file existence, non-zero size, duration, and non-silence before offering it as a listening or analysis artifact.
 
