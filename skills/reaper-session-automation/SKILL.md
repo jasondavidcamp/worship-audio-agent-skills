@@ -22,7 +22,9 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 7. If REAPER shows a render countdown much longer than the requested range, cancel the render and treat the render path as unsafe until bounds are fixed.
 8. Close render progress, render complete, and confirmation popups before continuing automation. Verify the MCP/ReaPy API responds before the next operation.
 9. For plugin work, verify plugin display names and formatted parameter values in REAPER. Normalized parameters are a fallback representation, not a reliable transfer format by themselves.
-10. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
+10. Separate plugin discovery from mix iteration. Loading plugins, checking whether they instantiate, or cycling through default inserts is discovery only; do not count it as a mix pass.
+11. Count a plugin iteration only when it has a stated audible goal, a deliberate chain/settings change, a verified render or session-state artifact, and a short comparison note.
+12. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
 
 ## Workflow
 
@@ -32,12 +34,15 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 
 2. Prepare safe automation:
    - For track or FX edits, identify exact track index and plugin display names from REAPER's installed FX cache or current session.
+   - If probing plugin availability, label the work as discovery, capture exact plugin names/parameter lists, and remove or bypass trial inserts that are not part of the chosen chain.
+   - Before claiming an iteration, list the intended chain, the parameter or preset changes from the previous pass, and the evidence that will be rendered or inspected.
    - For render work, read `references/reaper-render-safety.md` before starting.
    - For REAPER-to-SuperRack artifacts, read `references/reaper-superrack-transfer.md` before exporting or interpreting Waves state.
 
 3. Make scoped changes:
    - Use serial FX chains unless the final host supports the same routing.
    - Verify parameter names and formatted values after each important setting change.
+   - Do not cycle plugins on a track as a substitute for parameter work. If no setting changes were made, report "plugin discovery only" and do not advance an iteration counter.
    - Avoid long-running render commands while probing plugin parameters or project state.
 
 4. Render or print evidence only through safe paths:

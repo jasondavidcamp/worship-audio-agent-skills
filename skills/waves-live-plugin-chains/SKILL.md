@@ -21,9 +21,10 @@ Keep `live-worship-mix-engineering` Waves-neutral. Use this skill only after the
 6. Treat "Live" plugin components or modes as different from full/lookahead/studio modes; choose the live component when the source is heard in the venue.
 7. Mark high-latency AI cleanup, heavy restoration, mastering, or analysis plugins as broadcast-only/verify-first unless official Waves data says they are suitable for the target live path.
 8. Treat installed plugins as candidates, not automatic recommendations.
-9. Loudness-match insert/bypass and candidate renders before ranking.
-10. Reject clipping, crackle, hash, pumping, obvious tuning artifacts, over-expanded phrases, or lost lyric intelligibility before asking for taste.
-11. If the task becomes `.sprk` or `.xps` file inspection/patching, switch to `superrack-session-files`.
+9. Do not count a plugin as tested just because it loaded with default settings. A useful candidate needs a source-specific role, deliberate starting settings or preset choice, and evidence from the same comparison section.
+10. Loudness-match insert/bypass and candidate renders before ranking.
+11. Reject clipping, crackle, hash, pumping, obvious tuning artifacts, over-expanded phrases, or lost lyric intelligibility before asking for taste.
+12. If the task becomes `.sprk` or `.xps` file inspection/patching, switch to `superrack-session-files`.
 
 ## Chain Decision Flow
 
@@ -38,12 +39,14 @@ Keep `live-worship-mix-engineering` Waves-neutral. Use this skill only after the
    - Control: RComp, RVox, CLA-76, CLA-2A, C6/C4, SSL/API bus compression.
    - Polish: saturation, exciter, delay, reverb, subtle widening, tuning.
    - Protection/measurement: L2/L3-LL/L4, WLM, meters.
+   - If the only known fact is "this plugin is installed," stop at inventory/discovery and ask `reaper-session-automation` to verify exact names or parameters instead of presenting it as a mix candidate.
 
 3. Pick the simplest live-safe chain:
    - Remove noise, bleed, and masking before adding brightness or loudness.
    - Add compression only after the source lane is clear enough to compress safely.
    - Add ambience or width only after lyric clarity and mono translation survive.
    - If any proposed plugin fails the SuperRack/latency gate, replace it or label it as a verified-only exception.
+   - Include the first intentional settings to try, not only plugin names.
 
 4. Document transfer constraints:
    - Host: SuperRack SoundGrid or SuperRack Performer. LV1/REAPER references are acceptable only when the same chain is expected to transfer to SuperRack.
