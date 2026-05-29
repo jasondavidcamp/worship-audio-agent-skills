@@ -78,6 +78,7 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 
 5. Handoff:
    - Return concise session facts: project path, target track, FX chain, settings changed, render path, and any REAPER warnings.
+   - For iteration requests, state the winning iteration explicitly in the summary before or after the per-pass logs: winner id/name, grade, and whether it was applied to the target track.
    - For iteration requests, include a run-log row for each counted pass: iteration id, audible goal, changed plugins/parameters, plugin focus/visibility status, render section/path, verification gates, and grade/status. Prefer this reviewer-facing shape for each pass:
 
 ```text
