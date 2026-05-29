@@ -24,8 +24,9 @@ Use this note before rendering through `reapy`, REAPER MCP, or any unattended RE
 Before starting a render loop, write down the intended render source and why it matches the task.
 
 - Use master mix/time selection for full-band, bus, livestream, or aimpoint checks only after a raw-control render from the same section proves the master path is non-silent.
-- Use selected-track/stem rendering, selected-item rendering, or a disposable staging track for single-source FX iteration when the task is about one instrument and the project routing may bypass the master.
-- If the source WAV has signal but both master-mix and isolated real-track renders are silent, treat the REAPER project track path as untrusted. Rebind the take or create a disposable staging track from the same media file, then grade any result with lower confidence until the full-band path is verified.
+- For single-source FX iteration, try the real target track first: selected-track/stem render, selected-item render, or master mix of only that track, depending on what best matches the task. A disposable staging track is a fallback, not the default.
+- If the source WAV has signal but both master-mix and isolated real-track renders are silent, treat the REAPER project track path as untrusted. Rebind the take and rerun a raw-control render. Use a disposable staging track from the same media file only if the real track still fails or the user explicitly wants non-mutating audition evidence, then grade any result with lower confidence until the full-band path is verified.
+- When using a disposable staging track, write down why the real track was not used and whether the final chosen settings were applied back to the real track.
 - Do not count silent renders as plugin iterations. Label them as render-path diagnosis and fix the render source before changing plugin settings.
 
 ## Required Render Pattern

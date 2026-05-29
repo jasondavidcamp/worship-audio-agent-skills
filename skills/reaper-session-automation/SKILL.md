@@ -26,8 +26,9 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 11. Separate plugin discovery from mix iteration. Loading plugins, checking whether they instantiate, or cycling through default inserts is discovery only; do not count it as a mix pass.
 12. Count a plugin iteration only when it has a stated audible goal, a deliberate chain/settings change, a verified render or session-state artifact, and a short comparison note.
 13. When the user asks to iterate toward an aimpoint, every counted REAPER pass must include or hand off enough evidence for an aimpoint grade. If no grade can be produced, label the pass as setup, discovery, or render-only.
-14. Before rendering, state the render source being used: master mix, selected track/stem, selected item, or disposable staging track. Match the source to the task instead of reusing the last successful render helper by habit.
-15. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
+14. Before rendering, state the render source being used: real target track, selected track/stem, selected item, master mix, or disposable staging track. Match the source to the task instead of reusing the last successful render helper by habit.
+15. Default to the real target track for plugin edits and source-specific iteration when it passes a raw-control render. Use disposable staging tracks only as an explicit fallback, and state why the real track path could not be trusted.
+16. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
 
 ## Workflow
 
@@ -56,7 +57,8 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
    - For a requested short sample, choose and state concrete bounds such as `chorus_1 = 93.0-98.0s`; if the user requested "5 seconds," verify `end - start = 5.0` before rendering.
    - When a useful current loop/time selection already exists, read it back first and either use those exact seconds or preserve/restore it after setting a temporary test range.
    - Use `scripts/render_time_range.py` only for explicit master-mix time ranges.
-   - For single-source FX iteration, prefer a selected-track/stem render or a disposable staging track from the source media unless the real master path has already produced a non-silent raw control for the same section.
+   - For single-source FX iteration, first try the real target track: selected-track/stem render, selected-item render, or master mix of only that track, as appropriate. Continue on the real track only after a raw-control render for the same section passes duration, non-silence, and popup-cleanup gates.
+   - Use a disposable staging track only when the real target track render fails verification, the session track path is known untrusted, or the user explicitly wants a non-mutating audition. Log the failure or reason before using staging.
    - For very short checks, prefer disposable media-item/take FX workflows when full master renders are unnecessary.
    - Immediately after every render command, close the render progress/results popup. When using custom ReaScript instead of `scripts/render_time_range.py`, copy or call that script's render-window cleanup routine before analysis or the next action.
    - Verify output file existence, non-zero size, duration, non-silence, and popup cleanup before offering it as a listening or analysis artifact.
