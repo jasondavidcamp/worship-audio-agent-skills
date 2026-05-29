@@ -49,3 +49,9 @@ This repo intentionally excludes private rendered audio, `.snap` files, `.sprk` 
 ## Script Dependencies
 
 Most scripts use Python standard libraries. Audio analysis scripts may also use packages such as `numpy`, `soundfile`, `scipy`, `librosa`, `pyloudnorm`, and optionally `essentia`.
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE).
+
+Waves, SuperRack, REAPER, Behringer WING, and other product names are trademarks of their respective owners. This project is not affiliated with or endorsed by those companies.
