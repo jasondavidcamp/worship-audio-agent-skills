@@ -32,6 +32,7 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 1. Inspect session state:
    - Confirm the open project path, track count, target track names, current solo/mute states, existing FX, and item media paths.
    - If MCP tools fail with ReaPy attribute or connection errors, read `references/reaper-mcp-setup.md` and probe direct `reapy.reascript_api` availability before changing the project.
+   - When running direct probe scripts from a shell, use the active shell's native multiline syntax or a helper script; do not assume Bash heredocs work in PowerShell.
 
 2. Prepare safe automation:
    - For track or FX edits, identify exact track index and plugin display names from REAPER's installed FX cache or current session.
