@@ -22,6 +22,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("rack_xps", type=Path)
     parser.add_argument("output_dir", type=Path)
+    parser.add_argument("--manifest", action="store_true", help="Also write a JSON extraction manifest into output_dir")
     args = parser.parse_args()
 
     data = args.rack_xps.read_text(encoding="utf-8", errors="replace")
@@ -57,14 +58,15 @@ def main() -> int:
             }
         )
 
-    manifest = {
-        "source_rack_xps": str(args.rack_xps),
-        "output_dir": str(args.output_dir),
-        "exports": exports,
-    }
-    (args.output_dir / "extracted-plugin-xps-manifest.json").write_text(
-        json.dumps(manifest, indent=2), encoding="utf-8"
-    )
+    if args.manifest:
+        manifest = {
+            "source_rack_xps": str(args.rack_xps),
+            "output_dir": str(args.output_dir),
+            "exports": exports,
+        }
+        (args.output_dir / "extracted-plugin-xps-manifest.json").write_text(
+            json.dumps(manifest, indent=2), encoding="utf-8"
+        )
     print(json.dumps({"exported": len(exports)}, indent=2))
     return 0 if exports else 1
 

@@ -111,6 +111,8 @@ Extract embedded plugin presets from a SuperRack rack-chain `.xps` for REAPER au
 & "<python>" scripts/extract_plugin_xps_from_rack_xps.py "C:\path\rack-chain.xps" "C:\path\extracted-plugin-presets"
 ```
 
+Extraction leaves only ordered `.xps` files by default. Pass `--manifest` only when you need a JSON extraction log.
+
 ## Related Skills
 
 - Use `live-worship-mix-engineering` for the general worship-mix diagnosis and non-Waves workflow.

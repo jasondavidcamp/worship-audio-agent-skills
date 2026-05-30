@@ -47,6 +47,7 @@ When testing a plugin-state transfer, record:
 - Use `scripts/export_waves_xps_from_rpp.py` to export one folder per track and one `.xps` per Waves FX slot.
 - Use `scripts/export_live_waves_xps.py` when the open REAPER session has unsaved plugin changes that need to become `.xps` files.
 - Exported folders of single-plugin `.xps` files should preserve chain order in the filenames with two-digit prefixes, such as `01 F6-RTA Mono.xps`, `02 RCompressor Mono.xps`, `03 SSL EV2 Channel Mono.xps`. The `.xps` preset name can stay clean; the filename is the human/import ordering hint.
+- Keep transfer folders clean by default: the export helpers print counts to stdout and only write JSON manifests when `--manifest` is passed. If a manifest is used for verification, remove it before handing off a folder meant for manual import.
 
 ## Live Compare Notes
 

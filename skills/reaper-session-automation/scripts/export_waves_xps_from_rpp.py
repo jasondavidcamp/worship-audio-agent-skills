@@ -152,7 +152,12 @@ def make_xps(xml_text: str, preset_name: str) -> str:
     )
 
 
-def export_waves_xps(project: Path, output_root: Path, skip_tracks: set[str]) -> dict:
+def export_waves_xps(
+    project: Path,
+    output_root: Path,
+    skip_tracks: set[str],
+    write_manifest: bool = False,
+) -> dict:
     output_root.mkdir(parents=True, exist_ok=True)
     lines = project.read_text(encoding="utf-8", errors="replace").splitlines()
     exports: list[dict] = []
@@ -205,7 +210,8 @@ def export_waves_xps(project: Path, output_root: Path, skip_tracks: set[str]) ->
         "exports": exports,
         "errors": errors,
     }
-    (output_root / "export-manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    if write_manifest:
+        (output_root / "export-manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     return manifest
 
 
@@ -214,9 +220,10 @@ def main() -> int:
     parser.add_argument("project", type=Path, help="REAPER .rpp file")
     parser.add_argument("output_root", type=Path, help="Root folder for track subfolders")
     parser.add_argument("--skip-track", action="append", default=[], help="Track name to skip")
+    parser.add_argument("--manifest", action="store_true", help="Also write a JSON export manifest into output_root")
     args = parser.parse_args()
 
-    manifest = export_waves_xps(args.project, args.output_root, set(args.skip_track))
+    manifest = export_waves_xps(args.project, args.output_root, set(args.skip_track), args.manifest)
     print(json.dumps({"exported": len(manifest["exports"]), "errors": len(manifest["errors"])}, indent=2))
     return 1 if manifest["errors"] else 0
 

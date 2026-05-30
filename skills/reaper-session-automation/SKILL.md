@@ -59,6 +59,7 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
    - For REAPER-to-SuperRack artifacts, read `references/reaper-superrack-transfer.md` before exporting or interpreting Waves state.
    - For Waves `.xps` work, ask `waves-live-plugin-chains` to identify the artifact shape and transfer intent. Use this skill for live REAPER export/import attempts, and `superrack-session-files` only for SuperRack-specific `.sprk` or rack-chain validation.
    - When exporting a chain as separate single-plugin Waves `.xps` files, preserve chain order in the filenames with two-digit prefixes such as `01 F6-RTA Mono.xps`, `02 RCompressor Mono.xps`. The preset name inside the file can remain the plugin/preset display name; the filename carries slot order for humans and later imports.
+   - Keep handoff export folders clean: leave only the ordered `.xps` files unless the user asks for an audit/debug log. Use `--manifest` only when a JSON export manifest is explicitly useful, and delete temporary manifests after verification before handing the folder to a human.
    - When source-staleness has already been seen in the project, refresh target-track audio takes that overlap the test range before the raw-control render: recreate the `PCM_Source` from the same existing file path, preserve take start offset and item timing, then log the refresh as preflight rather than as a failed iteration.
 
 3. Make scoped changes:
@@ -140,7 +141,7 @@ Extract Waves `.xps` preset files from an `.rpp` into one folder per track/chann
 & "<reaper-python>" scripts/export_waves_xps_from_rpp.py "C:\path\project.rpp" "C:\path\preset-exports\YYYY-MM-DD.N" --skip-track "Drum Bus"
 ```
 
-Exports use ordered filenames such as `01 PSE Mono.xps`, `02 F6-RTA Mono.xps`.
+Exports use ordered filenames such as `01 PSE Mono.xps`, `02 F6-RTA Mono.xps`. Add `--manifest` only when you intentionally want a JSON export log.
 
 Export the current Waves FX state from the open REAPER session:
 
@@ -148,7 +149,7 @@ Export the current Waves FX state from the open REAPER session:
 & "<reaper-python>" scripts/export_live_waves_xps.py --track "Bass" "C:\path\preset-exports\Bass"
 ```
 
-The live export helper also uses two-digit REAPER FX order prefixes by default.
+The live export helper also uses two-digit REAPER FX order prefixes by default and does not leave a manifest in the handoff folder unless `--manifest` is passed.
 
 Validate or attempt a single-plugin Waves `.xps` import into REAPER. Treat a non-zero result as a safety stop, not a shell failure to work around:
 

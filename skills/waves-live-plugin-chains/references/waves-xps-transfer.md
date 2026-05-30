@@ -40,8 +40,9 @@ SuperRack rack-chain preset:
 4. Match exact plugin component and channel format whenever possible: mono to mono, stereo to stereo, live component to live component.
 5. Treat `Parameters Type="RealWorld"` as plugin-owned state, not a universal parameter map. Only edit token positions that are locally documented for that plugin/version.
 6. When a chain is represented as a folder of separate single-plugin `.xps` files, preserve slot order in filenames with two-digit prefixes such as `01 PSE Mono.xps`, `02 F6-RTA Mono.xps`. The prefix is a chain-order hint, not part of the plugin preset identity.
-7. A host API accepting a preset/chunk write is not proof of import. Verify with displayed/formatted values, a native UI check, an exported round-trip, or an audible render gate.
-8. Keep exported `.xps` files out of public repos unless they are sanitized and legally safe to publish.
+7. Keep manual handoff folders clean: default to ordered `.xps` files only. JSON manifests or extraction logs are optional debug/audit artifacts and should be written only on request or removed before handoff.
+8. A host API accepting a preset/chunk write is not proof of import. Verify with displayed/formatted values, a native UI check, an exported round-trip, or an audible render gate.
+9. Keep exported `.xps` files out of public repos unless they are sanitized and legally safe to publish.
 
 ## Host Handoff
 
@@ -51,6 +52,7 @@ For REAPER:
 - If drag/drop is not available, use the Waves preset menu path: `Load -> Preset File`.
 - Use `reaper-session-automation` to export live REAPER Waves plugin state to single-plugin `.xps` files.
 - Expect REAPER-exported folders to use two-digit order prefixes so humans and later import automation can reconstruct the chain order.
+- Expect REAPER-exported handoff folders to omit manifest JSON unless explicitly requested.
 - Use `reaper-session-automation` to attempt plugin `.xps` import and verify formatted values.
 - If formatted values do not change after import, stop and use native Waves UI import or a plugin-specific exposed-parameter mapping.
 

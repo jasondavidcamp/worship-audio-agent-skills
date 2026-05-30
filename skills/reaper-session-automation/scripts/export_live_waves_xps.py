@@ -60,7 +60,13 @@ def resolve_track(project, track_name_arg: str | None, track_index: int | None):
     return matches[0]
 
 
-def export_live(track_name_arg: str | None, track_index: int | None, fx_index: int | None, output_dir: Path) -> dict:
+def export_live(
+    track_name_arg: str | None,
+    track_index: int | None,
+    fx_index: int | None,
+    output_dir: Path,
+    write_manifest: bool = False,
+) -> dict:
     reapy.connect()
     project = reapy.Project()
     resolved_track_index, track = resolve_track(project, track_name_arg, track_index)
@@ -118,7 +124,10 @@ def export_live(track_name_arg: str | None, track_index: int | None, fx_index: i
         "exports": exports,
         "errors": errors,
     }
-    (output_dir / "live-xps-export-manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    if write_manifest:
+        (output_dir / "live-xps-export-manifest.json").write_text(
+            json.dumps(manifest, indent=2), encoding="utf-8"
+        )
     return manifest
 
 
@@ -128,10 +137,11 @@ def main() -> int:
     track_group.add_argument("--track", help="Exact REAPER track name")
     track_group.add_argument("--track-index", type=int, help="Zero-based REAPER track index")
     parser.add_argument("--fx-index", type=int, help="Zero-based FX index; omit to export all Waves FX on the track")
-    parser.add_argument("output_dir", type=Path, help="Directory that will receive .xps files and a manifest")
+    parser.add_argument("output_dir", type=Path, help="Directory that will receive ordered .xps files")
+    parser.add_argument("--manifest", action="store_true", help="Also write a JSON export manifest into output_dir")
     args = parser.parse_args()
 
-    manifest = export_live(args.track, args.track_index, args.fx_index, args.output_dir)
+    manifest = export_live(args.track, args.track_index, args.fx_index, args.output_dir, args.manifest)
     print(json.dumps({"exported": len(manifest["exports"]), "errors": len(manifest["errors"])}, indent=2))
     return 1 if manifest["errors"] else 0
 
