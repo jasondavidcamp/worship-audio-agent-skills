@@ -51,6 +51,7 @@ This skill owns taste calls: asking for them, interpreting them, resolving confl
    - Loudness-match the candidate render to the reference before judging tone.
    - Compare broad bands and dynamics, then write an engineering interpretation.
    - For bass-guitar stem aimpoints against a chosen reference, use `mix-render-diagnostics/scripts/reference_score.py --source bass` when the user wants no-human automated test points beyond section matching.
+   - For kick-drum aimpoints where the reference is a full drum-kit stem, first use `scripts/extract_kick_aimpoint_from_drum_stem.py` to create a private kick-hit profile and optional extracted WAV, then use `mix-render-diagnostics/scripts/reference_score.py --source kick` for iteration scoring.
    - For iteration batches, assign an `aimpoint_grade` on a 0-100 scale, a confidence level, a one-sentence reason, and whether it moved closer, farther, or stayed flat versus the prior pass.
 
 5. Turn analysis into moves:
@@ -143,6 +144,14 @@ Run a drum-focused pass:
 ```powershell
 & "<python>" scripts/analyze_drum_reference.py "<drum-stem-or-render.wav>" --pretty
 ```
+
+Extract a private kick-hit aimpoint from a full drum-kit stem:
+
+```powershell
+& "<python>" scripts/extract_kick_aimpoint_from_drum_stem.py "<drum-kit-reference.wav>" --json-output "<scratch>\\kick-aimpoint.json" --extract-wav "<scratch>\\kick-hit-reference.wav" --pretty
+```
+
+Keep the generated JSON/WAV in a private scratch folder. Do not commit copyrighted reference audio or extracted hit montages.
 
 The script accepts formats readable by the installed audio stack, including WAV and many M4A/AAC files when backend support is present.
 

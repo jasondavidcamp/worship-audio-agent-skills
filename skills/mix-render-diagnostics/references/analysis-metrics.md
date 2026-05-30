@@ -74,6 +74,15 @@ For bass guitar against a reference stem, use `scripts/reference_score.py --sour
 - Compression/pumping proxy from crest-factor loss and short-window RMS over-stability.
 - A candidate-reference score on a 0-100 scale plus warnings that can feed the aimpoint grade.
 
+For kick drum against a kick reference excerpt or extracted kick-hit montage, use `scripts/reference_score.py --source kick`. If the user provides only a full drum-kit stem as the target, ask `band-sound-aimpoint/scripts/extract_kick_aimpoint_from_drum_stem.py` to create a private kick-hit reference WAV first. The score should include:
+
+- Kick-hit profile comparison from detected transient windows, not only whole-file averages.
+- Low-end balance ratios: `20-60 / 60-120`, `120-220 / 60-120`, and `220-600 / 60-120`.
+- Attack/read ratio: `2-5 kHz / 60-120 Hz`, with hash checked against useful attack.
+- Attack/body envelope and crest factor so clipped, over-flattened, or too-spiky candidates are rejected.
+- Peak/headroom gates before taste calls.
+- A candidate-reference score on a 0-100 scale plus warnings that can feed the aimpoint grade.
+
 ## Ranking Guidance
 
 Prefer candidates that solve the named problem with the least collateral damage. If two candidates score similarly, keep the simpler chain or the one that is easier to reproduce in the user's target delivery environment.

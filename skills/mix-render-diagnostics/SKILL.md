@@ -44,6 +44,7 @@ This skill does not own emotional target language or live-chain design. Translat
    - Use `scripts/analyze_wav.py` for quick dependency-free WAV peak/RMS/crest checks.
    - Use `scripts/artifact_gate.py` to compare candidate snippets against known-good baseline snippets before A/B comparison.
    - Use `scripts/reference_score.py --source bass` when comparing bass guitar candidates against a bass reference stem without human interaction; it covers loudness-matched spectrum, low-end ratios, note consistency, attack/body envelope, translation, mud, sub/headroom, compression/pumping, and an automated score. `scripts/bass_reference_score.py` remains as a compatibility wrapper.
+   - Use `scripts/reference_score.py --source kick` when comparing kick drum candidates against a kick reference excerpt or a private kick-hit WAV extracted by `band-sound-aimpoint/scripts/extract_kick_aimpoint_from_drum_stem.py`.
    - For section-aware diagnostics, vocal masking, transient/punch, reverb/tail, stereo/mono, codec, or candidate report work, read `references/diagnostic-modules.md` and run `scripts/render_diagnostic_report.py`.
    - Compare source, candidate, and reference with the metrics in `references/analysis-metrics.md`.
    - For deeper reference/candidate descriptors, use `band-sound-aimpoint/scripts/analyze_reference_audio.py --essentia` when Essentia is available; otherwise rely on the existing librosa/LUFS fields.
@@ -110,6 +111,12 @@ Score a bass candidate against a bass reference stem:
 
 ```powershell
 & "<python>" scripts/reference_score.py --source bass --candidate "C:\path\candidate-bass.wav" --reference "C:\path\reference-bass.wav" --pretty
+```
+
+Score a kick candidate against a kick reference or extracted kick-hit WAV:
+
+```powershell
+& "<python>" scripts/reference_score.py --source kick --candidate "C:\path\candidate-kick.wav" --reference "C:\path\kick-hit-reference.wav" --pretty
 ```
 
 Compatibility wrapper:

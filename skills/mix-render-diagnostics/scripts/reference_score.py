@@ -5,9 +5,11 @@ The shared framework handles WAV loading, mono folding, sample-rate alignment,
 loudness matching, comparison gates, warning/confidence handling, and JSON
 output. Source profiles add metrics and scoring rules for a specific target.
 
-Currently implemented source profile:
+Currently implemented source profiles:
 
 - bass: bass guitar stem/reference comparison.
+- kick: kick drum candidate/reference comparison, including extracted kick-hit
+  references from full drum-kit stems.
 """
 
 from __future__ import annotations
@@ -35,9 +37,23 @@ BASS_BANDS = {
     "noise_5k_10k": (5000.0, 10000.0),
 }
 
+KICK_BANDS = {
+    "sub_20_60": (20.0, 60.0),
+    "thump_60_120": (60.0, 120.0),
+    "upper_120_220": (120.0, 220.0),
+    "box_220_600": (220.0, 600.0),
+    "knock_600_1500": (600.0, 1500.0),
+    "attack_2k_5k": (2000.0, 5000.0),
+    "hash_5k_10k": (5000.0, 10000.0),
+}
+
 
 def db(value: float) -> float:
     return 20.0 * math.log10(max(float(value), 1e-12))
+
+
+def db_power(value: float) -> float:
+    return 10.0 * math.log10(max(float(value), 1e-24))
 
 
 def read_wav_mono(path: Path) -> tuple[np.ndarray, int, dict]:
@@ -212,6 +228,128 @@ def envelope_metrics(audio: np.ndarray, sample_rate: int) -> dict:
     if not ratios:
         return {"onsets": len(onsets), "attack_to_body_db": None}
     return {"onsets": len(ratios), "attack_to_body_db": float(np.median(ratios))}
+
+
+def percentile_summary(values: list[float], percentiles: tuple[int, ...] = (10, 25, 50, 75, 90)) -> dict[str, float] | None:
+    if not values:
+        return None
+    array = np.array(values, dtype=np.float64)
+    return {str(percentile): float(np.percentile(array, percentile)) for percentile in percentiles}
+
+
+def band_energy(audio: np.ndarray, sample_rate: int, bands: dict[str, tuple[float, float]]) -> dict[str, float]:
+    if len(audio) < 2:
+        return {name: 1e-24 for name in bands}
+    nfft = max(4096, 1 << (len(audio) - 1).bit_length())
+    padded = np.zeros(nfft, dtype=np.float32)
+    padded[: len(audio)] = audio.astype(np.float32)
+    spectrum = np.abs(np.fft.rfft(padded * np.hanning(nfft))) ** 2
+    freqs = np.fft.rfftfreq(nfft, 1.0 / sample_rate)
+    output: dict[str, float] = {}
+    for name, (low, high) in bands.items():
+        mask = (freqs >= low) & (freqs < min(high, sample_rate / 2.0))
+        output[name] = float(np.sum(spectrum[mask])) if np.any(mask) else 1e-24
+    return output
+
+
+def kick_hit_indices(audio: np.ndarray, sample_rate: int) -> list[int]:
+    window = max(1, int(0.025 * sample_rate))
+    hop = max(1, int(0.010 * sample_rate))
+    if len(audio) < window * 4:
+        return []
+    envelope = []
+    for start in range(0, len(audio) - window, hop):
+        segment = audio[start : start + window]
+        envelope.append(float(np.sqrt(np.mean(segment * segment))))
+    envelope_array = np.array(envelope, dtype=np.float64)
+    if len(envelope_array) < 3 or float(np.max(envelope_array)) <= 0.0:
+        return []
+
+    threshold = max(float(np.percentile(envelope_array, 88) * 0.55), float(np.max(envelope_array) * 0.12), 1e-6)
+    indices: list[int] = []
+    last_sample = -10**9
+    for index in range(1, len(envelope_array) - 1):
+        is_peak = (
+            envelope_array[index] >= threshold
+            and envelope_array[index] >= envelope_array[index - 1]
+            and envelope_array[index] >= envelope_array[index + 1]
+        )
+        if not is_peak:
+            continue
+        sample = index * hop + window // 2
+        if sample - last_sample > int(0.18 * sample_rate):
+            indices.append(sample)
+            last_sample = sample
+        elif indices:
+            previous_envelope_index = max(0, min(len(envelope_array) - 1, (indices[-1] - window // 2) // hop))
+            if envelope_array[index] > envelope_array[previous_envelope_index]:
+                indices[-1] = sample
+                last_sample = sample
+    return indices
+
+
+def kick_hit_rows(audio: np.ndarray, sample_rate: int) -> list[dict]:
+    pre = int(0.030 * sample_rate)
+    post = int(0.260 * sample_rate)
+    rows: list[dict] = []
+    for center in kick_hit_indices(audio, sample_rate):
+        start = max(0, center - pre)
+        end = min(len(audio), center + post)
+        segment = audio[start:end]
+        if len(segment) < int(0.12 * sample_rate):
+            continue
+        energy = band_energy(segment, sample_rate, KICK_BANDS)
+        thump = energy["thump_60_120"]
+        transient = segment[pre : pre + int(0.035 * sample_rate)] if pre < len(segment) else segment[: int(0.035 * sample_rate)]
+        body_start = pre + int(0.060 * sample_rate)
+        body_end = pre + int(0.180 * sample_rate)
+        body = segment[body_start:body_end] if body_end < len(segment) else segment[int(0.060 * sample_rate) :]
+        attack_body_db = None
+        if len(transient) and len(body):
+            transient_rms = float(np.sqrt(np.mean(transient * transient)))
+            body_rms = float(np.sqrt(np.mean(body * body)))
+            attack_body_db = db(transient_rms / max(body_rms, 1e-12))
+        peak = float(np.max(np.abs(segment))) if len(segment) else 0.0
+        rms = float(np.sqrt(np.mean(segment * segment))) if len(segment) else 0.0
+        rows.append(
+            {
+                "time_s": center / sample_rate,
+                "peak_dbfs": db(peak),
+                "rms_dbfs": db(rms),
+                "crest_db": db(peak / max(rms, 1e-12)),
+                "attack_body_db": attack_body_db,
+                "ratios": {
+                    "sub_vs_thump_db": db_power(energy["sub_20_60"] / thump),
+                    "upper_vs_thump_db": db_power(energy["upper_120_220"] / thump),
+                    "box_vs_thump_db": db_power(energy["box_220_600"] / thump),
+                    "attack_vs_thump_db": db_power(energy["attack_2k_5k"] / thump),
+                    "hash_vs_attack_db": db_power(energy["hash_5k_10k"] / max(energy["attack_2k_5k"], 1e-24)),
+                },
+            }
+        )
+    return rows
+
+
+def kick_profile(audio: np.ndarray, sample_rate: int) -> dict:
+    rows = kick_hit_rows(audio, sample_rate)
+    profile = {
+        "detected_hits": len(rows),
+        "peak_dbfs_percentiles": percentile_summary([row["peak_dbfs"] for row in rows]),
+        "rms_dbfs_percentiles": percentile_summary([row["rms_dbfs"] for row in rows]),
+        "crest_db_percentiles": percentile_summary([row["crest_db"] for row in rows]),
+        "attack_body_db_percentiles": percentile_summary(
+            [row["attack_body_db"] for row in rows if row["attack_body_db"] is not None]
+        ),
+    }
+    for ratio_name in (
+        "sub_vs_thump_db",
+        "upper_vs_thump_db",
+        "box_vs_thump_db",
+        "attack_vs_thump_db",
+        "hash_vs_attack_db",
+    ):
+        profile[f"{ratio_name}_percentiles"] = percentile_summary([row["ratios"][ratio_name] for row in rows])
+    return profile
 
 
 def build_base_comparison(candidate_path: Path, reference_path: Path, bands: dict[str, tuple[float, float]]) -> dict:
@@ -457,15 +595,176 @@ def analyze_bass(candidate_path: Path, reference_path: Path) -> dict:
     return result
 
 
+def median_from_profile(profile: dict, key: str) -> float | None:
+    percentiles = profile.get(key)
+    if not percentiles:
+        return None
+    return float(percentiles.get("50"))
+
+
+def percentile_delta(candidate_profile: dict, reference_profile: dict, key: str) -> dict | None:
+    candidate_median = median_from_profile(candidate_profile, key)
+    reference_median = median_from_profile(reference_profile, key)
+    if candidate_median is None or reference_median is None:
+        return None
+    return {
+        "candidate_median": candidate_median,
+        "reference_median": reference_median,
+        "delta_db": candidate_median - reference_median,
+    }
+
+
+def add_kick_metrics(context: dict) -> None:
+    result = context["result"]
+    candidate = context["candidate_audio"]
+    reference = context["reference_audio"]
+    cand_sr = context["candidate_sample_rate"]
+    ref_sr = context["reference_sample_rate"]
+    cand_basic = result["basic"]["candidate"]
+    ref_basic = result["basic"]["reference"]
+
+    candidate_profile = kick_profile(candidate, cand_sr)
+    reference_profile = kick_profile(reference, ref_sr)
+    result["kick_hit_profile"] = {
+        "candidate": candidate_profile,
+        "reference": reference_profile,
+    }
+    result["kick_profile_deltas"] = {}
+    for key in (
+        "sub_vs_thump_db_percentiles",
+        "upper_vs_thump_db_percentiles",
+        "box_vs_thump_db_percentiles",
+        "attack_vs_thump_db_percentiles",
+        "hash_vs_attack_db_percentiles",
+        "crest_db_percentiles",
+        "attack_body_db_percentiles",
+    ):
+        delta = percentile_delta(candidate_profile, reference_profile, key)
+        if delta is not None:
+            result["kick_profile_deltas"][key] = delta
+
+    result["headroom"] = {
+        "candidate_peak_dbfs": cand_basic["peak_dbfs"],
+        "reference_peak_dbfs": ref_basic["peak_dbfs"],
+        "candidate_clipping_risk": cand_basic["peak_dbfs"] > -0.2,
+        "candidate_low_headroom": cand_basic["peak_dbfs"] > -3.0,
+    }
+
+
+def score_kick(result: dict) -> tuple[int, list[str]]:
+    warnings = [
+        warning
+        for warning in gate_warnings(result)
+        if not warning.startswith("candidate/reference durations differ")
+    ]
+    score = 100.0
+    deltas = result.get("kick_profile_deltas", {})
+    candidate_profile = result["kick_hit_profile"]["candidate"]
+    reference_profile = result["kick_hit_profile"]["reference"]
+
+    if candidate_profile["detected_hits"] < 4:
+        score -= 20.0
+        warnings.append("too few candidate kick hits detected for a stable score")
+    if reference_profile["detected_hits"] < 4:
+        score -= 20.0
+        warnings.append("too few reference kick hits detected for a stable score")
+
+    weights = {
+        "sub_vs_thump_db_percentiles": 2.2,
+        "upper_vs_thump_db_percentiles": 1.2,
+        "box_vs_thump_db_percentiles": 1.5,
+        "attack_vs_thump_db_percentiles": 1.4,
+        "hash_vs_attack_db_percentiles": 1.0,
+        "crest_db_percentiles": 2.0,
+        "attack_body_db_percentiles": 1.1,
+    }
+    caps = {
+        "sub_vs_thump_db_percentiles": 12.0,
+        "upper_vs_thump_db_percentiles": 8.0,
+        "box_vs_thump_db_percentiles": 10.0,
+        "attack_vs_thump_db_percentiles": 10.0,
+        "hash_vs_attack_db_percentiles": 7.0,
+        "crest_db_percentiles": 12.0,
+        "attack_body_db_percentiles": 10.0,
+    }
+    labels = {
+        "sub_vs_thump_db_percentiles": "sub/thump balance",
+        "upper_vs_thump_db_percentiles": "upper-kick/thump balance",
+        "box_vs_thump_db_percentiles": "box/thump balance",
+        "attack_vs_thump_db_percentiles": "attack/thump balance",
+        "hash_vs_attack_db_percentiles": "hash/attack balance",
+        "crest_db_percentiles": "kick crest factor",
+        "attack_body_db_percentiles": "attack/body envelope",
+    }
+    for key, payload in deltas.items():
+        delta = abs(payload["delta_db"])
+        score -= min(caps[key], delta * weights[key])
+        warning_threshold = 4.0 if key not in {"crest_db_percentiles", "attack_body_db_percentiles"} else 6.0
+        if delta > warning_threshold:
+            direction = "above" if payload["delta_db"] > 0 else "below"
+            warnings.append(
+                f"{labels[key]} is {delta:.1f} dB {direction} reference median"
+            )
+
+    headroom = result["headroom"]
+    if headroom["candidate_clipping_risk"]:
+        score -= 35.0
+        warnings.append("candidate peak is at or near 0 dBFS")
+    elif headroom["candidate_low_headroom"]:
+        score -= min(10.0, (headroom["candidate_peak_dbfs"] + 3.0) * 2.0 + 4.0)
+        warnings.append("candidate peak headroom is below 3 dB")
+
+    # Penalize obviously unhelpful full-excerpt spectral drift after loudness matching.
+    band_deltas = result["loudness_matched_band_deltas"]
+    spectral_keys = ("sub_20_60", "thump_60_120", "box_220_600", "attack_2k_5k", "hash_5k_10k")
+    spectral_distance = float(np.mean([abs(band_deltas[key]["delta_db"]) for key in spectral_keys]))
+    score -= min(12.0, spectral_distance * 0.8)
+
+    return int(max(0.0, min(100.0, round(score)))), warnings
+
+
+def analyze_kick(candidate_path: Path, reference_path: Path) -> dict:
+    context = build_base_comparison(candidate_path, reference_path, KICK_BANDS)
+    result = context["result"]
+    result["source_type"] = "kick"
+    result["profile"] = "kick_drum_reference_v1"
+    add_kick_metrics(context)
+    score, warnings = score_kick(result)
+    result["reference_score"] = score
+    result["kick_reference_score"] = score
+    result["warnings"] = warnings
+    gates = result.get("comparison_gates", {})
+    enough_hits = (
+        result["kick_hit_profile"]["candidate"]["detected_hits"] >= 4
+        and result["kick_hit_profile"]["reference"]["detected_hits"] >= 4
+    )
+    if enough_hits and not (
+        gates.get("short_comparison")
+        or gates.get("low_reference_level")
+        or gates.get("low_candidate_level")
+    ):
+        result["confidence"] = "medium"
+    else:
+        result["confidence"] = "low"
+    result["notes"] = [
+        "Use comparable musical sections or an extracted kick-hit reference for strongest results.",
+        "This profile compares kick-hit medians plus full-excerpt loudness-matched bands.",
+        "Metrics are proxies; human listening still owns final taste calls.",
+    ]
+    return result
+
+
 def analyze(candidate_path: Path, reference_path: Path, source: str = "bass") -> dict:
     if source == "bass":
         return analyze_bass(candidate_path, reference_path)
+    if source == "kick":
+        return analyze_kick(candidate_path, reference_path)
     raise ValueError(f"Unsupported source profile: {source}")
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--source", default="bass", choices=("bass",), help="Source profile to use")
+    parser.add_argument("--source", default="bass", choices=("bass", "kick"), help="Source profile to use")
     parser.add_argument("--candidate", required=True, type=Path, help="Candidate WAV")
     parser.add_argument("--reference", required=True, type=Path, help="Reference WAV")
     parser.add_argument("--json-output", type=Path, help="Optional JSON report path")
