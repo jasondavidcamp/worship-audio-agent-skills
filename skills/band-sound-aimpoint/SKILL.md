@@ -50,7 +50,7 @@ This skill owns taste calls: asking for them, interpreting them, resolving confl
    - Use the same kind of section from a trustworthy REAPER render, stem, or other source.
    - Loudness-match the candidate render to the reference before judging tone.
    - Compare broad bands and dynamics, then write an engineering interpretation.
-   - For bass-guitar stem aimpoints such as a CityAlight bass reference, use `mix-render-diagnostics/scripts/bass_reference_score.py` when the user wants no-human automated test points beyond section matching.
+   - For bass-guitar stem aimpoints such as a CityAlight-style bass reference, use `mix-render-diagnostics/scripts/reference_score.py --source bass` when the user wants no-human automated test points beyond section matching.
    - For iteration batches, assign an `aimpoint_grade` on a 0-100 scale, a confidence level, a one-sentence reason, and whether it moved closer, farther, or stayed flat versus the prior pass.
 
 5. Turn analysis into moves:

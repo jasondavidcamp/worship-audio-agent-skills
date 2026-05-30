@@ -60,7 +60,9 @@ For band, drums, or livestream buses:
 - Vocal pocket and masking behavior.
 - Stereo image stability.
 
-For bass guitar against a reference stem, use `scripts/bass_reference_score.py` when a no-human automated pass is needed. It intentionally does not pick or match song sections; feed it already comparable files or excerpts when section role matters. The score should include:
+For source-aware reference scoring, prefer `scripts/reference_score.py --source <source>` so shared loading, resampling, loudness matching, gates, warning/confidence handling, and JSON shape stay consistent across instruments. Add new instruments as profiles in that framework instead of creating unrelated one-off scripts. Keep old source-specific wrappers only for compatibility.
+
+For bass guitar against a reference stem, use `scripts/reference_score.py --source bass` when a no-human automated pass is needed. It intentionally does not pick or match song sections; feed it already comparable files or excerpts when section role matters. The score should include:
 
 - Loudness-matched spectral distance across sub, fundamental, bass, mud, low-mid, note/read, edge, and noise bands.
 - Low-end balance ratios: `40-80 / 80-160`, `80-160 / 160-300`, and `160-300 / 300-700`.
