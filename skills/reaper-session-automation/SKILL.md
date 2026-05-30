@@ -66,8 +66,10 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
    - Pause or update the UI briefly after focusing a plugin when the user is shoulder-surfing, then state which plugin and parameter group is being changed.
    - For track FX, confirm the track-wide FX chain is enabled (`I_FXEN=1`) before rendering or grading. If it was off and the user asked for audible plugin work, enable it and log that change.
    - Verify parameter names and formatted values after each important setting change.
-   - When importing a Waves plugin `.xps` back into REAPER, first validate that it is a single-plugin preset rather than a SuperRack rack-chain preset. Use `scripts/apply_waves_xps_to_reaper.py --dry-run` before mutating the session, and after any import attempt compare formatted values before and after.
-   - If REAPER accepts a `vst_chunk` write but formatted values do not change, report the import as unverified/failed and use native Waves UI import or a plugin-specific exposed-parameter mapping before rendering.
+   - When importing a Waves plugin `.xps` back into REAPER, first validate that it is a single-plugin preset rather than a SuperRack rack-chain preset.
+   - Prefer the native Waves UI import path when the plugin window is visible or can be safely focused: add/focus the Waves plugin, open the Waves preset browser/menu, choose `Load -> Preset File`, select the `.xps`, then verify formatted REAPER values or an exported round-trip before rendering.
+   - Use `scripts/apply_waves_xps_to_reaper.py --dry-run` before mutating the session when using automation. If native UI import is not available, use the helper's `auto` mapped import for supported Waves plugins such as F6/F6-RTA, RComp, and SSL EV2.
+   - If REAPER accepts a `vst_chunk` write but formatted values do not change, report the import as unverified/failed and use native Waves UI import or a plugin-specific exposed-parameter mapping before rendering. Do not retry the same chunk path repeatedly.
    - Do not spend a shoulder-surfed iteration binary-searching every parameter to exact display values. Calibrate a small mapping when needed, set routine values directly, and verify the handful of controls that matter musically.
    - If the plugin cannot be focused or its UI cannot be made visible, say so and mark the change as non-visible automation rather than implying the human could watch it happen.
    - Do not cycle plugins on a track as a substitute for parameter work. If no setting changes were made, report "plugin discovery only" and do not advance an iteration counter.
@@ -145,8 +147,10 @@ Validate or attempt a single-plugin Waves `.xps` import into REAPER. Treat a non
 
 ```powershell
 & "<reaper-python>" scripts/apply_waves_xps_to_reaper.py "C:\path\F6 Mono.xps" --track "Bass" --fx-index 0 --dry-run
-& "<reaper-python>" scripts/apply_waves_xps_to_reaper.py "C:\path\F6 Mono.xps" --track "Bass" --fx-index 0
+& "<reaper-python>" scripts/apply_waves_xps_to_reaper.py "C:\path\F6 Mono.xps" --track "Bass" --fx-index 0 --method auto
 ```
+
+When a human can see the plugin UI, the preferred `.xps` import is the native Waves menu path: focus the exact FX window, open the Waves preset browser/menu, choose `Load -> Preset File`, select the `.xps`, then read back the important formatted parameters.
 
 ## Related Skills
 
