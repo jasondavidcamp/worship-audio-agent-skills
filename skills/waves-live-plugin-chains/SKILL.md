@@ -73,7 +73,7 @@ Keep `live-worship-mix-engineering` Waves-neutral. Use this skill only after the
 - Read `references/waves-plugin-decision-matrix.md` for source-specific plugin choices and first-line alternatives.
 - Read `references/waves-superrack-operational-reference.md` for live-safety, latency posture, SoundGrid/Performer cautions, and operational metadata.
 - Read `references/source-candidate-palettes.md` before multi-pass Waves iterations, especially when the user wants broader exploration across instruments, voice types, or plugin families.
-- Read `references/musical-palette-expansion-sources.md` when broadening palettes from FOH live-chain examples, church/worship case studies, or plugin manuals/product pages after the official eligibility gate passes.
+- Read `references/musical-palette-expansion-sources.md` when broadening palettes from FOH live-chain examples, church/worship case studies, StudioVerse popularity patterns, or plugin manuals/product pages after the official eligibility gate passes.
 - Read `references/waves-next-move-map.md` when translating common worship-mix diagnoses into Waves-specific next moves.
 - Read `references/superrack-vocal-speech-chains.md` for lead vocal, BGV/choir, and spoken-word/pastor mic chains.
 - Read `references/superrack-rhythm-band-bus-chains.md` for drums, kick/bass/low-end, band bus, mix bus, and livestream bus chains.

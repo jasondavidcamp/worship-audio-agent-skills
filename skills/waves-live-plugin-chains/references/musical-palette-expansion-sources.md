@@ -19,14 +19,47 @@ Use this after `superrack-live-eligibility-gate.md`. The truth gate answers whet
    - Use for first-pass settings, parameter intent, mode/component cautions, and "what problem is this plugin built to solve?"
    - Manuals and product pages do not override the truth gate. They explain musical purpose and control behavior, not final deployability.
 
+4. StudioVerse popularity mining:
+   - Examples: Waves StudioVerse browse/search pages and in-DAW StudioRack/StudioVerse chains with source tags, creator attribution, descriptions, and likes.
+   - Use high-like or repeatedly appearing chains to discover plugin-family patterns, order patterns, and source-specific hypotheses.
+   - Treat StudioVerse as crowd/producer signal, not live-sound authority. Community chains may be studio-oriented, genre-specific, stereo-only, high-latency, CPU-heavy, or unsuitable for worship/live paths.
+   - Prefer verified creators and Waves/factory chains over anonymous community chains when extracting general patterns, but still run every plugin through the truth gate.
+
 ## Palette Expansion Rules
 
-- Build source palettes in this order: diagnosis, source type, worship aimpoint, prior local wins, FOH/church examples, plugin manual intent, then render evidence.
+- Build source palettes in this order: diagnosis, source type, worship aimpoint, prior local wins, FOH/church examples, StudioVerse popularity patterns, plugin manual intent, then render evidence.
 - For 20+ pass iterations, include at least one candidate from each relevant family before narrowing: cleanup/EQ, dynamics/control, channel strip/color, translation, harmonic color, and bus/output safety.
 - Do not copy an engineer's whole chain unless the source, host, format, and aimpoint match. Extract the role instead: "dynamic vocal harshness control," "bass small-speaker translation," "snare transient control," "band-bus glue."
 - When a case study uses legacy MultiRack or an older plugin version, translate the idea to current SuperRack-compatible components instead of assuming the exact setup is still deployable.
+- Do not copy StudioVerse chains wholesale into skill files or public repos. Extract only generalized observations such as common plugin families, chain order, source/problem labels, and why the pattern might be worth a controlled render test.
+- When mining StudioVerse, rank signals roughly as: repeated source-tag pattern across many chains, high likes for the source tag, verified/factory creator, clear source/problem description, then audio/render evidence in our own session.
 - Prefer source-native fixes before bus fixes. FOH chains often include buses and master processing; for iteration on one instrument, use the bus idea only if the task explicitly includes that bus.
 - For worship and church production, reject moves that improve solo tone but reduce lyric intelligibility, mono stability, headroom, or smoothness over a long service.
+
+## StudioVerse Mining Workflow
+
+1. Choose a narrow source/problem query: e.g. `bass guitar uneven notes`, `female vocal sibilance`, `snare punch`, `piano low-mid`.
+2. Browse StudioVerse by source tag and sort or note high-like/high-visibility chains when available.
+3. Record only pattern-level observations:
+   - source tag,
+   - chain title or category,
+   - creator class: Waves/factory, verified creator, or community,
+   - like/popularity signal when visible,
+   - plugin families and order if visible in the target StudioVerse/StudioRack instance,
+   - musical hypothesis to test.
+4. Reject or downgrade patterns that depend on studio-only processors, full/lookahead modes, stereo widening, mastering loudness, aggressive distortion, unsupported components, or genre effects that fight the worship aimpoint.
+5. Convert surviving patterns into one or two controlled candidates, then render and grade them like any other pass.
+
+StudioVerse-derived candidate log shape:
+
+```text
+StudioVerse pattern: Bass Guitar / high-like chains often combine leveling + harmonic translation
+Extracted role: even notes, then small-speaker read
+Candidate: Bass Rider Live -> F6 -> RBass
+Truth gate: Bass Rider latency conditional; RBass core-live but headroom gated
+Worship risk: may over-flatten phrasing or grow sub/headroom load
+Test condition: compare against raw and non-enhancer leveling chain before keeper decision
+```
 
 ## Source-To-Plugin Norms To Mine
 
@@ -70,3 +103,5 @@ Buses and stream:
 - Vox Church SuperRack livestream story: <https://www.waves.com/vox-church-streams-live-audio-waves-superrack>
 - Saddleback SoundGrid/MultiRack story: <https://www.waves.com/saddleback-church-chooses-multirack-soundgrid>
 - Plugin pages and manuals: <https://www.waves.com/plugins>, <https://www.waves.com/downloads/manuals>
+- StudioVerse browse and product pages: <https://www.waves.com/studioverse/browse>, <https://www.waves.com/studioverse>, <https://www.waves.com/plugins/studiorack>
+- StudioVerse community guidelines: <https://www.waves.com/support/studioverse-community-guidelines>
