@@ -109,7 +109,7 @@ Run a quick WAV metric pass:
 Score a bass candidate against a bass reference stem:
 
 ```powershell
-& "<python>" scripts/bass_reference_score.py --candidate "C:\path\candidate-bass.wav" --reference "D:\Multitrack Recordings\CityAlight\Only a Hold God (D)\MultiTracks\Bass.wav" --pretty
+& "<python>" scripts/bass_reference_score.py --candidate "C:\path\candidate-bass.wav" --reference "C:\path\reference-bass.wav" --pretty
 ```
 
 Run a static/artifact gate against a known-good snippet:
