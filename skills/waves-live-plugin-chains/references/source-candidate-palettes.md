@@ -8,6 +8,7 @@ Use this before Waves multi-pass iteration so the chain search does not collapse
 - Include any prior approved/exported chain for the same source early in the batch, or state why it does not apply.
 - Prefer live-safe, SuperRack-compatible mono/stereo components that match the source format.
 - Before recommending or applying a candidate, run the official truth gate in `superrack-live-eligibility-gate.md`: Supported Platforms, Plugin Latency, Channel Components, then SuperRack Support Notes.
+- For broad or unfamiliar palette work, use `musical-palette-expansion-sources.md` after the truth gate to add FOH/church/manual-informed candidates.
 - Keep each pass role-clear: cleanup, control, color, translation, or keeper refinement.
 - Do not use all tools just because they exist. Reject candidates that add latency, artifacts, harshness, pumping, headroom loss, or workflow risk.
 - For 5-pass batches, include at least two different topologies unless the user asks for refinement only.

@@ -45,6 +45,7 @@ Keep `live-worship-mix-engineering` Waves-neutral. Use this skill only after the
 
 3. Build a candidate palette for iteration:
    - Read `references/source-candidate-palettes.md` for the source type.
+   - Read `references/musical-palette-expansion-sources.md` when the task asks for broader exploration, 10+ passes, or a less familiar source/plugin family.
    - Check for prior approved/exported chains or presets for the same source; include one early or state why it does not apply.
    - For 5-pass iterations, include topology variety: prior/current chain, clean utility chain, alternate dynamics, color/channel-strip chain, and keeper refinement.
    - For 10-20 pass iterations, broaden into a plugin-family shootout before narrowing.
@@ -72,6 +73,7 @@ Keep `live-worship-mix-engineering` Waves-neutral. Use this skill only after the
 - Read `references/waves-plugin-decision-matrix.md` for source-specific plugin choices and first-line alternatives.
 - Read `references/waves-superrack-operational-reference.md` for live-safety, latency posture, SoundGrid/Performer cautions, and operational metadata.
 - Read `references/source-candidate-palettes.md` before multi-pass Waves iterations, especially when the user wants broader exploration across instruments, voice types, or plugin families.
+- Read `references/musical-palette-expansion-sources.md` when broadening palettes from FOH live-chain examples, church/worship case studies, or plugin manuals/product pages after the official eligibility gate passes.
 - Read `references/waves-next-move-map.md` when translating common worship-mix diagnoses into Waves-specific next moves.
 - Read `references/superrack-vocal-speech-chains.md` for lead vocal, BGV/choir, and spoken-word/pastor mic chains.
 - Read `references/superrack-rhythm-band-bus-chains.md` for drums, kick/bass/low-end, band bus, mix bus, and livestream bus chains.
