@@ -4,6 +4,8 @@ Use this as a generic checklist for REAPER automation through `reapy` or a REAPE
 
 ## Typical Setup
 
+- Install `python-reapy` into a dedicated or default Python environment used for REAPER automation.
+- Store the working interpreter path in a private local config such as `~/.codex/local/reaper-python.txt`. Do not commit workstation-specific Python paths to the public skill repo.
 - Install or clone the REAPER MCP/reapy integration in a local tools directory.
 - Create a Python virtual environment for the MCP server and install its dependencies.
 - Register the MCP command in the agent's config.
@@ -12,6 +14,13 @@ Use this as a generic checklist for REAPER automation through `reapy` or a REAPE
 
 ## Verification
 
+- Verify direct ReaPy before render-sensitive work:
+
+```powershell
+$py = if (Test-Path "$env:USERPROFILE\.codex\local\reaper-python.txt") { Get-Content "$env:USERPROFILE\.codex\local\reaper-python.txt" -Raw } else { "python" }
+& $py.Trim() -c "import reapy, reapy.reascript_api as RPR; print('reapy ok', reapy.Project().name); print('EnumProjects', hasattr(RPR, 'EnumProjects'))"
+```
+
 - Confirm the MCP server can start and list tools without REAPER connected.
 - Confirm REAPER can run the `activate_reapy_server.py` action.
 - If calls fail with an API or connection warning, restart REAPER and verify the reapy server action is available/enabled.
@@ -19,7 +28,7 @@ Use this as a generic checklist for REAPER automation through `reapy` or a REAPE
 
 ## Known Wrapper Mismatch Pattern
 
-If this local deployment repeatedly returns `module 'reapy.reascript_api' has no attribute 'EnumProjects'` from MCP project/list helpers, treat the MCP wrapper as known-untrusted for session inspection. Do not retry the same MCP helper at the start of every mix pass.
+If this local deployment repeatedly returns `module 'reapy.reascript_api' has no attribute 'EnumProjects'` from MCP project/list helpers, treat the MCP wrapper as known-untrusted for session inspection. Do not retry the same MCP helper at the start of every mix pass, especially when direct ReaPy has already verified that `EnumProjects` exists in the configured automation Python.
 
 Use direct ReaScript/ReaPy through the working Python environment or the skill scripts for:
 

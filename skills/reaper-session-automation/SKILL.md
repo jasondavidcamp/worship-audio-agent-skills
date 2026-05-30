@@ -14,32 +14,35 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 ## Operating Rules
 
 1. Treat REAPER as live session state. Inspect before mutating, and preserve unrelated user changes.
-2. Prefer explicit ReaScript/ReaPy operations over generic "most recent settings" commands when safety depends on exact bounds, routing, or render source.
-3. Do not trust raw MCP project/render helpers when local API behavior has already shown mismatches. Verify with direct ReaScript calls and formatted values.
-4. If a local MCP helper has a known deterministic API mismatch, such as `module 'reapy.reascript_api' has no attribute 'EnumProjects'`, do not spend the first REAPER call proving it again. Start inspection, FX, and render-sensitive work through direct ReaScript/ReaPy or the skill helper scripts, and mention the MCP bypass only once.
-5. Snapshot or record render settings before changing them, and restore them when a test changes user-visible render state.
-6. For small sections, translate the request into explicit `start` and `end` seconds before rendering. Do not trust the current selection length unless it has been read back and reported.
-7. For snippets under 60 seconds, never call raw render actions, generic MCP render helpers, or "most recent render settings" commands directly. Use `scripts/render_time_range.py` or a disposable item/take FX workflow, then verify the WAV duration is close to `end - start`.
-8. If REAPER shows a render countdown much longer than the requested range, cancel the render and treat the render path as unsafe until bounds are fixed.
-9. Treat render-popup cleanup as part of the render, not a courtesy afterthought. A render is not complete until the render progress/results popup has been closed and a ReaPy/MCP API ping succeeds.
-10. For plugin work, verify plugin display names and formatted parameter values in REAPER. Normalized parameters are a fallback representation, not a reliable transfer format by themselves.
-11. When changing parameters on a plugin, focus the exact plugin window before setting its parameters so a human shoulder-surfing REAPER can see the change. A hidden/offscreen parameter write is not enough for user-visible automation.
-12. Before judging track-FX changes, verify both the individual FX enabled states and the track-wide FX chain switch (`I_FXEN`). A track can show enabled inserts while the whole FX chain is bypassed, causing rendered files to ignore every plugin parameter change.
-13. While shoulder-surfing plugin settings, avoid exhaustive formatted-value searches on every parameter. Use known or locally calibrated normalized mappings for routine moves, verify only the important displayed values, and keep visible pauses short enough for the user to follow without waiting through busywork.
-14. Separate plugin discovery from mix iteration. Loading plugins, checking whether they instantiate, or cycling through default inserts is discovery only; do not count it as a mix pass.
-15. Count a plugin iteration only when it has a stated audible goal, a deliberate chain/settings change, a verified render or session-state artifact, and a short comparison note.
-16. When the user asks to iterate toward an aimpoint, every counted REAPER pass must include or hand off enough evidence for an aimpoint grade. If no grade can be produced, label the pass as setup, discovery, or render-only.
-17. Before rendering, state the render source being used: real target track, selected track/stem, selected item, master mix, or disposable staging track. Match the source to the task instead of reusing the last successful render helper by habit.
-18. Default to the real target track for plugin edits and source-specific iteration when it passes a raw-control render. Use disposable staging tracks only as an explicit fallback, and state why the real track path could not be trusted.
-19. For imported/live-capture projects, or any project/track that has previously produced a silent render from a valid source file, proactively refresh the target audio take source before the first raw-control render instead of waiting for another silent-render failure.
-20. For multi-pass iteration, show a compact reviewer-facing thought log for each counted pass so the human can follow the goal, change, evidence, gates, grade, reasoning, and next move.
-21. After an iteration chooses a keeper chain, remove rejected audition plugins from the target track instead of leaving them bypassed. Keep a disabled plugin only when it has a stated future-use reason, such as a live failover or explicit A/B request, and report that reason.
-22. Treat temporary loop/time selections as borrowed state. After the final render in a run, restore the previous user selection if one existed; otherwise clear the temporary selection.
-23. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
+2. Require a working direct ReaPy Python path for render-sensitive or FX-sensitive automation. Prefer the private local config `~/.codex/local/reaper-python.txt` when present; otherwise verify the active Python can `import reapy`, import `reapy.reascript_api`, and connect to the open REAPER project before touching live session state.
+3. Prefer explicit ReaScript/ReaPy operations over generic "most recent settings" commands when safety depends on exact bounds, routing, or render source.
+4. Do not trust raw MCP project/render helpers when local API behavior has already shown mismatches. Verify with direct ReaScript calls and formatted values.
+5. If a local MCP helper has a known deterministic API mismatch, such as `module 'reapy.reascript_api' has no attribute 'EnumProjects'`, do not spend the first REAPER call proving it again. Start inspection, FX, and render-sensitive work through direct ReaScript/ReaPy or the skill helper scripts, and mention the MCP bypass only once.
+6. Snapshot or record render settings before changing them, and restore them when a test changes user-visible render state.
+7. For small sections, translate the request into explicit `start` and `end` seconds before rendering. Do not trust the current selection length unless it has been read back and reported.
+8. For snippets under 60 seconds, never call raw render actions, generic MCP render helpers, or "most recent render settings" commands directly. Use `scripts/render_time_range.py` or a disposable item/take FX workflow, then verify the WAV duration is close to `end - start`.
+9. If REAPER shows a render countdown much longer than the requested range, cancel the render and treat the render path as unsafe until bounds are fixed.
+10. Treat render-popup cleanup as part of the render, not a courtesy afterthought. A render is not complete until the render progress/results popup has been closed and a ReaPy/MCP API ping succeeds.
+11. For plugin work, verify plugin display names and formatted parameter values in REAPER. Normalized parameters are a fallback representation, not a reliable transfer format by themselves.
+12. When changing parameters on a plugin, focus the exact plugin window before setting its parameters so a human shoulder-surfing REAPER can see the change. A hidden/offscreen parameter write is not enough for user-visible automation.
+13. Before judging track-FX changes, verify both the individual FX enabled states and the track-wide FX chain switch (`I_FXEN`). A track can show enabled inserts while the whole FX chain is bypassed, causing rendered files to ignore every plugin parameter change.
+14. While shoulder-surfing plugin settings, avoid exhaustive formatted-value searches on every parameter. Use known or locally calibrated normalized mappings for routine moves, verify only the important displayed values, and keep visible pauses short enough for the user to follow without waiting through busywork.
+15. Separate plugin discovery from mix iteration. Loading plugins, checking whether they instantiate, or cycling through default inserts is discovery only; do not count it as a mix pass.
+16. Count a plugin iteration only when it has a stated audible goal, a deliberate chain/settings change, a verified render or session-state artifact, and a short comparison note.
+17. When the user asks to iterate toward an aimpoint, every counted REAPER pass must include or hand off enough evidence for an aimpoint grade. If no grade can be produced, label the pass as setup, discovery, or render-only.
+18. Before rendering, state the render source being used: real target track, selected track/stem, selected item, master mix, or disposable staging track. Match the source to the task instead of reusing the last successful render helper by habit.
+19. Default to the real target track for plugin edits and source-specific iteration when it passes a raw-control render. Use disposable staging tracks only as an explicit fallback, and state why the real track path could not be trusted.
+20. For imported/live-capture projects, or any project/track that has previously produced a silent render from a valid source file, proactively refresh the target audio take source before the first raw-control render instead of waiting for another silent-render failure.
+21. For multi-pass iteration, show a compact reviewer-facing thought log for each counted pass so the human can follow the goal, change, evidence, gates, grade, reasoning, and next move.
+22. After an iteration chooses a keeper chain, remove rejected audition plugins from the target track instead of leaving them bypassed. Keep a disabled plugin only when it has a stated future-use reason, such as a live failover or explicit A/B request, and report that reason.
+23. Treat temporary loop/time selections as borrowed state. After the final render in a run, restore the previous user selection if one existed; otherwise clear the temporary selection.
+24. Keep bulky renders, private projects, and exported commercial plugin presets outside public skill folders and repos.
 
 ## Workflow
 
 1. Inspect session state:
+   - Resolve the REAPER automation interpreter: read `~/.codex/local/reaper-python.txt` if it exists, otherwise use the active Python only after it passes the direct ReaPy probe in `references/reaper-mcp-setup.md`.
+   - If no direct ReaPy Python can connect to the open REAPER project, stop render-sensitive or FX-sensitive automation and report the missing setup. Do not use a failing MCP wrapper as a substitute for counted mix iteration.
    - Confirm the open project path, track count, target track names, current solo/mute states, existing FX, and item media paths.
    - If this deployment has a known MCP/ReaPy wrapper mismatch, especially the `EnumProjects` attribute error, skip MCP project/list helpers for the initial inspection and use direct ReaScript/ReaPy immediately.
    - If the adapter state is unknown and MCP tools fail with ReaPy attribute or connection errors, read `references/reaper-mcp-setup.md` and probe direct `reapy.reascript_api` availability before changing the project.
