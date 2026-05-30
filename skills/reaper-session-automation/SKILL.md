@@ -1,13 +1,13 @@
 ---
 name: reaper-session-automation
-description: Safely operate REAPER sessions through MCP, ReaPy, or ReaScript. Use when inspecting or modifying REAPER projects, tracks, items, sends, routing, FX chains, plugin parameters, render settings, time selections, short snippet renders, render-window recovery, REAPER MCP setup, .rpp extraction, or REAPER-to-SuperRack handoff.
+description: Safely operate REAPER sessions through a configured direct ReaPy/ReaScript Python path, with MCP only as an optional non-sensitive adapter. Use when inspecting or modifying REAPER projects, tracks, items, sends, routing, FX chains, plugin parameters, render settings, time selections, short snippet renders, render-window recovery, REAPER setup, .rpp extraction, or REAPER-to-SuperRack handoff.
 ---
 
 # REAPER Session Automation
 
 ## Purpose
 
-Use this skill as the REAPER host-adapter layer. It owns safe REAPER operations: project inspection, track/item/FX manipulation, routing checks, explicit time-range rendering, render-state cleanup, and REAPER-specific transfer artifacts.
+Use this skill as the REAPER host-adapter layer. It owns safe REAPER operations: project inspection, track/item/FX manipulation, routing checks, explicit time-range rendering, render-state cleanup, and REAPER-specific transfer artifacts. Direct ReaPy/ReaScript through the configured REAPER automation Python is the primary control path for any live session, FX, or render work.
 
 This skill does not judge whether a mix sounds good. Once a trustworthy WAV, stem, screenshot, preset export, or project-state report exists, hand the audio-evidence interpretation to `mix-render-diagnostics`, `live-worship-mix-engineering`, `band-sound-aimpoint`, or `waves-live-plugin-chains` as appropriate.
 
@@ -42,10 +42,11 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
 
 1. Inspect session state:
    - Resolve the REAPER automation interpreter: read `~/.codex/local/reaper-python.txt` if it exists, otherwise use the active Python only after it passes the direct ReaPy probe in `references/reaper-mcp-setup.md`.
+   - Prefer `scripts/resolve_reaper_python.py --verify` for that preflight when shell access is available; it reports the configured interpreter without exposing workstation paths in public skill files.
    - If no direct ReaPy Python can connect to the open REAPER project, stop render-sensitive or FX-sensitive automation and report the missing setup. Do not use a failing MCP wrapper as a substitute for counted mix iteration.
    - Confirm the open project path, track count, target track names, current solo/mute states, existing FX, and item media paths.
    - If this deployment has a known MCP/ReaPy wrapper mismatch, especially the `EnumProjects` attribute error, skip MCP project/list helpers for the initial inspection and use direct ReaScript/ReaPy immediately.
-   - If the adapter state is unknown and MCP tools fail with ReaPy attribute or connection errors, read `references/reaper-mcp-setup.md` and probe direct `reapy.reascript_api` availability before changing the project.
+   - If direct ReaPy fails, read `references/reaper-mcp-setup.md` and fix or configure the REAPER automation Python before continuing. Do not explore MCP workarounds for render-sensitive or FX-sensitive tasks.
    - When running direct probe scripts from a shell, use the active shell's native multiline syntax or a helper script; do not assume Bash heredocs work in PowerShell.
 
 2. Prepare safe automation:
@@ -107,21 +108,27 @@ Next: add gentler leveling before EQ; avoid more low-end boost
 ## References
 
 - Read `references/reaper-render-safety.md` before any unattended render, time selection, snippet render, routing-sensitive render, or render-window cleanup.
-- Read `references/reaper-mcp-setup.md` when checking the local REAPER MCP install, Codex config entry, ReaPy connection, or API mismatch.
+- Read `references/reaper-mcp-setup.md` when checking the local direct ReaPy install, optional REAPER MCP bridge, Codex config entry, ReaPy connection, or API mismatch.
 - Read `references/reaper-superrack-transfer.md` when exporting Waves settings from REAPER, extracting `.xps` files from `.rpp`, or translating REAPER plugin state into SuperRack.
 
 ## Helper Scripts
 
+Resolve the configured REAPER automation Python, optionally verifying the open project:
+
+```powershell
+& "python" scripts/resolve_reaper_python.py --verify --pretty
+```
+
 Render a known-safe REAPER time range:
 
 ```powershell
-& "<python>" scripts/render_time_range.py "C:\path\candidate.wav" --start 150 --end 180
+& "<reaper-python>" scripts/render_time_range.py "C:\path\candidate.wav" --start 150 --end 180
 ```
 
 Extract Waves `.xps` preset files from an `.rpp` into one folder per track/channel:
 
 ```powershell
-& "<python>" scripts/export_waves_xps_from_rpp.py "C:\path\project.rpp" "C:\path\preset-exports\YYYY-MM-DD.N" --skip-track "Drum Bus"
+& "<reaper-python>" scripts/export_waves_xps_from_rpp.py "C:\path\project.rpp" "C:\path\preset-exports\YYYY-MM-DD.N" --skip-track "Drum Bus"
 ```
 
 ## Related Skills

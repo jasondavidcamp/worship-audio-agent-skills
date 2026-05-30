@@ -1,19 +1,19 @@
 # REAPER Render Safety And Local Automation Lessons
 
-Use this note before rendering through `reapy`, REAPER MCP, or any unattended REAPER automation.
+Use this note before rendering through direct `reapy` or any unattended REAPER automation. Treat REAPER MCP render helpers as optional and unsafe unless separately verified for the current setup.
 
 ## REAPER-Specific Lessons Learned
 
 - Store bulky render output outside the skill repo, preferably on a dedicated audio/render volume. Do not commit rendered audio or generated preset exports.
-- The generic MCP helper assumption that `RENDER_BOUNDSFLAG=1` means "time selection" was wrong in the active REAPER 7.61 setup.
+- A legacy generic MCP helper assumption that `RENDER_BOUNDSFLAG=1` means "time selection" was wrong in the active REAPER 7.61 setup.
 - In the tested automation path, `RENDER_BOUNDSFLAG=2` correctly rendered the active time selection. Re-verify this after REAPER or API changes.
 - `RENDER_BOUNDSFLAG=0` produced a "Nothing to render!" error when no custom render range was set.
 - A project can inherit `RENDER_SETTINGS=32` / `RENDER_BOUNDSFLAG=4` from selected-media-item rendering. With no selected items this raises "Nothing to render!" even if a valid time selection was set. Force `RENDER_SETTINGS=0` for master mix and `RENDER_BOUNDSFLAG=2` for time selection before command `41824`.
 - An accidental wrong render-bounds value can start a full 16-minute render even when a 30-second clip was intended.
-- For requested snippets under 60 seconds, never rely on generic MCP render helpers, raw render actions, or "most recent render settings" actions. Use `scripts/render_time_range.py` or a disposable media-item apply-FX workflow, then confirm the WAV duration is close to `end - start`.
+- For requested snippets under 60 seconds, never rely on generic MCP render helpers, raw render actions, or "most recent render settings" actions. Use direct ReaPy helpers such as `scripts/render_time_range.py` or a disposable media-item apply-FX workflow, then confirm the WAV duration is close to `end - start`.
 - `scripts/render_time_range.py` is a master-mix render helper. It sets `RENDER_SETTINGS=0`; do not assume it is rendering selected tracks, stems, or the currently selected item.
 - If a render dialog says "Rendering to file..." for much longer than the requested range should take, stop/cancel the render and close any "Render Incomplete" prompt instead of waiting.
-- After every render or render batch, close any REAPER render-complete, render-progress, or confirmation popup before continuing. Prefer an explicit window-close helper such as `scripts/render_time_range.py`'s cleanup routine; use focusing REAPER and sending `Esc` only as a fallback. Verify the reapy/MCP API responds after cleanup. Do not leave render result windows open for the user.
+- After every render or render batch, close any REAPER render-complete, render-progress, or confirmation popup before continuing. Prefer an explicit window-close helper such as `scripts/render_time_range.py`'s cleanup routine; use focusing REAPER and sending `Esc` only as a fallback. Verify the direct ReaPy API responds after cleanup. Do not leave render result windows open for the user.
 - If REAPER asks "Loop/time selections locked, unlock now and remove?", cancel/escape the prompt unless the user explicitly asked to unlock or remove loop/time selections. Do not click `OK` as part of render cleanup.
 - Imported or live-capture projects can have missing or unexpected master hardware outputs while tracks retain direct hardware/ReaRoute outputs. Before playback or render checks, verify the master has a stereo hardware send to output 1/2 (`I_DSTCHAN=0`, `I_SRCCHAN=0`, unity volume, unmuted), clear unwanted per-track hardware/ReaRoute outputs, keep the normal track-to-master parent sends, and set the render source to master mix. File size alone is not enough; always measure non-silence after render.
 - If track items point at valid WAV files but master renders are silent or near plugin-noise level, check whether REAPER's PCM source handle is stale/offline. Rebinding the take to a fresh `PCM_Source_CreateFromFile(<same wav path>)` can restore normal rendering without copying tracks. Confirm with a short raw-control render before adding plugin candidates.
