@@ -1,6 +1,6 @@
 ---
 name: band-sound-aimpoint
-description: Define, analyze, calibrate, and apply a target sound for church band mixes using reference tracks, user taste calls, and style vocabulary such as CityAlight-style naturalness. Use when comparing band, livestream, vocal, drum, or full-mix renders against a desired style/feel; creating mix aimpoints; describing tonal balance, dynamics, arrangement density, worship-band aesthetic, congregational clarity, reference-track matching, taste preferences, emotional mix goals, or plugin-chain decisions against a known target.
+description: Define, analyze, calibrate, and apply a target sound for church band mixes using reference tracks, user taste calls, and worship style vocabulary. Use when comparing band, livestream, vocal, drum, or full-mix renders against a desired style/feel; creating mix aimpoints; describing tonal balance, dynamics, arrangement density, worship-band aesthetic, congregational clarity, reference-track matching, taste preferences, emotional mix goals, or plugin-chain decisions against a known target.
 ---
 
 # Band Sound Aimpoint
@@ -50,7 +50,7 @@ This skill owns taste calls: asking for them, interpreting them, resolving confl
    - Use the same kind of section from a trustworthy REAPER render, stem, or other source.
    - Loudness-match the candidate render to the reference before judging tone.
    - Compare broad bands and dynamics, then write an engineering interpretation.
-   - For bass-guitar stem aimpoints such as a CityAlight-style bass reference, use `mix-render-diagnostics/scripts/reference_score.py --source bass` when the user wants no-human automated test points beyond section matching.
+   - For bass-guitar stem aimpoints against a chosen reference, use `mix-render-diagnostics/scripts/reference_score.py --source bass` when the user wants no-human automated test points beyond section matching.
    - For iteration batches, assign an `aimpoint_grade` on a 0-100 scale, a confidence level, a one-sentence reason, and whether it moved closer, farther, or stayed flat versus the prior pass.
 
 5. Turn analysis into moves:
@@ -110,7 +110,7 @@ Use `low` confidence when the grade is based only on metrics or session-state ev
 
 Use public internet or training sources for general mix principles, plugin roles, worship-mix workflows, reference vocabulary, arrangement expectations, and before/after decision patterns.
 
-Use the user's direct taste calls for the church's acceptable vocal level, BGV blend, vocal processing amount, ambience depth, drum/band energy, mono deployment priorities, and whether CityAlight, Bethel, Churchfront, or a local hybrid should dominate a decision.
+Use the user's direct taste calls for the church's acceptable vocal level, BGV blend, vocal processing amount, ambience depth, drum/band energy, mono deployment priorities, and which artist reference, training source, or local hybrid should dominate a decision.
 
 ## Reference Files
 
