@@ -23,7 +23,7 @@ Keep `live-worship-mix-engineering` Waves-neutral. Use this skill only after the
 8. Treat installed plugins as candidates, not automatic recommendations.
 9. Do not count a plugin as tested just because it loaded with default settings. A useful candidate needs a source-specific role, deliberate starting settings or preset choice, and evidence from the same comparison section.
 10. For multi-pass chain iteration, define what would improve the aimpoint grade before choosing settings, then require a score or `grade_pending` after the candidate is rendered.
-11. Before multi-pass Waves iteration, build a source-specific candidate palette. Include prior approved/exported chains for the same source early, plus at least one alternate topology unless the user explicitly asks for refinement only.
+11. Before multi-pass Waves iteration, build a source-specific candidate palette. Treat prior approved/exported/native chains for the same source as evidence anchors, not taste defaults: import them faithfully, score/listen against the active user aimpoint, and let the evidence decide. Include at least one such prior chain early when available, plus at least one alternate topology unless the user explicitly asks for refinement only.
 12. Loudness-match insert/bypass and candidate renders before ranking.
 13. Reject clipping, crackle, hash, pumping, obvious tuning artifacts, over-expanded phrases, or lost lyric intelligibility before asking for taste.
 14. Use this skill for Waves `.xps` shape, chain, compatibility, and transfer planning. Switch to `reaper-session-automation` for live REAPER export/import execution, and to `superrack-session-files` for `.sprk` patching or SuperRack-specific session/rack validation.
@@ -46,8 +46,8 @@ Keep `live-worship-mix-engineering` Waves-neutral. Use this skill only after the
 3. Build a candidate palette for iteration:
    - Read `references/source-candidate-palettes.md` for the source type.
    - Read `references/musical-palette-expansion-sources.md` when the task asks for broader exploration, 10+ passes, or a less familiar source/plugin family.
-   - Check for prior approved/exported chains or presets for the same source; include one early or state why it does not apply.
-   - For 5-pass iterations, include topology variety: prior/current chain, clean utility chain, alternate dynamics, color/channel-strip chain, and keeper refinement.
+   - Check for prior approved/exported/native chains or presets for the same source. These are hypotheses with provenance, not recommendations. Include the strongest relevant prior chain early, import it faithfully, and score it against the active aimpoint; if it does not apply, state why.
+   - For 5-pass iterations, include topology variety: raw/current baseline, prior exported/native chain anchor when available, clean utility chain, alternate dynamics or color/channel-strip chain, and keeper refinement.
    - For 10-20 pass iterations, broaden into a plugin-family shootout before narrowing.
    - Name the audible hypothesis for each topology, not only the plugin list.
 
@@ -69,6 +69,7 @@ Keep `live-worship-mix-engineering` Waves-neutral. Use this skill only after the
 6. Plan `.xps` transfer when needed:
    - Read `references/waves-xps-transfer.md`.
    - Identify whether the artifact is a single-plugin preset or a SuperRack rack-chain preset.
+   - When prior `.xps` chains are available for the same source, plan them as scored anchor candidates before inventing many new variants.
    - For rack-chain `.xps` files that must be auditioned in REAPER, extract embedded plugin presets first, then hand the resulting plugin `.xps` files to `reaper-session-automation`.
    - For approved REAPER chains that must leave REAPER, hand live export execution to `reaper-session-automation` and inspect the resulting `.xps` shape here before SuperRack validation.
    - Require host-specific verification after import. Do not treat `.xps` existence or API acceptance as proof that plugin state is active.
