@@ -17,6 +17,19 @@ Use this as a generic checklist for REAPER automation through `reapy` or a REAPE
 - If calls fail with an API or connection warning, restart REAPER and verify the reapy server action is available/enabled.
 - Keep REAPER version, MCP version, and Python environment notes in a private deployment log.
 
+## Known Wrapper Mismatch Pattern
+
+If this local deployment repeatedly returns `module 'reapy.reascript_api' has no attribute 'EnumProjects'` from MCP project/list helpers, treat the MCP wrapper as known-untrusted for session inspection. Do not retry the same MCP helper at the start of every mix pass.
+
+Use direct ReaScript/ReaPy through the working Python environment or the skill scripts for:
+
+- project/track/item/FX inspection,
+- render settings and time selections,
+- plugin insertion and parameter reads/writes,
+- render-window cleanup and API pings.
+
+Only revisit the MCP wrapper after the local REAPER MCP package has been updated, reconfigured, or explicitly tested. Until then, the MCP tool list can exist while specific helper implementations remain unsafe for the current REAPER/ReaPy API.
+
 ## Shell-Safe Probe Scripts
 
 When probing REAPER through direct Python/ReaScript snippets, match the command shape to the user's active shell:
