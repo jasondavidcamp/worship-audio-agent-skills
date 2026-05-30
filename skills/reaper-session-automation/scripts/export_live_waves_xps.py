@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export Waves plugin preset XML from the open REAPER session into .xps files."""
+"""Export Waves plugin preset XML from the open REAPER session into ordered .xps files."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from pathlib import Path
 import reapy
 import reapy.reascript_api as RPR
 
-from export_waves_xps_from_rpp import clean_name, decode_waves_xml, make_xps, plugin_file_name
+from export_waves_xps_from_rpp import decode_waves_xml, make_xps, ordered_file_stem, plugin_file_name
 
 
 def track_name(track) -> str:
@@ -70,7 +70,6 @@ def export_live(track_name_arg: str | None, track_index: int | None, fx_index: i
     fx_indices = [fx_index] if fx_index is not None else list(range(RPR.TrackFX_GetCount(track.id)))
     exports: list[dict] = []
     errors: list[dict] = []
-    seen_names: dict[str, int] = {}
 
     for current_fx_index in fx_indices:
         current_fx_name = fx_name(track, current_fx_index)
@@ -81,8 +80,7 @@ def export_live(track_name_arg: str | None, track_index: int | None, fx_index: i
             continue
 
         preset_name = plugin_file_name(current_fx_name)
-        seen_names[preset_name] = seen_names.get(preset_name, 0) + 1
-        file_stem = preset_name if seen_names[preset_name] == 1 else f"{preset_name} {seen_names[preset_name]}"
+        file_stem = ordered_file_stem(current_fx_index + 1, preset_name)
         output_path = output_dir / f"{file_stem}.xps"
 
         try:
@@ -93,6 +91,7 @@ def export_live(track_name_arg: str | None, track_index: int | None, fx_index: i
                     "track_index": resolved_track_index,
                     "track": resolved_track_name,
                     "fx_index": current_fx_index,
+                    "chain_order": current_fx_index + 1,
                     "plugin": current_fx_name,
                     "file": str(output_path),
                 }
@@ -115,6 +114,7 @@ def export_live(track_name_arg: str | None, track_index: int | None, fx_index: i
         "track_index": resolved_track_index,
         "track": resolved_track_name,
         "output_dir": str(output_dir),
+        "convention": "single-plugin Waves .xps files named with two-digit REAPER FX chain order plus plugin display name",
         "exports": exports,
         "errors": errors,
     }

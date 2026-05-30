@@ -2,7 +2,8 @@
 """Extract Waves plugin preset XML from a REAPER .rpp into .xps files.
 
 This mirrors a manual Waves plugin export convention: one folder per REAPER
-track, one .xps file per Waves FX slot named by plugin display name.
+track, one .xps file per Waves FX slot named with a two-digit chain-order
+prefix plus the plugin display name.
 """
 
 from __future__ import annotations
@@ -26,6 +27,10 @@ def plugin_file_name(reaper_name: str) -> str:
     name = re.sub(r"^VST3?:\s*", "", reaper_name)
     name = re.sub(r"\s*\(Waves\)\s*$", "", name)
     return clean_name(name)
+
+
+def ordered_file_stem(order: int, preset_name: str) -> str:
+    return f"{order:02d} {preset_name}"
 
 
 def track_chunks(lines: list[str]):
@@ -163,12 +168,9 @@ def export_waves_xps(project: Path, output_root: Path, skip_tracks: set[str]) ->
 
         track_dir = output_root / clean_name(current_track)
         track_dir.mkdir(parents=True, exist_ok=True)
-        seen_names: dict[str, int] = {}
-
         for slot, block in enumerate(blocks, start=1):
             preset_name = plugin_file_name(block["reaper_name"])
-            seen_names[preset_name] = seen_names.get(preset_name, 0) + 1
-            file_stem = preset_name if seen_names[preset_name] == 1 else f"{preset_name} {seen_names[preset_name]}"
+            file_stem = ordered_file_stem(slot, preset_name)
             output_path = track_dir / f"{file_stem}.xps"
             try:
                 xml_text = decode_waves_xml(block["lines"])
@@ -179,6 +181,7 @@ def export_waves_xps(project: Path, output_root: Path, skip_tracks: set[str]) ->
                     {
                         "track": current_track,
                         "slot": slot,
+                        "chain_order": slot,
                         "plugin": block["reaper_name"],
                         "file": str(output_path),
                     }
@@ -197,7 +200,7 @@ def export_waves_xps(project: Path, output_root: Path, skip_tracks: set[str]) ->
         "created_at_local": datetime.now().isoformat(timespec="seconds"),
         "source_project": str(project),
         "output_root": str(output_root),
-        "convention": "one folder per REAPER track/channel; one Waves .xps preset file per FX slot named by plugin display name",
+        "convention": "one folder per REAPER track/channel; one Waves .xps preset file per Waves FX slot named with a two-digit chain-order prefix plus plugin display name",
         "skipped_tracks": sorted(skip_tracks),
         "exports": exports,
         "errors": errors,
