@@ -4,7 +4,7 @@ Use this before recommending any plugin chain for a live Waves workflow. The goa
 
 ## Source Material Mined
 
-- Waves SuperRack Support Notes, updated 2025-08-13: SuperRack/plugin version compatibility, SoundGrid network notes, MIDI/plugin limits, Performer CPU warnings, and known issues.
+- Waves SuperRack Support Notes: SuperRack/plugin version compatibility, SoundGrid network notes, MIDI/plugin limits, Performer CPU warnings, third-party VST3 limits, and known issues.
 - Waves SuperRack SoundGrid product/support page: SuperRack SoundGrid is built for FOH, monitor, broadcast, and AV use, and V15 supports V16 and V15 Waves plugins.
 - Waves SuperRack Performer product/support page: SuperRack Performer supports Waves V16/V15 plugins in V15 and can run natively on Core Audio/ASIO, but this skill still limits recommendations to Waves/SuperRack-deployable chains.
 - Waves Supported Platforms chart: per-plugin SuperRack SoundGrid and SuperRack Native/Performer support.
@@ -13,6 +13,26 @@ Use this before recommending any plugin chain for a live Waves workflow. The goa
 - Waves Live Common Questions: SoundGrid latency is affected by I/O conversion, server buffer, driver buffer, plugin latency, and routing; rack latency is displayed in SuperRack.
 - Waves SuperRack Performer audio-artifact troubleshooting: heavy plugins, buffer size, sample rate, cables/hubs, and interface drivers/firmware affect crackles/dropouts.
 - Waves Clarix LB product page: SoundGrid-compatible broadcast cleanup with 47 ms latency, not intended for in-venue concert audio.
+
+## Official Truth-Gate Sources
+
+Use these Waves sources as the authoritative gate before treating any plugin as a live/SuperRack candidate. They change over time, so prefer checking the live pages or a fresh local inventory over copying a stale table into this skill.
+
+1. Supported Platforms: <https://www.waves.com/support/tech-specs/supported-platforms>
+   - Confirms whether a plugin is supported in SuperRack SoundGrid, SuperRack Native/Performer, StudioRack, LV1, MultiRack, or another host.
+   - If the plugin is missing, platform-limited, host-limited, or only supported in a different Waves host, mark it `verify-in-target` or reject it for the live chain.
+   - MultiRack is legacy: Waves notes that the last plugin version supported in MultiRack is V10.
+2. Plugin Latency: <https://www.waves.com/support/tech-specs/plugin-latency>
+   - Converts a musically useful plugin into a path decision: core live, conditional live, verify-first, or broadcast-only.
+   - Check component/mode differences. Live, low-latency, no-lookahead, and full/studio modes can have different latency.
+3. Channel Components: <https://www.waves.com/support/tech-specs/channel-components>
+   - Confirms mono, stereo, mono-to-stereo, and special component availability.
+   - A supported plugin can still be unusable on a mono source if the needed mono component does not exist or does not appear in the target rack.
+4. SuperRack Support Notes: <https://www.waves.com/support/superrack-support-notes>
+   - Captures current host limitations and known issues that generic plugin charts do not show.
+   - Current examples include CLA MixHub Bucket View not being supported in SuperRack SoundGrid/Performer, SuperRack Performer Realtek ASIO freeze risk, and third-party VST3 support being limited to mono/stereo components.
+
+Decision order: platform support first, channel component second, latency/mode third, SuperRack support notes fourth, then musical/source fit. If any source disagrees with a local REAPER plugin inventory, trust the official Waves chart for deployability and use the inventory only as staging evidence.
 
 ## Hard Gate
 
@@ -25,6 +45,8 @@ Recommend a plugin in a live chain only when all are true:
 5. CPU/load is realistic for the show. If SuperRack Performer audio or CPU indicators turn yellow/red, lighten the chain or raise buffer.
 6. The chain uses the live component or low-latency mode when the plugin has both full/studio and live modes.
 7. The target host and path are named: SoundGrid, Performer, LV1, REAPER staging, FOH, monitor, livestream, or broadcast-only.
+
+Do not let a source palette override this gate. A palette entry means "consider this tool for the diagnosis"; it does not mean "approved for the target rack." A plugin can be a useful REAPER audition tool and still be rejected, replaced, or marked verify-first for SuperRack.
 
 ## Version Gate
 

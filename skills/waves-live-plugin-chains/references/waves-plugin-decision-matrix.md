@@ -13,8 +13,9 @@ First read `superrack-live-eligibility-gate.md`. If this matrix and the gate dis
 5. For drums, avoid solo-source hype that hurts vocal pocketing or live translation.
 6. Treat installed plugins as candidates, not automatic recommendations. Verify uncertain plugins in the actual SuperRack target.
 7. Use only official SuperRack-supported Waves plugins or plugins verified in the target SuperRack instance.
-8. Prefer the live component or low-latency mode when a plugin has both live and full/studio modes.
-9. Separate latency risk from musical risk. Vocal Rider is low-latency, but can still fight worship phrasing; Bass Rider Live has more latency and should be checked against the path.
+8. Check the official gate in this order before approving a chain: Supported Platforms, Channel Components, Plugin Latency, then SuperRack Support Notes.
+9. Prefer the live component or low-latency mode when a plugin has both live and full/studio modes.
+10. Separate latency risk from musical risk. Vocal Rider is low-latency, but can still fight worship phrasing; Bass Rider Live has more latency and should be checked against the path.
 
 ## Drum Chain Starting Points
 
