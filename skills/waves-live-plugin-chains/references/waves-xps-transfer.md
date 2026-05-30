@@ -46,6 +46,8 @@ SuperRack rack-chain preset:
 
 For REAPER:
 
+- Prefer native Waves drag/drop when the plugin UI is visible: drag the single-plugin `.xps` file onto the matching Waves plugin UI, then verify formatted REAPER values or export a round-trip preset.
+- If drag/drop is not available, use the Waves preset menu path: `Load -> Preset File`.
 - Use `reaper-session-automation` to export live REAPER Waves plugin state to single-plugin `.xps` files.
 - Use `reaper-session-automation` to attempt plugin `.xps` import and verify formatted values.
 - If formatted values do not change after import, stop and use native Waves UI import or a plugin-specific exposed-parameter mapping.
@@ -55,4 +57,3 @@ For SuperRack:
 - Use `superrack-session-files` to inspect rack-chain `.xps` files and `.sprk` sessions.
 - Prefer SuperRack-native rack-chain imports for complete rack movement.
 - After import, verify plugin order, bypass/disabled state, sidechains, latency, snapshots, and routing.
-

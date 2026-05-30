@@ -12,7 +12,7 @@ Direction matters:
 
 - REAPER live/plugin state -> plugin `.xps`: this REAPER skill executes the export through `scripts/export_live_waves_xps.py`.
 - REAPER `.rpp` saved state -> plugin `.xps`: this REAPER skill executes the extraction through `scripts/export_waves_xps_from_rpp.py`.
-- Plugin `.xps` -> REAPER live plugin: prefer native Waves UI import when the plugin window can be focused (`Load -> Preset File`). If UI import is not available, this REAPER skill executes guarded import attempts through `scripts/apply_waves_xps_to_reaper.py`. Use the helper's mapped import path for supported plugins before trying raw chunk replacement.
+- Plugin `.xps` -> REAPER live plugin: prefer native Waves UI import when the plugin window can be focused. The most reliable observed native path is dragging the `.xps` file from Explorer onto the Waves plugin UI. The menu path (`Load -> Preset File`) is the second native option. If UI import is not available, this REAPER skill executes guarded import attempts through `scripts/apply_waves_xps_to_reaper.py`. Use the helper's mapped import path for supported plugins before trying raw chunk replacement.
 - SuperRack rack-chain `.xps` -> REAPER live plugin: not a direct import. Use the Waves skill to decompose embedded plugin presets first, then use this skill to apply and verify them in REAPER.
 
 ## Capture Checklist
@@ -61,8 +61,9 @@ When importing a single-plugin `.xps` into REAPER:
 1. Confirm the file is a plugin preset, not a SuperRack rack-chain preset. The top-level plugin must not be `Super-Rack Chainer` / `MCMR`.
 2. Match the target REAPER plugin by exact display name and mono/stereo component.
 3. Focus the target plugin window so the operator can see the import attempt.
-4. Prefer the native Waves menu path: preset browser/menu -> `Load -> Preset File` -> select the `.xps`.
-5. Snapshot formatted parameter values before and after the import, or export the plugin back to `.xps` for a round-trip check.
-6. If the native UI path is unavailable, use a mapped exposed-parameter import for known plugin families.
-7. Use raw `vst_chunk` replacement only as an experimental last resort.
-8. Count the import only if the visible/formatted values verify the expected state. If the API reports success but values do not change, stop and report the import as unverified.
+4. Prefer native drag/drop: drag the `.xps` file from Explorer onto the Waves plugin UI. In a verified test, dropping onto the embedded Waves OpenGL plugin area loaded `SSL EV2 Channel Mono.xps` and restored `Line` from `0.0 dB` to `1.3 dB`.
+5. If drag/drop is unavailable, use the native Waves menu path: preset browser/menu -> `Load -> Preset File` -> select the `.xps`.
+6. Snapshot formatted parameter values before and after the import, or export the plugin back to `.xps` for a round-trip check.
+7. If the native UI path is unavailable, use a mapped exposed-parameter import for known plugin families.
+8. Use raw `vst_chunk` replacement only as an experimental last resort.
+9. Count the import only if the visible/formatted values verify the expected state. If the API reports success but values do not change, stop and report the import as unverified.

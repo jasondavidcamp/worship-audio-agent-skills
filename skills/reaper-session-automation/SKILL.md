@@ -67,7 +67,8 @@ This skill does not judge whether a mix sounds good. Once a trustworthy WAV, ste
    - For track FX, confirm the track-wide FX chain is enabled (`I_FXEN=1`) before rendering or grading. If it was off and the user asked for audible plugin work, enable it and log that change.
    - Verify parameter names and formatted values after each important setting change.
    - When importing a Waves plugin `.xps` back into REAPER, first validate that it is a single-plugin preset rather than a SuperRack rack-chain preset.
-   - Prefer the native Waves UI import path when the plugin window is visible or can be safely focused: add/focus the Waves plugin, open the Waves preset browser/menu, choose `Load -> Preset File`, select the `.xps`, then verify formatted REAPER values or an exported round-trip before rendering.
+   - Prefer the native Waves UI import path when the plugin window is visible or can be safely focused: add/focus the Waves plugin, drag the `.xps` file from Explorer onto the Waves plugin UI, then verify formatted REAPER values or an exported round-trip before rendering. This is usually easier to automate than the menu path because Waves' OpenGL UI hides internal menu items from Windows UI Automation.
+   - If drag/drop is unavailable, use the Waves preset browser/menu path: open the Waves preset menu, choose `Load -> Preset File`, select the `.xps`, then verify formatted values.
    - Use `scripts/apply_waves_xps_to_reaper.py --dry-run` before mutating the session when using automation. If native UI import is not available, use the helper's `auto` mapped import for supported Waves plugins such as F6/F6-RTA, RComp, and SSL EV2.
    - If REAPER accepts a `vst_chunk` write but formatted values do not change, report the import as unverified/failed and use native Waves UI import or a plugin-specific exposed-parameter mapping before rendering. Do not retry the same chunk path repeatedly.
    - Do not spend a shoulder-surfed iteration binary-searching every parameter to exact display values. Calibrate a small mapping when needed, set routine values directly, and verify the handful of controls that matter musically.
@@ -150,7 +151,7 @@ Validate or attempt a single-plugin Waves `.xps` import into REAPER. Treat a non
 & "<reaper-python>" scripts/apply_waves_xps_to_reaper.py "C:\path\F6 Mono.xps" --track "Bass" --fx-index 0 --method auto
 ```
 
-When a human can see the plugin UI, the preferred `.xps` import is the native Waves menu path: focus the exact FX window, open the Waves preset browser/menu, choose `Load -> Preset File`, select the `.xps`, then read back the important formatted parameters.
+When a human can see the plugin UI, the preferred `.xps` import is the native Waves drag/drop path: focus the exact FX window, drag the `.xps` file onto the Waves plugin UI, then read back the important formatted parameters. The Waves menu path (`Load -> Preset File`) is the second native option.
 
 ## Related Skills
 
