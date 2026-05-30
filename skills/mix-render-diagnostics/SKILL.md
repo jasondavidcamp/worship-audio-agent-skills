@@ -43,6 +43,7 @@ This skill does not own emotional target language or live-chain design. Translat
 3. Analyze:
    - Use `scripts/analyze_wav.py` for quick dependency-free WAV peak/RMS/crest checks.
    - Use `scripts/artifact_gate.py` to compare candidate snippets against known-good baseline snippets before A/B comparison.
+   - Use `scripts/bass_reference_score.py` when comparing bass guitar candidates against a bass reference stem without human interaction; it covers loudness-matched spectrum, low-end ratios, note consistency, attack/body envelope, translation, mud, sub/headroom, compression/pumping, and an automated score.
    - For section-aware diagnostics, vocal masking, transient/punch, reverb/tail, stereo/mono, codec, or candidate report work, read `references/diagnostic-modules.md` and run `scripts/render_diagnostic_report.py`.
    - Compare source, candidate, and reference with the metrics in `references/analysis-metrics.md`.
    - For deeper reference/candidate descriptors, use `band-sound-aimpoint/scripts/analyze_reference_audio.py --essentia` when Essentia is available; otherwise rely on the existing librosa/LUFS fields.
@@ -103,6 +104,12 @@ Run a quick WAV metric pass:
 
 ```powershell
 & "<python>" scripts/analyze_wav.py "<render.wav>" --pretty
+```
+
+Score a bass candidate against a bass reference stem:
+
+```powershell
+& "<python>" scripts/bass_reference_score.py --candidate "C:\path\candidate-bass.wav" --reference "D:\Multitrack Recordings\CityAlight\Only a Hold God (D)\MultiTracks\Bass.wav" --pretty
 ```
 
 Run a static/artifact gate against a known-good snippet:

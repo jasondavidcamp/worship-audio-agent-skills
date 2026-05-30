@@ -60,6 +60,18 @@ For band, drums, or livestream buses:
 - Vocal pocket and masking behavior.
 - Stereo image stability.
 
+For bass guitar against a reference stem, use `scripts/bass_reference_score.py` when a no-human automated pass is needed. It intentionally does not pick or match song sections; feed it already comparable files or excerpts when section role matters. The score should include:
+
+- Loudness-matched spectral distance across sub, fundamental, bass, mud, low-mid, note/read, edge, and noise bands.
+- Low-end balance ratios: `40-80 / 80-160`, `80-160 / 160-300`, and `160-300 / 300-700`.
+- Note consistency from short-window RMS variation, with both too-uneven and over-flattened behavior treated as risks.
+- Attack/body envelope from onset-adjacent energy, used as a proxy for whether notes speak or feel soft.
+- Small-speaker translation proxies: `700 Hz-2 kHz / 40-160 Hz` and `300-700 Hz / 40-160 Hz`.
+- Mud penalty for excess `160-300 Hz` and `300-700 Hz` after loudness matching.
+- Sub/headroom risk for excess `20-40 Hz`, poor peak headroom, or low-end growth without useful read.
+- Compression/pumping proxy from crest-factor loss and short-window RMS over-stability.
+- A candidate-reference score on a 0-100 scale plus warnings that can feed the aimpoint grade.
+
 ## Ranking Guidance
 
 Prefer candidates that solve the named problem with the least collateral damage. If two candidates score similarly, keep the simpler chain or the one that is easier to reproduce in the user's target delivery environment.
