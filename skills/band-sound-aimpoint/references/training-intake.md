@@ -32,7 +32,7 @@ Less useful by itself:
 
 ## What Requires The User
 
-- Whether the church wants CityAlight naturalness, Bethel polish, or a local hybrid.
+- Whether the church wants natural congregational restraint, polished modern lift, ambient/spontaneous space, gospel/choir energy, or a local hybrid.
 - Acceptable amount of vocal tuning.
 - Acceptable amount of vocal compression and polish.
 - Whether BGVs should feel choir-like, supportive, or mostly tucked.
@@ -53,6 +53,6 @@ The fastest calibration comes from repeated small choices, not long general feed
 ## Current Learning Priority
 
 1. Build a reliable "what is wrong?" diagnosis before selecting plugins.
-2. Use the Worship Sound Guy and Drew Brashler material as strong priors for live vocal chains.
-3. Use Churchfront-style livestream/bus material as priors for full-band balance, routing, and mono-safe clarity.
+2. Use vetted live-vocal training material as priors for practical vocal-chain decisions.
+3. Use vetted livestream/bus training material as priors for full-band balance, routing, and mono-safe clarity.
 4. Use the user's taste calls to decide how far to push tuning, compression, reverb, and vocal-forward balance.

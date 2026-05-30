@@ -20,9 +20,9 @@ Classify the target before judging it. "More worshipful" is not a mix target. "N
 
 Common references:
 
-- CityAlight.
-- Getty/Sovereign Grace-style hymn-modern hybrids.
-- Many scripture-forward local church arrangements.
+- Scripture-forward congregational songs.
+- Hymn-modern hybrids.
+- Many melody-led local church arrangements.
 
 Aimpoint:
 
@@ -45,7 +45,7 @@ Risks:
 Common references:
 
 - Acoustic worship sets.
-- Shane & Shane / Worship Initiative-adjacent arrangements.
+- Acoustic training or discipleship-focused arrangements.
 - Small-band hymn or psalm settings.
 
 Aimpoint:
@@ -65,7 +65,7 @@ Risks:
 
 Common references:
 
-- Elevation, Passion, Hillsong-style large-room arrangements.
+- Large-room live worship arrangements.
 - Big live-album worship with extended builds and crowd energy.
 
 Aimpoint:
@@ -87,7 +87,7 @@ Risks:
 
 Common references:
 
-- Bethel/Upperroom/IHOPKC-adjacent long-form or spontaneous worship.
+- Long-form or spontaneous worship.
 - Prayer-room and extended ministry moments.
 
 Aimpoint:
@@ -145,7 +145,7 @@ Risks:
 
 Most real churches are hybrids. Name the blend:
 
-- "CityAlight naturalness with a little Elevation lift."
+- "Natural congregational restraint with a little large-room lift."
 - "Acoustic worship clarity with modern livestream polish."
 - "Arena worship energy, but mono-safe and volunteer-simple."
 - "Ambient prayer-space verses with tight modern choruses."
