@@ -1,4 +1,4 @@
 interface:
   display_name: "REAPER Session Automation"
   short_description: "Operate REAPER safely through direct ReaPy/ReaScript."
-  default_prompt: "Automate REAPER sessions safely through the configured direct ReaPy/ReaScript Python path: inspect projects, tracks, items, FX, sends, render settings, time selections, snippets, render recovery, and REAPER-to-SuperRack handoff. Use MCP only as an optional non-sensitive adapter."
+  default_prompt: "Automate REAPER sessions safely through the configured direct ReaPy/ReaScript Python path: inspect projects, tracks, items, FX, sends, render settings, time selections, snippets, render recovery, guarded Waves plugin .xps export/import attempts, and REAPER-to-SuperRack handoff. Use MCP only as an optional non-sensitive adapter."

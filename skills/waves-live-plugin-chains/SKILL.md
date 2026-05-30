@@ -1,13 +1,13 @@
 ---
 name: waves-live-plugin-chains
-description: Choose live-safe, SuperRack-compatible Waves plugin chains for worship, church livestream, and live broadcast workflows. Use when the user specifically has Waves plugins, SuperRack SoundGrid, SuperRack Performer, LV1/SuperRack-compatible Waves processing, or REAPER-staged Waves chain testing and needs source-specific plugin selection, serial chain order, latency/safety checks, F6/PSE/RVox/Sibilance/CLA/API/SSL selection, or help translating an audio diagnosis into Waves plugin moves that should survive SuperRack deployment.
+description: Choose live-safe, SuperRack-compatible Waves plugin chains for worship, church livestream, and live broadcast workflows. Use when the user specifically has Waves plugins, SuperRack SoundGrid, SuperRack Performer, LV1/SuperRack-compatible Waves processing, REAPER-staged Waves chain testing, Waves `.xps` preset/chain transfer planning, source-specific plugin selection, serial chain order, latency/safety checks, F6/PSE/RVox/Sibilance/CLA/API/SSL selection, or help translating an audio diagnosis into Waves plugin moves that should survive SuperRack deployment.
 ---
 
 # Waves Live Plugin Chains
 
 ## Purpose
 
-Use this skill as the Waves-specific plugin decision layer. It translates an audio diagnosis into live-safe, SuperRack-compatible Waves plugin choices, chain order, and validation checks.
+Use this skill as the Waves-specific plugin decision and portable preset-transfer layer. It translates an audio diagnosis into live-safe, SuperRack-compatible Waves plugin choices, chain order, validation checks, and `.xps` transfer intent that can be applied by REAPER or SuperRack host skills.
 
 Keep `live-worship-mix-engineering` Waves-neutral. Use this skill only after the user says Waves, SuperRack, LV1/SuperRack, or a Waves plugin is available or desired.
 
@@ -26,7 +26,7 @@ Keep `live-worship-mix-engineering` Waves-neutral. Use this skill only after the
 11. Before multi-pass Waves iteration, build a source-specific candidate palette. Include prior approved/exported chains for the same source early, plus at least one alternate topology unless the user explicitly asks for refinement only.
 12. Loudness-match insert/bypass and candidate renders before ranking.
 13. Reject clipping, crackle, hash, pumping, obvious tuning artifacts, over-expanded phrases, or lost lyric intelligibility before asking for taste.
-14. If the task becomes `.sprk` or `.xps` file inspection/patching, switch to `superrack-session-files`.
+14. Use this skill for Waves `.xps` shape, chain, compatibility, and transfer planning. Switch to `reaper-session-automation` for live REAPER export/import execution, and to `superrack-session-files` for `.sprk` patching or SuperRack-specific session/rack validation.
 
 ## Chain Decision Flow
 
@@ -66,6 +66,13 @@ Keep `live-worship-mix-engineering` Waves-neutral. Use this skill only after the
    - Snapshot/recall requirements.
    - Latency and CPU risk.
 
+6. Plan `.xps` transfer when needed:
+   - Read `references/waves-xps-transfer.md`.
+   - Identify whether the artifact is a single-plugin preset or a SuperRack rack-chain preset.
+   - For rack-chain `.xps` files that must be auditioned in REAPER, extract embedded plugin presets first, then hand the resulting plugin `.xps` files to `reaper-session-automation`.
+   - For approved REAPER chains that must leave REAPER, hand live export execution to `reaper-session-automation` and inspect the resulting `.xps` shape here before SuperRack validation.
+   - Require host-specific verification after import. Do not treat `.xps` existence or API acceptance as proof that plugin state is active.
+
 ## Reference Files
 
 - Read `references/superrack-live-eligibility-gate.md` first when a chain will be used live. It is the compatibility, version, latency, format, and CPU gate.
@@ -73,6 +80,7 @@ Keep `live-worship-mix-engineering` Waves-neutral. Use this skill only after the
 - Read `references/waves-plugin-decision-matrix.md` for source-specific plugin choices and first-line alternatives.
 - Read `references/waves-superrack-operational-reference.md` for live-safety, latency posture, SoundGrid/Performer cautions, and operational metadata.
 - Read `references/source-candidate-palettes.md` before multi-pass Waves iterations, especially when the user wants broader exploration across instruments, voice types, or plugin families.
+- Read `references/waves-xps-transfer.md` when exporting, importing, decomposing, inspecting, or planning `.xps` preset/chain movement between REAPER and SuperRack.
 - Read `references/musical-palette-expansion-sources.md` when broadening palettes from FOH live-chain examples, church/worship case studies, StudioVerse popularity patterns, or plugin manuals/product pages after the official eligibility gate passes.
 - Read `references/waves-next-move-map.md` when translating common worship-mix diagnoses into Waves-specific next moves.
 - Read `references/superrack-vocal-speech-chains.md` for lead vocal, BGV/choir, and spoken-word/pastor mic chains.
@@ -90,10 +98,22 @@ Generate a local installed-plugin catalog:
 
 Keep generated inventories private unless intentionally sanitized. They reflect the current machine's Waves install and license state.
 
+Inspect a Waves `.xps` file and identify whether it is a single-plugin preset or a SuperRack rack-chain preset:
+
+```powershell
+& "<python>" scripts/inspect_waves_xps.py "C:\path\preset-or-rack.xps"
+```
+
+Extract embedded plugin presets from a SuperRack rack-chain `.xps` for REAPER auditioning or per-plugin comparison:
+
+```powershell
+& "<python>" scripts/extract_plugin_xps_from_rack_xps.py "C:\path\rack-chain.xps" "C:\path\extracted-plugin-presets"
+```
+
 ## Related Skills
 
 - Use `live-worship-mix-engineering` for the general worship-mix diagnosis and non-Waves workflow.
 - Use `band-sound-aimpoint` to define the desired sound or reference target.
-- Use `reaper-session-automation` to stage or render Waves chain candidates in REAPER.
+- Use `reaper-session-automation` to stage or render Waves chain candidates in REAPER, export live REAPER plugin `.xps` files, or attempt/verify plugin `.xps` import into REAPER.
 - Use `mix-render-diagnostics` to compare the resulting WAVs or stems.
-- Use `superrack-session-files` to inspect, validate, or patch SuperRack `.sprk` and `.xps` files.
+- Use `superrack-session-files` to inspect, validate, or patch SuperRack `.sprk` sessions and SuperRack-specific rack-chain state after this skill has handled portable Waves `.xps` intent.

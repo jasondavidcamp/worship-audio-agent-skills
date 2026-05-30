@@ -23,9 +23,15 @@ def attr_preset(text):
 def inspect(path):
     data = Path(path).read_text(encoding="utf-8", errors="replace")
     preset_name, generic_type = attr_preset(data)
+    top_plugin = tag(data, "PluginName")
+    top_subcomp = tag(data, "PluginSubComp")
+    top_tokens = tokens(data)
     print(f"file: {path}")
     print(f"top_preset: {preset_name!r} generic_type={generic_type!r}")
-    print(f"top_plugin: {tag(data, 'PluginName')!r} subcomp={tag(data, 'PluginSubComp')!r}")
+    print(f"top_plugin: {top_plugin!r} subcomp={top_subcomp!r}")
+
+    if top_plugin and top_plugin != "Super-Rack Chainer" and top_tokens:
+        print(f"single_plugin_preset: tokens={len(top_tokens)}")
 
     for slot_match in re.finditer(r'<slot index="(\d+)">(.*?)</slot>', data, re.S):
         slot_index = int(slot_match.group(1))

@@ -1,4 +1,4 @@
 interface:
   display_name: "SuperRack Session Files"
-  short_description: "Inspect and patch SuperRack session files."
-  default_prompt: "Use this skill when working with Waves SuperRack .sprk session databases, .xps rack presets, snapshots, routing, sidechains, or file-level validation."
+  short_description: "Inspect SuperRack sessions and .xps files."
+  default_prompt: "Use this skill when working with Waves SuperRack .sprk session databases, SuperRack rack-chain .xps validation, rack presets, snapshots, routing, sidechains, or file-level validation. Hand portable Waves .xps transfer planning to waves-live-plugin-chains and live REAPER import/export attempts to reaper-session-automation."

@@ -6,13 +6,13 @@ AI-agent skills and helper tools for live worship audio: mix aimpoints, worship 
 
 - `band-sound-aimpoint`: define reference targets, style vocabulary, and taste-call calibration for worship mixes.
 - `live-worship-mix-engineering`: critique worship mix renders, diagnose weak points, and choose practical brand-neutral next moves.
-- `reaper-session-automation`: safely operate REAPER projects, tracks, FX chains, render settings, short snippet renders, render-window recovery, and REAPER-to-SuperRack handoffs.
-- `waves-live-plugin-chains`: choose source-specific live-safe Waves plugin chains for SuperRack SoundGrid/Performer, or for LV1/REAPER-staged chains that must transfer safely to SuperRack.
+- `reaper-session-automation`: safely operate REAPER projects, tracks, FX chains, render settings, short snippet renders, render-window recovery, and host-verified REAPER Waves plugin `.xps` export/import attempts.
+- `waves-live-plugin-chains`: choose source-specific live-safe Waves plugin chains for SuperRack SoundGrid/Performer, or for LV1/REAPER-staged chains that must transfer safely to SuperRack, including portable Waves `.xps` preset/chain transfer planning.
 - `mix-render-diagnostics`: analyze existing render candidates, references, stems, sections, stereo/mono translation, codec delivery risk, artifacts, and candidate reports.
 - `behringer-wing-snap`: inspect Behringer WING `.snap` files and compare routing against SuperRack sessions.
 - `superrack-session-files`: inspect, validate, and carefully patch Waves SuperRack `.sprk` session databases and `.xps` rack presets.
 
-Boundary note: `reaper-session-automation` owns DAW/session operations; `mix-render-diagnostics` starts after trustworthy audio files or stems exist.
+Boundary note: `waves-live-plugin-chains` owns portable Waves plugin-chain and `.xps` transfer intent; `reaper-session-automation` owns DAW/session operations and live REAPER execution; `superrack-session-files` owns SuperRack `.sprk`/rack-preset validation; `mix-render-diagnostics` starts after trustworthy audio files or stems exist.
 
 ## Workflows
 

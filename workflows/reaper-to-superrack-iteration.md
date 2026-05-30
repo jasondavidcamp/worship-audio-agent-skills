@@ -12,10 +12,10 @@ This workflow is strongest when the goal is to compare tone, dynamics, intelligi
 
 - `band-sound-aimpoint`: define the target sound, reference family, and taste vocabulary.
 - `live-worship-mix-engineering`: diagnose the current mix and choose practical next moves.
-- `waves-live-plugin-chains`: choose live-safe Waves chains that can survive SuperRack deployment.
-- `reaper-session-automation`: stage chains in REAPER, manage render settings, create controlled snippets, and capture transfer notes.
+- `waves-live-plugin-chains`: choose live-safe Waves chains that can survive SuperRack deployment, and plan portable Waves `.xps` preset/chain transfer.
+- `reaper-session-automation`: stage chains in REAPER, manage render settings, create controlled snippets, execute REAPER `.xps` export/import attempts, and capture host verification.
 - `mix-render-diagnostics`: compare rendered candidates against baselines, references, and delivery-risk checks after trustworthy audio exists.
-- `superrack-session-files`: inspect `.sprk` and `.xps` files, validate imported chains, and safely patch known session state.
+- `superrack-session-files`: inspect `.sprk` files and SuperRack-specific rack-chain `.xps` details, validate imported chains, and safely patch known session state.
 - `behringer-wing-snap`: verify WING routing, SoundGrid channels, external inserts, and snapshot scope when the console routing matters.
 
 ## Preferred Loop
@@ -25,8 +25,8 @@ This workflow is strongest when the goal is to compare tone, dynamics, intelligi
 3. Stage the candidate in REAPER with `reaper-session-automation`, keeping the chain serial and disabling ReaInsert or live hardware effects during offline renders.
 4. Render controlled snippets: raw baseline, known-good baseline, then candidate sections such as sparse verse, dense chorus, and late-service energy.
 5. Analyze with `mix-render-diagnostics` and listen: reject clipping, static, harshness, pumping, low-mid buildup, phase trouble, or lost lyric clarity before doing full-length renders.
-6. Export the approved Waves settings or rack-chain `.xps` when possible, and record plugin versions, mono/stereo format, sample rate, latency mode, and changed controls.
-7. Bring the chain into SuperRack through a native import or a cautious `.sprk`/`.xps` file workflow.
+6. Use `waves-live-plugin-chains` to plan the `.xps` transfer shape: single-plugin presets, rack-chain preset, or extracted plugin presets. Record plugin versions, mono/stereo format, sample rate, latency mode, and changed controls.
+7. Bring the chain into SuperRack through a native import or a cautious `.sprk`/`.xps` file workflow. If a plugin `.xps` is imported back into REAPER for auditioning, verify formatted parameter values before rendering; do not trust an API-accepted VST chunk write by itself.
 8. Validate deployment with `superrack-session-files`: plugin order, bypass state, disabled state, sidechains, rack routing, snapshots, recall-safe state, latency, and SQLite integrity.
 9. If WING routing is part of the system, compare the relevant `.snap` with the SuperRack session so channel numbers, buses, and inserts line up.
 10. Keep local renders, sessions, presets, screenshots, and taste-call notes out of the public repo.
@@ -61,6 +61,7 @@ Before calling a candidate ready for SuperRack:
 - The chosen chain is serial and uses SuperRack-compatible Waves plugins.
 - Gain changes are intentional and documented.
 - Any exported preset or `.xps` has been inspected.
+- Any REAPER `.xps` round trip has verified visible/formatted plugin values after import.
 - The SuperRack session copy passes `PRAGMA integrity_check` and `PRAGMA foreign_key_check`.
 - Active state and stored snapshots have been compared when snapshot recall matters.
 - Sidechains are checked at both the rack assignment level and the plugin detector/source level.

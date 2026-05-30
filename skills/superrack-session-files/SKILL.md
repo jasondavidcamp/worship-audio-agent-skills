@@ -26,8 +26,11 @@ If SuperRack is open with the session already loaded, warn that saving from the 
 Keep this skill focused on SuperRack files and session structure.
 
 - Use `waves-live-plugin-chains` for Waves plugin selection, live-safe chain design, and SoundGrid/Performer plugin suitability.
-- Use this skill when the task is to inspect, validate, compare, back up, or carefully patch `.sprk` or `.xps` file content.
+- Use `waves-live-plugin-chains` for portable Waves `.xps` shape, chain intent, and REAPER/SuperRack transfer planning.
+- Use this skill when the task is to inspect, validate, compare, back up, or carefully patch SuperRack `.sprk` sessions or SuperRack-specific rack-chain `.xps` file content.
+- Use `reaper-session-automation` when the task is exporting Waves plugin state from REAPER or importing/attempting a plugin `.xps` into a live REAPER FX instance.
 - Do not invent plugin preset serialization. Prefer SuperRack-generated rows or native `.xps` exports as templates.
+- Distinguish single-plugin `.xps` presets from SuperRack rack-chain `.xps` exports. The portable distinction belongs in `waves-live-plugin-chains`; SuperRack-specific rack/session validation belongs here.
 
 ## Core Tables
 
@@ -61,7 +64,7 @@ Use `scripts/patch_f6_pocketing.py` only when the session already contains a Sup
 
 The patch script makes a timestamped backup, edits only `plugin_preset` rows for the selected plug, and validates SQLite integrity.
 
-Use `scripts/inspect_xps.py` to inspect a SuperRack rack-chain `.xps` export:
+Use `scripts/inspect_xps.py` to inspect SuperRack-specific rack-chain details in an `.xps` export after `waves-live-plugin-chains` has identified the portable XPS shape:
 
 ```powershell
 & "<python>" scripts/inspect_xps.py "<path-to-rack-preset.xps>"

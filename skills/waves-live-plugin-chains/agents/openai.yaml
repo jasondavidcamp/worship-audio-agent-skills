@@ -1,4 +1,4 @@
 interface:
   display_name: "Waves Live Plugin Chains"
-  short_description: "Choose SuperRack-safe Waves live chains."
-  default_prompt: "Use Waves live plugin-chain guidance to choose source-specific, SuperRack-compatible Waves plugins, chains, and live-safety checks for worship audio."
+  short_description: "Choose SuperRack-safe Waves chains and XPS transfers."
+  default_prompt: "Use Waves live plugin-chain guidance to choose source-specific, SuperRack-compatible Waves plugins, chains, live-safety checks, and portable Waves .xps preset/chain transfer plans for worship audio."
