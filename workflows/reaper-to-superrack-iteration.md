@@ -2,8 +2,6 @@
 
 Use REAPER for fast Waves chain iteration, then use SuperRack session-file tooling for deployment validation. Treat SuperRack UI automation as a fallback for no-reload operations, not the default creative loop.
 
-![Weekday AI Iteration Loop](../graphics/weekday-ai-iteration-loop.jpeg)
-
 ## When To Use This
 
 Use this workflow when developing Waves plugin chains for worship vocals, speech, band buses, drum buses, livestream buses, or other processing that must eventually run in Waves SuperRack SoundGrid or SuperRack Performer.
