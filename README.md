@@ -1,6 +1,6 @@
 # Worship Audio Agent Skills
 
-AI-agent skills and helper tools for live worship audio: mix aimpoints, worship mix diagnosis, render-file diagnostics, REAPER session automation, Behringer WING snapshots, Waves plugin-chain choices, SuperRack session files, and practical mix-engineering workflows.
+AI-agent skills and helper tools for live worship audio: mix aimpoints, worship mix diagnosis, render-file diagnostics, REAPER session automation, Behringer WING snapshots, Roland TM-6 PRO hybrid drums, Waves plugin-chain choices, SuperRack session files, and practical mix-engineering workflows.
 
 ## Skills
 
@@ -9,6 +9,7 @@ AI-agent skills and helper tools for live worship audio: mix aimpoints, worship 
 - `reaper-session-automation`: safely operate REAPER projects, tracks, FX chains, render settings, short snippet renders, render-window recovery, and host-verified REAPER Waves plugin `.xps` export/import attempts.
 - `waves-live-plugin-chains`: choose source-specific live-safe Waves plugin chains for SuperRack SoundGrid/Performer, or for LV1/REAPER-staged chains that must transfer safely to SuperRack, including portable Waves `.xps` preset/chain transfer planning.
 - `mix-render-diagnostics`: analyze existing render candidates, references, stems, sections, stereo/mono translation, codec delivery risk, artifacts, and candidate reports.
+- `roland-tm6-pro-hybrid-drums`: choose worship-safe Roland TM-6 PRO trigger sounds, blend levels, gate-keying strategy, and live hybrid drum reinforcement settings.
 - `behringer-wing-snap`: inspect Behringer WING `.snap` files and compare routing against SuperRack sessions.
 - `superrack-session-files`: inspect, validate, and carefully patch Waves SuperRack `.sprk` session databases and `.xps` rack presets.
 
@@ -45,4 +46,4 @@ Most scripts use Python standard libraries. Audio analysis scripts may also use 
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE).
 
-Waves, SuperRack, REAPER, Behringer WING, and other product names are trademarks of their respective owners. This project is not affiliated with or endorsed by those companies.
+Waves, SuperRack, REAPER, Behringer WING, Roland TM-6 PRO, and other product names are trademarks of their respective owners. This project is not affiliated with or endorsed by those companies.

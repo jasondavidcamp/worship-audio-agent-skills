@@ -1,0 +1,4 @@
+interface:
+  display_name: "Roland TM-6 Pro Hybrid Drums"
+  short_description: "Tune worship drum trigger layers"
+  default_prompt: "Use $roland-tm6-pro-hybrid-drums to recommend TM-6 Pro hybrid drum trigger sounds, blend, and live-safety settings for kick, snare, and floor tom against a worship mix aimpoint."
