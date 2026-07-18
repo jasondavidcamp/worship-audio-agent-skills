@@ -244,32 +244,36 @@ def build_report(data: dict, sr_names: dict[int, str] | None = None) -> dict:
     return report
 
 
+def summarize_scope_value(values):
+    if isinstance(values, str):
+        enabled = [str(i + 1) for i, char in enumerate(values) if char in ("+", "1", "T", "t")]
+        disabled = [str(i + 1) for i, char in enumerate(values) if char in ("-", "0", "F", "f")]
+        return {
+            "format": "compact_string",
+            "length": len(values),
+            "enabled_count": len(enabled),
+            "disabled_count": len(disabled),
+            "enabled": enabled[:80],
+            "disabled": disabled[:80],
+        }
+    if isinstance(values, dict):
+        # Nested WING scope groups (source/output/area) are dicts of compact
+        # strings, not booleans. Recurse so routing scopes aren't reported as 0.
+        if any(isinstance(val, (str, dict)) for val in values.values()):
+            return {key: summarize_scope_value(val) for key, val in values.items()}
+        enabled = [key for key, val in values.items() if val is True]
+        disabled = [key for key, val in values.items() if val is False]
+        return {
+            "enabled_count": len(enabled),
+            "disabled_count": len(disabled),
+            "enabled": enabled[:80],
+            "disabled": disabled[:80],
+        }
+    return values
+
+
 def summarize_scopes(scopes: dict) -> dict:
-    summary = {}
-    for group, values in scopes.items():
-        if isinstance(values, dict):
-            enabled = [key for key, val in values.items() if val is True]
-            disabled = [key for key, val in values.items() if val is False]
-            summary[group] = {
-                "enabled_count": len(enabled),
-                "disabled_count": len(disabled),
-                "enabled": enabled[:80],
-                "disabled": disabled[:80],
-            }
-        elif isinstance(values, str):
-            enabled = [str(i + 1) for i, char in enumerate(values) if char in ("+", "1", "T", "t")]
-            disabled = [str(i + 1) for i, char in enumerate(values) if char in ("-", "0", "F", "f")]
-            summary[group] = {
-                "format": "compact_string",
-                "length": len(values),
-                "enabled_count": len(enabled),
-                "disabled_count": len(disabled),
-                "enabled": enabled[:80],
-                "disabled": disabled[:80],
-            }
-        else:
-            summary[group] = values
-    return summary
+    return {group: summarize_scope_value(values) for group, values in scopes.items()}
 
 
 def is_lr_opposite(label_a: str, label_b: str) -> bool:
